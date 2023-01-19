@@ -51,9 +51,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
-    x.SwaggerDoc("v1.0", new OpenApiInfo
+    x.SwaggerDoc("v1", new OpenApiInfo
     {
-        Version = "v1.0",
+        Version = "v1",
         Title = "Time Off System API",
         Description = "Final Project MCC73 Group 4"
     });
