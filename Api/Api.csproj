@@ -20,11 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Base\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Handlers\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
