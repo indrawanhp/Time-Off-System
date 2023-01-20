@@ -37,17 +37,41 @@ namespace Api.Controllers
                         return Ok(new { statusCode = 200, message = "Account Not Found!" });
                     case 1:
                         return Ok(new { statusCode = 200, message = "Wrong Password!" });
-                    case 2:
-                        return Ok(new { statusCode = 200, message = "Login Success!"});
-
                     default:
-                      return Ok(new { statusCode = 401, message = "Login Gagal!"});
+                        // bikin method untuk mendapatkan role-nya user yang login
+                        var roles = _repo.UserRoles(loginVM.Email);
+
+                        var claims = new List<Claim>()
+                        {
+                        new Claim("email", loginVM.Email)
+                        };
+
+                        foreach (var item in roles)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, item));
+                        }
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_con["JWT:Key"]));
+                        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _con["JWT:Issuer"],
+                            _con["JWT:Audience"],
+                            claims,
+                            expires: DateTime.Now.AddMinutes(10),
+                            signingCredentials: signIn
+                            );
+
+                        var generateToken = new JwtSecurityTokenHandler().WriteToken(token);
+                        claims.Add(new Claim("Token Security", generateToken.ToString()));
+
+                        return Ok(new { statusCode = 200, message = "Login Success!", data = generateToken, Roles = roles, Email = loginVM.Email });
                 }
             }
             catch (Exception e)
             {
                 return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
             }
+
 
         }
     }
