@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230119163558_initial-migration")]
-    partial class initialmigration
+    [Migration("20230120083505_inital-migration")]
+    partial class initalmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,6 +144,10 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("age");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birth_date");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -270,9 +274,9 @@ namespace Api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("end_date");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("message");
+                        .HasColumnName("remark");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2")

@@ -14,6 +14,8 @@ public class Employee
     public string FirstName { get; set; }
     [Required, Column("last_name")]
     public string LastName { get; set; }
+    [Required, Column("birth_date")]
+    public DateTime BirthDate { get; set; }
     [Required, Column("address")]
     public string Address { get; set; }
     [Required, Column("hire_date")]

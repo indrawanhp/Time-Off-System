@@ -141,6 +141,10 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("age");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birth_date");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -267,9 +271,9 @@ namespace Api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("end_date");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("message");
+                        .HasColumnName("remark");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2")

@@ -23,8 +23,8 @@ public class RequestTimeOff
     public string? Description { get; set; }
     [Column("status")]
     public Status Status { get; set; } = Status.Request;
-    [Column("message")]
-    public string? Message { get; set; }
+    [Column("remark")]
+    public string? Remark { get; set; }
     [Column("is_publish")]
     public bool isPublish { get; set; } = false;
 
@@ -33,7 +33,7 @@ public class RequestTimeOff
     [ForeignKey(nameof(EmployeeId))]
     public Employee? Employee { get; set; }
     [JsonIgnore]
-    public ICollection<AllocationLeave> Leaves { get; set; }
+    public ICollection<AllocationLeave>? Leaves { get; set; }
 }
 
 public enum Status
