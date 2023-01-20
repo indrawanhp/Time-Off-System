@@ -271,9 +271,9 @@ namespace Api.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("end_date");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("message");
+                        .HasColumnName("remark");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2")
