@@ -23,6 +23,25 @@ namespace Api.Controllers
             _repo = repo;
             _con = con;
         }
+
+        [HttpPost]
+        [Route("Register")]
+        [AllowAnonymous]
+        public ActionResult Register(RegisterVM registerVM)
+        {
+            try
+            {
+                var result = _repo.Register(registerVM);
+                return result == 0
+                    ? Ok(new { statusCode = 204, message = "Email or Phone is Already Registered!" })
+                    : Ok(new { statusCode = 201, message = "Register Succesfully!" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
+
         [HttpPost]
         [Route("Login")]
         [AllowAnonymous]

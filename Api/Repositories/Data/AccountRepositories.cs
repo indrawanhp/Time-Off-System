@@ -14,6 +14,67 @@ namespace Api.Repositories.Data
             _context = context;
         }
 
+        public int Register(RegisterVM registerVM)
+        {
+            if (!CheckEmailPhone(registerVM.Email, registerVM.Phone))
+            {
+                return 0; // Email atau Password sudah terdaftar
+            }
+            Employee emp = new Employee()
+            {
+                FirstName = registerVM.firstName,
+                LastName = registerVM.lastName,
+                Address = registerVM.Address,
+                HireDate = registerVM.HireDate,
+                ReleaseDate = registerVM.ReleaseDate,
+                Phone = registerVM.Phone,
+                Gender = registerVM.Gender,
+                Age = registerVM.Age,
+                ManagerId = registerVM.Manager
+            };
+            _context.Employees.Add(emp);
+            _context.SaveChanges();
+
+            JobPlacements jp = new JobPlacements()
+            {
+                EmployeeId = emp.Id,
+                DepartmentId = registerVM.DepartmenId,
+                JobId = registerVM.JobId
+            };
+            _context.JobPlacements.Add(jp);
+            _context.SaveChanges();
+
+            Accounts ac = new Accounts()
+            {
+                EmployeeId = emp.Id,
+                Email = registerVM.Email,
+                Password = Hashing.HashPassword(registerVM.Password)
+            };
+            _context.Accounts.Add(ac);
+            _context.SaveChanges();
+
+            AccountRoles ar = new AccountRoles()
+            {
+                AccountId = emp.Id,
+                RoleId = 1
+            };
+            _context.AccountRoles.Add(ar);
+            _context.SaveChanges();
+            return 1;
+        }
+
+        private bool CheckEmailPhone(string email, string phone)
+        {
+            var duplicateEmail = _context.Accounts.Where(a => a.Email == email).ToList();
+            var duplicatePhone = _context.Employees.Where(e => e.Phone == phone).ToList();
+
+            if (duplicateEmail.Any() && duplicatePhone.Any())
+            {
+                return false; // Email atau Password sudah ada
+            }
+            return true; // Email dan Password belum terdaftar
+        }
+
         public int Login (LoginVM login)
         {
             var result = _context.Accounts.Join(_context.Employees, a => a.EmployeeId, e => e.Id, (a, e) =>
