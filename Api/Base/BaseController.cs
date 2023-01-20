@@ -64,9 +64,9 @@ public class BaseController<Repository, Entity, TId> : ControllerBase
             return result == 0 ? Ok(new { statusCode = 204, message = "Data failed to Insert!" }) :
             Ok(new { statusCode = 201, message = "Data Saved Succesfully!" });
         }
-        catch(Exception e)
+        catch
         {
-            return BadRequest(new { statusCode = 500, message = e.Message });
+            return BadRequest(new { statusCode = 500, message = "" });
         }
     }
 
