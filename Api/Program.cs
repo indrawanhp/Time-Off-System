@@ -1,5 +1,6 @@
 using Api.Contexts;
 using Api.Models;
+using Api.Repositories.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,15 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 //Dependency Injection
-builder.Services.AddScoped<AccountRoles>();
-builder.Services.AddScoped<Accounts>();
-builder.Services.AddScoped<AllocationLeave>();
-builder.Services.AddScoped<Department>();
-builder.Services.AddScoped<Employee>();
-builder.Services.AddScoped<JobPlacements>();
-builder.Services.AddScoped<Jobs>();
-builder.Services.AddScoped<RequestTimeOff>();
-builder.Services.AddScoped<Roles>();
+builder.Services.AddScoped<AccountRoleRepositories>();
+builder.Services.AddScoped<AccountRepositories>();
+builder.Services.AddScoped<AllocationLeaveRepositories>();
+builder.Services.AddScoped<DepartmentRepositories>();
+builder.Services.AddScoped<EmployeeRepositories>();
+builder.Services.AddScoped<JobPlacementRepositories>();
+builder.Services.AddScoped<JobRepositories>();
+builder.Services.AddScoped<RequestTimeOffRepositories>();
+builder.Services.AddScoped<RoleRepositories>();
 
 //Configure SQL Server Databases
 builder.Services.AddDbContext<MyContext>(options => options
