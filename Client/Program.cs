@@ -1,7 +1,11 @@
+using Api.Contexts;
 using Client.Base;
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Net;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +22,7 @@ builder.Services.AddControllersWithViews();
 
 
 //Configured Dependency
-builder.Services.AddScoped<LoginRepository>();
+builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<Address>();
 
 //This is to configuration JWT
@@ -51,12 +55,35 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+// Custome Error page
+app.UseStatusCodePages(async context =>
+{
+    var request = context.HttpContext.Request;
+    var response = context.HttpContext.Response;
+
+    if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized))
+    {
+        response.Redirect("/Unauthorized");
+    }
+    else if (response.StatusCode.Equals((int)HttpStatusCode.NotFound))
+    {
+        response.Redirect("/NotFound");
+    }
+    else if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
+    {
+        response.Redirect("/Forbidden");
+    }
+});
 app.UseSession();
 app.Use(async (context, next) =>
 {
@@ -69,7 +96,6 @@ app.Use(async (context, next) =>
 });
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

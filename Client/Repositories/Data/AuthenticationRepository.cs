@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Client.Repositories.Data;
 
-public class LoginRepository : GeneralRepository<Accounts, int>
+public class AuthenticationRepository : GeneralRepository<Accounts, int>
 { 
     private readonly Address address;
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public LoginRepository(Address address, string request = "Account/") : base(address, request)
+    public AuthenticationRepository(Address address, string request = "Account/") : base(address, request)
     {
         this.address = address;
         this.request = request;
