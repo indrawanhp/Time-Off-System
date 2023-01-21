@@ -19,11 +19,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
-<<<<<<< HEAD
   <ItemGroup>
     <Folder Include="Handlers\" />
   </ItemGroup>
 
-=======
->>>>>>> main
 </Project>
