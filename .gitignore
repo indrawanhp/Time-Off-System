@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /Time Off System - Api/Migrations
 
 Time Off System - Api/appsettings.json
+
+Api/bin/
+Api/obj/
