@@ -15,11 +15,11 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin")]
-public class AccountController : BaseController<AccountRepositories, Accounts, int>
+public class AccountsController : BaseController<AccountRepositories, Accounts, int>
 {
     private AccountRepositories _repositories;
     private IConfiguration _config;
-    public AccountController(AccountRepositories repo, IConfiguration con) : base(repo)
+    public AccountsController(AccountRepositories repo, IConfiguration con) : base(repo)
     {
         _repositories = repo;
         _config = con;
