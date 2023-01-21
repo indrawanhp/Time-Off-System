@@ -57,6 +57,7 @@ public class AccountController : BaseController<AccountRepositories, Accounts, i
                 case 1:
                     return Unauthorized(new { message = "Wrong Password"});
                 default:
+                    var email = loginVM.Email;
                     var roles = _repositories.UserRoles(loginVM.Email);
                     var claims = new List<Claim>()
                     {
@@ -65,7 +66,7 @@ public class AccountController : BaseController<AccountRepositories, Accounts, i
 
                     foreach(var item in roles)
                     {
-                        claims.Add(new Claim("role", item));
+                        claims.Add(new Claim(ClaimTypes.Role, item));
                     }
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
@@ -81,7 +82,7 @@ public class AccountController : BaseController<AccountRepositories, Accounts, i
                     var generateToken = new JwtSecurityTokenHandler().WriteToken(token);
                     claims.Add(new Claim("Token Security", generateToken.ToString()));
 
-                    return Ok(new { statusCode = 200, message = "Login Success!", data = generateToken });
+                    return Ok(new { statusCode = 200, message = "Login Success!", data = generateToken, email = email, Roles = roles[0] });
             }
         }
         catch (Exception e)

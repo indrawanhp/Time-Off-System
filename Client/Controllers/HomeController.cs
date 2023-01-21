@@ -1,4 +1,9 @@
-﻿using Client.Models;
+using Api.Models;
+using Api.Repositories.Data;
+using Api.ViewModels;
+using Client.Base;
+using Client.Models;
+using Client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,13 +11,6 @@ namespace Client.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();

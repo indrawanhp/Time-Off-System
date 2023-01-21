@@ -1,0 +1,49 @@
+﻿
+@{
+	Layout = "_LayoutAuth";
+}
+
+<div class="row justify-content-center">
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img src="~/1.svg" width="100%;" style="margin-top: 50px; margin-left: 20px;" />
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Form Login</h1>
+                            </div>
+                            <form role="form" method="POST" action="/Authentication/Auth" class="needs-validation" id="formLogin" novalidate>
+                                <div class="input-material-group mb-3">
+                                    <input type="email" class="form-control" name="Email" placeholder="Email" required>
+                                </div>
+                                <div class="input-material-group mb-4">
+                                    <input type="password" class="form-control" name="Password" placeholder="Password" required>
+
+                                </div>
+                                <button type="submit" id="btn_login" class="btn btn-primary btn-block">Sign In</button>
+                                <a class="text-sm text-paleBlue" href="#">Forgot Password?</a><br><small class="text-gray-500">Do not have an account? </small><a class="text-sm text-paleBlue" href="register.html">Signup</a>
+                            </form>
+                            <div class="text-center">
+                                <a class="small" href="#">Forgot Password?</a>
+                            </div>
+                            <div class="text-center">
+                                <a class="small" asp-controller="authentication" asp-action="register">Create an Account!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
