@@ -67,7 +67,7 @@ namespace Api.Repositories.Data
         public List<string> UserRoles(string email)
         {
             var getRoles = (from a in _context.Accounts
-                           join ar in _context.AccountRoles on a.EmployeeId equals ar.Id
+                           join ar in _context.AccountRoles on a.EmployeeId equals ar.AccountId
                            join r in _context.Roles on ar.RoleId equals r.Id
                            where email == a.Email
                            select r.Name).ToList();
