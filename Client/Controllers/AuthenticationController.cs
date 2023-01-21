@@ -3,6 +3,8 @@ using Api.ViewModels;
 using Client.Base;
 using Client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Client.Controllers
 {
@@ -21,25 +23,27 @@ namespace Client.Controllers
         public async Task<IActionResult> Auth(LoginVM login)
         {
             var jwtToken = await repository.Auth(login);
-            var token = jwtToken.data;
-            var role = jwtToken.Roles;
+            var token = jwtToken.Data;
+            var claim = ExtractClaims(token);
+            var role = claim.Where(claim => claim.Type == "role").Select(claim => claim.Value).ToList();
+            var id = claim.FirstOrDefault(claim => claim.Type == "id")?.Value;
 
             if (token == null)
             {
                 return RedirectToAction("Login", "Authentication");
             }
             HttpContext.Session.SetString("JWToken", token);
-            HttpContext.Session.SetString("Roles", role);
+            HttpContext.Session.SetInt32("ID", int.Parse(id));
 
-            if (role == "Admin")
+            if (role.Contains("Admin"))
             {
                 return RedirectToAction("index", "Admin");
             }
-            else if (role == "Manager")
+            else if (role.Contains("Manager"))
             {
                 return RedirectToAction("index", "Manager");
             }
-            else if (role == "Employee")
+            else if (role.Contains("Employee"))
             {
                 return RedirectToAction("index", "Employee");
             }
@@ -63,21 +67,32 @@ namespace Client.Controllers
         {
             return View();
         }
-        [HttpGet("Unauthorized/")]
+
+
+        [HttpGet("/Unauthorized")]
         public IActionResult Unauthorized()
         {
             return View("401");
         }
 
-        [HttpGet("Forbidden/")]
+        [HttpGet("/Forbidden")]
         public IActionResult Forbidden()
         {
             return View("403");
         }
-        [HttpGet("Notfound/")]
+
+        [HttpGet("/Notfound")]
         public IActionResult Notfound()
         {
             return View("404");
+        }
+
+        public IEnumerable<Claim> ExtractClaims(string jwtToken)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(jwtToken);
+            IEnumerable<Claim> claims = securityToken.Claims;
+            return claims;
         }
     }
 }

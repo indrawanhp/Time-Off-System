@@ -14,7 +14,7 @@ public class AuthenticationRepository : GeneralRepository<Accounts, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public AuthenticationRepository(Address address, string request = "Account/") : base(address, request)
+    public AuthenticationRepository(Address address, string request = "Accounts/") : base(address, request)
     {
         this.address = address;
         this.request = request;
