@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Api.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class initalmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     firstname = table.Column<string>(name: "first_name", type: "nvarchar(max)", nullable: false),
                     lastname = table.Column<string>(name: "last_name", type: "nvarchar(max)", nullable: false),
+                    birthdate = table.Column<DateTime>(name: "birth_date", type: "datetime2", nullable: false),
                     address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     hiredate = table.Column<DateTime>(name: "hire_date", type: "datetime2", nullable: false),
                     releasedate = table.Column<DateTime>(name: "release_date", type: "datetime2", nullable: false),
@@ -107,7 +108,7 @@ namespace Api.Migrations
                     allocationid = table.Column<int>(name: "allocation_id", type: "int", nullable: false),
                     description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false),
-                    message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    remark = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ispublish = table.Column<bool>(name: "is_publish", type: "bit", nullable: false)
                 },
                 constraints: table =>

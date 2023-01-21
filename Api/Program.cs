@@ -16,13 +16,13 @@ builder.Services.AddControllers();
 //Dependency Injection
 builder.Services.AddScoped<AccountRoleRepositories>();
 builder.Services.AddScoped<AccountRepositories>();
-builder.Services.AddScoped<AllocationLeaveRepositories>();
-builder.Services.AddScoped<DepartmentRepositories>();
-builder.Services.AddScoped<EmployeeRepositories>();
-builder.Services.AddScoped<JobPlacementRepositories>();
-builder.Services.AddScoped<JobRepositories>();
-builder.Services.AddScoped<RequestTimeOffRepositories>();
 builder.Services.AddScoped<RoleRepositories>();
+builder.Services.AddScoped<EmployeeRepositories>();
+builder.Services.AddScoped<JobRepositories>();
+builder.Services.AddScoped<JobPlacementRepositories>();
+builder.Services.AddScoped<DepartmentRepositories>();
+builder.Services.AddScoped<AllocationLeaveRepositories>();
+builder.Services.AddScoped<RequestTimeOffRepositories>();
 
 //Configure SQL Server Databases
 builder.Services.AddDbContext<MyContext>(options => options
