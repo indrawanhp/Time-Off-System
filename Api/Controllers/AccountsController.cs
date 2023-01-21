@@ -15,11 +15,11 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin")]
-public class AccountController : BaseController<AccountRepositories, Accounts, int>
+public class AccountsController : BaseController<AccountRepositories, Accounts, int>
 {
     private AccountRepositories _repositories;
     private IConfiguration _config;
-    public AccountController(AccountRepositories repo, IConfiguration con) : base(repo)
+    public AccountsController(AccountRepositories repo, IConfiguration con) : base(repo)
     {
         _repositories = repo;
         _config = con;
@@ -58,9 +58,12 @@ public class AccountController : BaseController<AccountRepositories, Accounts, i
                     return Unauthorized(new { message = "Wrong Password"});
                 default:
                     var roles = _repositories.UserRoles(loginVM.Email);
+                    var id = _repositories.userID(loginVM.Email);
+
                     var claims = new List<Claim>()
                     {
-                        new Claim("email", loginVM.Email)
+                        new Claim("email", loginVM.Email),
+                        new Claim("id", id.ToString())
                     };
 
                     foreach(var item in roles)
@@ -81,7 +84,7 @@ public class AccountController : BaseController<AccountRepositories, Accounts, i
                     var generateToken = new JwtSecurityTokenHandler().WriteToken(token);
                     claims.Add(new Claim("Token Security", generateToken.ToString()));
 
-                    return Ok(new { statusCode = 200, message = "Login Success!", data = generateToken });
+                    return Ok(new { statusCode = 200, message = "Login Success!", data = generateToken});
             }
         }
         catch (Exception e)
