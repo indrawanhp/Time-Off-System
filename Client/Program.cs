@@ -15,6 +15,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<AccountRepository>();
+builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<AccountRoleRepository>();
 builder.Services.AddScoped<AllocationLeaveRepository>();
 builder.Services.AddScoped<DepartmentRepository>();

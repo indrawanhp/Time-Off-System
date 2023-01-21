@@ -9,7 +9,7 @@ public class DepartmentRepository : GeneralRepository<Department, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public DepartmentRepository(Address address, string request = "Departments/") : base(address, request)
+    public DepartmentRepository(Address address, string request = "Department/") : base(address, request)
     {
         this.address = address;
         this.request = request;
