@@ -9,7 +9,7 @@ public class RequestTimeOffRepository : GeneralRepository<RequestTimeOff, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public RequestTimeOffRepository(Address address, string request = "RequestTimeOff/") : base(address, request)
+    public RequestTimeOffRepository(Address address, string request = "RequestTimeOffs/") : base(address, request)
     {
         this.address = address;
         this.request = request;

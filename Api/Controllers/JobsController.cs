@@ -10,9 +10,9 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Manager")]
-    public class JobPlacementController : BaseController<JobPlacementRepositories, JobPlacements, int>
+    public class JobsController : BaseController<JobRepositories, Jobs, int>
     {
-        public JobPlacementController(JobPlacementRepositories repo) : base(repo)
+        public JobsController(JobRepositories repo) : base(repo)
         {
         }
     }

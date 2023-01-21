@@ -9,7 +9,7 @@ public class EmployeeRepository : GeneralRepository<Employee, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public EmployeeRepository(Address address, string request = "Employee/") : base(address, request)
+    public EmployeeRepository(Address address, string request = "Employees/") : base(address, request)
     {
         this.address = address;
         this.request = request;

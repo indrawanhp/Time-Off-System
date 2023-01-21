@@ -9,7 +9,7 @@ public class AccountRoleRepository : GeneralRepository<AccountRoles, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public AccountRoleRepository(Address address, string request = "AccountRole/") : base(address, request)
+    public AccountRoleRepository(Address address, string request = "AccountRoles/") : base(address, request)
     {
         this.address = address;
         this.request = request;

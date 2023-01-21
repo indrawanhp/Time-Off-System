@@ -9,10 +9,10 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin, Manager")]
-    public class AllocationLeaveController : BaseController<AllocationLeaveRepositories, AllocationLeave, int>
+    [Authorize(Roles = "Admin")]
+    public class DepartmentsController : BaseController<DepartmentRepositories, Department, int>
     {
-        public AllocationLeaveController(AllocationLeaveRepositories repo) : base(repo)
+        public DepartmentsController(DepartmentRepositories repo) : base(repo)
         {
         }
     }

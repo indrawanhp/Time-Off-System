@@ -9,7 +9,7 @@ public class AllocationLeaveRepository : GeneralRepository<AllocationLeave, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public AllocationLeaveRepository(Address address, string request = "AllocationLeave/") : base(address, request)
+    public AllocationLeaveRepository(Address address, string request = "AllocationsLeave/") : base(address, request)
     {
         this.address = address;
         this.request = request;

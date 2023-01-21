@@ -9,7 +9,7 @@ public class AccountRepository : GeneralRepository<Accounts, int>
     private readonly HttpClient httpClient;
     private readonly string request;
     private readonly IHttpContextAccessor _contextAccessor;
-    public AccountRepository(Address address, string request = "Account/") : base(address, request)
+    public AccountRepository(Address address, string request = "Accounts/") : base(address, request)
     {
         this.address = address;
         this.request = request;
