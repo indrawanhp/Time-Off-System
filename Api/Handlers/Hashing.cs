@@ -1,17 +1,18 @@
-﻿namespace Api.Handlers;
-
-public class Hashing
+﻿namespace Api.Handlers
 {
-    private static string GetRandomSalt()
+    public class Hashing
     {
-        return BCrypt.Net.BCrypt.GenerateSalt(12);
-    }
-    public static string HashPassword(string password)
-    {
-        return BCrypt.Net.BCrypt.HashPassword(password, GetRandomSalt());
-    }
-    public static bool ValidatePassword(string password, string correctHash)
-    {
-        return BCrypt.Net.BCrypt.Verify(password, correctHash);
+        private static string GetRandomSalt()
+        {
+            return BCrypt.Net.BCrypt.GenerateSalt(12);
+        }
+        public static string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password, GetRandomSalt());
+        }
+        public static bool ValidatePassword(string password, string correctHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, correctHash);
+        }
     }
 }

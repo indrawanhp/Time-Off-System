@@ -1,7 +1,8 @@
-﻿namespace Api.ViewModels;
-
-public class LoginVM
+﻿namespace Api.ViewModels
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public class LoginVM
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
 }
