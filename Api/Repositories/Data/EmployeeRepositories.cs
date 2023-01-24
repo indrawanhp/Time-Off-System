@@ -27,6 +27,7 @@ public class EmployeeRepositories : GeneralRepository<Employee, int>
                     EndDate = req.EndDate,
                     Duration = req.Duration,
                     Description = req.Description,
+                    Remark = req.Remark,
                     Status = req.Status,
                     IsPublish = req.isPublish
                 }).ToList();

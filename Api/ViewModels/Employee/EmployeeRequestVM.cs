@@ -11,6 +11,7 @@ public class EmployeeRequestVM
     public DateTime EndDate { get; set; }
     public int Duration { get; set; }
     public string Description { get; set; }
+    public string Remark { get; set; }
     public Status Status { get; set; }
     public bool IsPublish { get; set; }
 

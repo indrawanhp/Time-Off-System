@@ -98,7 +98,7 @@
                 <div id="tabsContent" class="tab-content">
                     <div id="request" class="tab-pane fade active show">
                         <div class="row p-3 pb-0 mb-0">
-                            <div class="col-2 text-center mr-auto">
+                            <div class="col-md-2 text-center mr-auto">
                                 <a type="button" id="request" value="request" class="btn btn-primary btn-sm btn-icon-split ms-auto" data-toggle="modal" data-target="#modal-form" onclick="ModalRequest();">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-brands fa-leanpub"></i>
@@ -107,7 +107,7 @@
                                 </a>
                             </div>
                             <div class="table-responsive mt-3">
-                                <table id="myTable" class="table align-items-center" width="100%">
+                                <table id="myTableRequest" class="table align-items-center" width="100%">
                                     <thead style="font-size:14px;">
                                         <tr>
                                             <th class="text-uppercase">Id</th>
@@ -124,8 +124,49 @@
                             </div>
                         </div>
                     </div>
-                    <div id="approved" class="tab-pane fade">DSAa</div>
-                    <div id="refused" class="tab-pane fade">asdsad</div>
+                    <div id="approved" class="tab-pane fade">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableApproved" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="refused" class="tab-pane fade">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableRefused" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,7 +226,7 @@
 @section scripts{
     @*Tabs Request*@
     <script>
-        let tableRequest = $('#myTable').DataTable({
+        let tableRequest = $('#myTableRequest').DataTable({
             ajax: {
                 type: "GET",
                 url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=0",
@@ -256,7 +297,7 @@
 
         const Publish = (id) => {
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Want to publish?',
                 text: 'You wont able to revert this!',
                 icon: 'question',
                 showCancelButton: true,
@@ -434,6 +475,138 @@
 
     @*Tabs Approve*@
     <script>
+        let tableApproved = $('#myTableApproved').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=1",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                }
+            ]
+        });
+    </script>
 
+    @*Tabs Refused*@
+    <script>
+        const Test = () => {
+            $.ajax({
+                type: "GET",
+                url: "../Employee/GetRequestEmployee/?id=4&status=2",
+            }).done((result) => {
+                console.log(result);
+            })
+        }
+        let tableRefused = $('#myTableRefused').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=2",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "remark",
+                    render: (data) => {
+                        return `<a type="button" class="px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" onclick="Swal.fire({ icon: 'error', title: 'Oops... Rejected', text: '${data}!'})">Note</a>`
+                    },
+                    className: "text-center"
+                }
+            ]
+        });
     </script>
 }
