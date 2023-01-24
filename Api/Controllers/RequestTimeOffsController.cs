@@ -9,7 +9,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Employee, Manager")]
+    //[Authorize(Roles = "Employee, Manager")]
     public class RequestTimeOffsController : BaseController<RequestTimeOffRepositories, RequestTimeOff, int>
     {
         public RequestTimeOffsController(RequestTimeOffRepositories repo) : base(repo)

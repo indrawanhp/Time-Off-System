@@ -1,0 +1,439 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Request Time Off";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
+}
+
+@section navbar{
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menu
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+            <i class="fas fa-solid fa-user-tie"></i>
+            <span>Data Employee </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" asp-area="" asp-controller="Employee" asp-action="LeaveRequest">
+            <i class="fas fa-solid fa-person-walking-arrow-right"></i>
+            <span>Request Time Off </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+            <i class="fas fa-solid fa-person-circle-question"></i>
+            <span>List Request </span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+}
+
+<style>
+    .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error {
+        font-size: 12px;
+        border: 1px solid red;
+        color: red;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h4 class="pb-2">Time Off</h4>
+                <ul id="tabs" class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="" data-target="#request" data-toggle="tab" class="nav-link active small text-uppercase">Request</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#approved" data-toggle="tab" class="nav-link small text-uppercase">Approved</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#refused" data-toggle="tab" class="nav-link small text-uppercase">Refused</a>
+                    </li>
+                </ul>
+                <br>
+                <div id="tabsContent" class="tab-content">
+                    <div id="request" class="tab-pane fade active show">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                                <a type="button" id="request" value="request" class="btn btn-primary btn-sm btn-icon-split ms-auto" data-toggle="modal" data-target="#modal-form" onclick="ModalRequest();">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-brands fa-leanpub"></i>
+                                    </span>
+                                    <span class="text">Leave Forms</span>
+                                </a>
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTable" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="approved" class="tab-pane fade">DSAa</div>
+                    <div id="refused" class="tab-pane fade">asdsad</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">Form Data</h6>
+                <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 text-center font-weight-bold">
+                        Leave
+                    </div>
+                    <div class="col-md-12">Remaining Out : <span id="remainingout"></span></div>
+                </div>
+                <form id="RequestForm" class="needs-validation" novalidate>
+                    <input type="hidden" value="@ViewBag.Id" name="employee_id" id="employee_id" required />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" name="start_date" id="start_date" class="form-control date" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" name="end_date" id="end_date" class="form-control date" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" id="description" cols="50" rows="3" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save" type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @*Tabs Request*@
+    <script>
+        let tableRequest = $('#myTable').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=0",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: ["isPublish", "requestId"],
+                    render: (data, type, row) => {
+                        if (row.isPublish == false) {
+                            return `<a type="button" onclick="Publish(${row.requestId})" class="px-2 text-light bg-success text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Publish"><i class="fas fa-solid fa-arrow-up-long"></i></a> <a type="button" onclick="Delete(${row.requestId});" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`
+                        } else {
+                            return `<p class="text-light bg-info text-center" style="box-shadow:3px 3px #000;">Published</p>`
+                        }
+                    },
+                    className: "text-center"
+                }
+            ]
+        });
+
+        const Publish = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You wont able to revert this!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Publish!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "../Employee/GetRequestById/" + id,
+                        type: "GET"
+                    }).done((result) => {
+                        console.log(result)
+                        let publish = {
+                            Id: id,
+                            EmployeeId: @ViewBag.Id,
+                            StartDate: result.startDate,
+                            EndDate: result.endDate,
+                            Duration: result.duration,
+                            AllocationId: result.allocationId,
+                            Description: result.description,
+                            Status: result.status,
+                            Remark: result.remark,
+                            IsPublish: true
+                        }
+                        console.log(publish)
+                        $.ajax({
+                            url: "../Employee/PublishRequest/",
+                            type: "PUT",
+                            contentType: "application/json",
+                            data: JSON.stringify(publish),
+                        }).done((result) => {
+                            console.log("success publish");
+                            Swal.fire({
+                                text: 'Request Published!',
+                                icon: 'success',
+                                timer: 5000,
+                                timerProgressBar: true
+                            });
+                            tableRequest.ajax.reload()
+                        }).fail((error) => {
+                            console.log("failed Publish");
+                            Swal.fire({
+                                text: 'Error Publishing Request!',
+                                icon: 'error',
+                                timer: 5000,
+                                timerProgressBar: true
+                            });
+                        })
+                    })
+                }
+            })
+        };
+
+        $(document).ready(function () {
+            $('#RequestForm').validate({
+                rules: {
+                    start_date: {
+                        required: true
+                    },
+                    end_date: {
+                        required: true
+                    },
+                    description: {
+                        required: true
+                    }
+                },
+                messages: {
+                    start_date: {
+                        required: "Enter the Date.",
+                    },
+                    end_date: {
+                        required: "Enter the Date.",
+                    },
+                    description: {
+                        required: "Enter Description of your leave"
+                    }
+                },
+                submitHandler: () => {
+                    AddRequest();
+                }
+            });
+        });
+
+        const ModalRequest = () => {
+            $.ajax({
+                url: "https://localhost:7090/api/AllocationsLeave/GetEmployee/" + @ViewBag.Id,
+                type: "GET"
+            }).done((result) => {
+                $('#remainingout').html(result.remaining);
+            });
+        }
+
+        const AddRequest = () => {
+            var start = new Date($('#start_date').val());
+            var end = new Date($('#end_date').val());
+            var duration = 0;
+
+            for (var d = start; d <= end; d.setDate(d.getDate() + 1)) {
+                if (d.getDay() > 0 && d.getDay() < 6) {
+                    duration++;
+                }
+            }
+
+            let requestleave = {
+                EmployeeId: $('#employee_id').val(),
+                StartDate: $('#start_date').val(),
+                EndDate: $('#end_date').val(),
+                Duration: duration,
+                Description: $('#description').val(),
+                Status: 0,
+                Remark: "",
+                IsPublish: false
+            }
+            $.ajax({
+                url: "../Employee/InsertRequest",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(requestleave),
+            }).done((result) => {
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'New Request Created!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                tableRequest.ajax.reload()
+            }).fail((error) => {
+                console.log("failed");
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'Error Creating Employee!',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            });
+        };
+
+        const Delete = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You wont able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "https://localhost:7090/api/RequestTimeOffs/" + id,
+                        success: () => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Form has been deleted.',
+                                'success'
+                            )
+                            tableRequest.ajax.reload()
+                        },
+                        error: () => {
+                            Swal.fire(
+                                'Failed!',
+                                'Error deleting form.',
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+
+    @*Tabs Approve*@
+    <script>
+
+    </script>
+}

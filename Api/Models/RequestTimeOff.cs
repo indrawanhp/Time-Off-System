@@ -29,8 +29,8 @@ public class RequestTimeOff
     public bool isPublish { get; set; } = false;
 
     //Relations
-    [JsonIgnore]
     [ForeignKey(nameof(EmployeeId))]
+    [JsonIgnore]
     public Employee? Employee { get; set; }
     [JsonIgnore]
     public ICollection<AllocationLeave>? Leaves { get; set; }

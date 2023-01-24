@@ -12,8 +12,27 @@ namespace Api.Controllers
     //[Authorize]
     public class EmployeesController : BaseController<EmployeeRepositories, Employee, int>
     {
+        private EmployeeRepositories _repo;
         public EmployeesController(EmployeeRepositories repo) : base(repo)
         {
+            _repo = repo;
+        }
+
+        [HttpGet]
+        [Route("GetRequestEmployee/{id}/{status}")]
+        public ActionResult GetRequestEmployee(int id, Status status)
+        {
+            try
+            {
+                var result = _repo.EmployeeRequest(id, status);
+                return result.Count() == 0
+                ? Ok(new { statusCode = 204, message = "Data Not Found!" })
+                : Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
         }
     }
 }
