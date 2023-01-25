@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(10);//set 10 menit
+    options.IdleTimeout = TimeSpan.FromMinutes(30);//set 10 menit
 });
 
 builder.Services.AddScoped<AccountRepository>();

@@ -9,7 +9,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    /*[Authorize(Roles = "Admin")]*/
     public class DepartmentsController : BaseController<DepartmentRepositories, Department, int>
     {
         public DepartmentsController(DepartmentRepositories repo) : base(repo)

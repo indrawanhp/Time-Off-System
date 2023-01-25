@@ -13,5 +13,9 @@ namespace Client.Controllers
         {
                 return View();
         }
+        public IActionResult ListJobAndDepartment()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,213 @@
+﻿@{
+    Layout = "_UserLayout";
+}
+
+@{
+    Layout = "_UserLayout";
+}
+@section navbar{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="CreateAccount">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Create Account </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="CreateRole">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Create Role</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="TotalTimeOff">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Check Total on Employee Time Off </span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/Authentication/logout">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+            <span> Logout </span>
+        </a>
+    </li>
+
+}
+
+<!-- BODY -->
+<div class="card shadow	 mb-4">
+	<div class="card-header py-3">
+		<h5 class="m-0 font-weight-bold text-primary text-center"> LIST ROLE </h5>
+	</div>
+	<div class="card-body">
+		<button class="btn btn-primary float-left mb-2 ms-1" data-bs-toggle="modal" data-bs-target="#modal" onclick="$('#formAccount')[0].reset(); Add()"> Tambah Data </button>
+		<!-- Method Add berasal dari let check add, yang menentukan apakah dia adalah insert atau update untuk tombolnya-->
+		@*<button class="btn btn-secondary float-right mb-2 ms-1" id="csv" name="csv"> CSV </button>
+		<button class="btn btn-warning float-right mb-2 ms-1" id="xls" name="xls"> XLS </button>
+		<button class="btn btn-danger float-right mb-2 ms-1" id="pdf" name="pdf"> PDF </button>*@
+		<!-- Tabel -->
+		<div class="table-responsive text-center">
+			<table id="role" class="table table-bordered table-hover table-group-divider bg-white">
+				<thead class="table-light">
+					<tr class="text-black;">
+						<th style="text-align: center;">Role ID</th>
+						<th style="text-align: center;">Nama Role</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody class="text-black">
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Create-->
+<div class="modal fade" id="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">List Role</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="formEmployee" name="form" autocomplete="off">
+					<div class="form-group">
+						<label for="nik">Role ID:</label>
+						<input type="text" class="form-control" placeholder="Masukkan ID Role" id="roleid" name="roleid">
+
+					</div>
+					<div class="form-group">
+						<label for="fname">NamaRole:</label>
+						<input type="text" class="form-control" id="namarole" placeholder="Masukkan Nama Role" name="namarole" required>
+
+					</div>
+					<div class="modal-footer">
+						<button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+    <script>
+        //GET DATA ACCOUNT
+        $(document).ready(function () {
+            let tables = $('#role').DataTable({
+                ajax: {
+                    url: `https://localhost:7090/api/Roles`,
+                    dataType: "Json",
+                    dataSrc: ""
+                },
+                columns: [ //untuk nampilin nama kolom di datatable
+                    {
+                        "data": "id"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "id",
+                        render: function (data, type, row) {
+                            return `<td><button type="button" onclick="Update('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#modal"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                                    <td><button type="button" onclick="Delete('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
+                                   `;
+                        }
+                    }
+                ],
+                dom: /*'Bfrtip',*/
+                    //"<'row'<'col-lg-4'l><'col-lg-6'B><'col-lg-2'f>>" +
+                    //"<'row'<'col-lg-12'tr>>" +
+                    //"<'row'<'col-lg-7'i><'col-lg-5'p>>",
+                    "<'row'<'col-lg-2'l><'col-lg-6'B><'col-lg-4'f>>" +
+                    "<'row'<'col-lg-12'tr>>" +
+                    "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i class="fas fa-solid fa-copy"></i>',
+                        className: 'btn btn-info btn-xs', //nama class button saja
+                        attr: {
+                            'data-bs-toggle': 'tooltip',
+                            'title': 'Copy Data'
+                        },
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fas fa-regular fa-file-excel text-lg"></i>',
+                        className: 'btn btn btn-success btn-xs', //nama class button saja
+                        attr: {
+                            'data-bs-toggle': 'tooltip',
+                            'title': 'Export to Excel'
+                        },
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fas fa-regular fa-file-csv"></i>',
+                        className: 'btn btn-dark btn-xs',
+                        attr: {
+                            'data-bs-toggle': 'tooltip',
+                            /*'data-bs-placement': 'top',*/
+                            'title': 'Export to CSV'
+                        },
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fas fa-solid fa-file-pdf"></i>',
+                        className: 'btn btn-danger btn-xs',
+                        attr: {
+                            'data-bs-toggle': 'tooltip',
+                            /*'data-bs-placement': 'top',*/
+                            'title': 'Export to PDF'
+                        },
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: '<i class="fas fa-solid fa-eye"></i>',
+                        attr: {
+                            'data-bs-toggle': 'tooltip',
+                            /*'data-bs-placement': 'top',*/
+                            'title': 'Column Visibility'
+                        },
+                        className: 'btn btn-light btn-xs',
+                    },
+                ],
+                //untuk menghapus class dt button
+                initComplete: function () {
+                    var btns = $('.dt-button');
+                    btns.removeClass('dt-button');
+
+                },
+            });
+        });
+                // END GET DATA
+
+                //insert
+
+                //update
+
+                //delete
+
+    </script>
+}

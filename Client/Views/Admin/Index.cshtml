@@ -13,19 +13,19 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="CreateAccount">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Create Account </span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="CreateRole">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Create Role</span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="TotalTimeOff">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Check Total on Employee Time Off </span>
         </a>
@@ -40,8 +40,89 @@
 
 }
 
+<!-- BODY -->
+<div class="card shadow	mb-4">
+    <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary text-center"> Data Employee </h5>
+    </div>
+    <div class="card-body">
+        <div class="container mb-2">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="chart1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="chart2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- END BODY-->
+
+
 @section scripts{
     <script>
-        console.log("Test")
+        //CHART 1
+        var options = {
+          series: [60, 40],
+          chart: {
+          width: 450,
+          type: 'pie',
+        },
+        labels: ['Employee', 'Admin'],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 400
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart1"), options);
+        chart.render();
+
+        //CHART 2
+        var options = {
+            series: [{
+                data: [4, 6]
+            }],
+            chart: {
+                type: 'bar',
+                height: 300
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['Admin', 'Employee'],
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart2"), options);
+        chart.render();
+
     </script>
 }

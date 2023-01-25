@@ -1,0 +1,726 @@
+﻿@{
+    Layout = "_UserLayout";
+}
+@{
+    Layout = "_UserLayout";
+}
+
+@section navbar{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="ListJobAndDepartment">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> List Department & Jobs</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/Authentication/logout">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+            <span> Logout </span>
+        </a>
+    </li>
+}
+
+<!-- BODY -->
+<div class="card shadow	mb-4">
+    <div class="card-header py-3">
+        <h5 class="m-0 font-weight-bold text-primary text-center"> List Job And Departments </h5>
+    </div>
+    <div class="card-body">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Departments</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Jobs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Jobs Placements</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+
+            <!-- DEPARTMENT -->
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+				<br />
+                <button type="button" class="btn btn-primary mb-3 ms-3" data-bs-toggle="modal" data-bs-target="#dep" onclick="$('#formDepartment')[0].reset(); Add()"> Create Departments</button>
+                <div class="table-responsive text-center">
+			    <table id="department" class="table table-bordered table-hover table-group-divider bg-white" width="100%">
+				<thead class="table-light">
+					<tr class="text-black;">
+						<th style="text-align: center;">ID</th>
+						<th style="text-align: center;">Name</th>
+						<th style="text-align: center;">Address</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody class="text-black">
+				</tbody>
+			</table>
+		    </div>
+        </div>
+
+            <!-- JOBS -->
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+				<br />
+                <button class="btn btn-primary mb-3 ms-3" data-bs-toggle="modal" data-bs-target="#job" onclick="$('#formJobs')[0].reset(); Add()"> Create Jobs</button>
+                <div class="table-responsive text-center">
+                    <table id="jobs" class="table table-bordered table-hover table-group-divider bg-white" width="100%">
+                        <thead class="table-light">
+                            <tr class="text-black;">
+                                <th style="text-align: center;">ID</th>
+                                <th style="text-align: center;">Name</th>
+                                <th style="text-align: center;">Min-Salary</th>
+                                <th style="text-align: center;">Max-Salary</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-black">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- job placement-->
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+				<br />
+                <button class="btn btn-primary mb-3 ms-3"  data-bs-toggle="modal" data-bs-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add()"> Create Jobs Placements</button>
+                <div class="table-responsive text-center">
+                    <table id="jobplacement" class="table table-bordered table-hover table-group-divider bg-white" width="100%">
+                        <thead class="table-light">
+                            <tr class="text-black;">
+                                <th style="text-align: center;">ID</th>
+                                <th style="text-align: center;">Employee ID</th>
+                                <th style="text-align: center;">Department ID</th>
+                                <th style="text-align: center;">Job ID</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-black">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal MENU 1-->
+<div class="modal fade" id="dep" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Data Department</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+                <form id="formDepartment" name="form" autocomplete="off" >
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input type="number" class="form-control" placeholder="Masukkan ID" id="departmentId" name="departmentId">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="departmentName" placeholder="Masukkan Nama Department" name="departmentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" class="form-control" id="address" placeholder="Masukkan Alamat" name="address" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- Modal MENU 2-->
+<div class="modal fade" id="job" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formJobs" name="form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input type="number" class="form-control" placeholder="Masukkan ID" id="jobId" name="jobId">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="jobName" placeholder="Masukkan Nama Job" name="jobName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Min Salary:</label>
+                        <input type="text" class="form-control" id="minSalary" placeholder="Masukkan Min Salary" name="minSalary" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Max Salary:</label>
+                        <input type="text" class="form-control" id="maxSalary" placeholder="Masukkan Max Salary" name="maxSalary" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal MENU 3-->
+<div class="modal fade" id="jobdep" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formJobdep" name="form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="id">ID:</label>
+                        <input type="number" class="form-control" placeholder="Masukkan ID" id="jobId" name="jobId">
+                    </div>
+                    <div class="form-group">
+                        <label for="id">Employee ID:</label>
+                        <select class="js-example-basic-single" name="states[]" multiple="multiple">
+                            <option value="AL">Alabama</option>
+                            ...
+                            <option value="WY">Wyoming</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id">Department ID:</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id">Job ID:</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- END BODY -->
+
+@section scripts{
+    <script>
+        //CRUD
+        // NAV-1
+        // GET DATA
+        $(document).ready(function () {
+            let tables = $('#department').DataTable({
+                ajax: {
+                    url: `https://localhost:7090/api/Departments`,
+                    dataType: "Json",
+                    dataSrc: ""
+                },
+                columns: [ //untuk nampilin nama kolom di datatable
+                    {
+                        "data": "id"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "address"
+                    },
+                    {
+                        "data": "id",
+                        render: function (data, type, row) {
+                            return `<td><button type="button" onclick="Update('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#dep"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                                            <td><button type="button" onclick="Delete('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
+                                            `;
+                        }
+                    }
+                ],
+            });
+        });
+
+        //validate
+    $(document).ready(function () {
+        $('#formDepartment').validate({
+        rules: {
+            departmentName: {
+                required: true,
+            },
+            address: {
+                required: true
+            },
+        },
+        messages: {
+            departmentName: "<h6>Silahkan Masukan Nama</h6>",
+            address: "<h6>Silahkan masukan Alamat</h6>",
+        },
+        submitHandler: () => {
+            if (!check) {
+                Insert()
+            } else {
+                prosesUpdate()
+            }
+        },
+        errorElement: "em",
+        errorPlacement: function (error, element) {
+            // Add the help-block class to the error element
+            error.addClass("help-block");
+
+            // Add has-feedback class to the parent div.form-group
+            // in order to add icons to inputs
+            element.parents(".col-sm-5").addClass("has-feedback");
+
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
+            } else {
+                error.insertAfter(element);
+            }
+
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if (!element.next("span")[0]) {
+                $("<span class='glyphicon glyphicon-remove form-control-feedback'></span>").insertAfter(element);
+            }
+        },
+        success: function (label, element) {
+            // Add the span element, if doesn't exists, and apply the icon classes to it.
+            if (!$(element).next("span")[0]) {
+                $("<span class='glyphicon glyphicon-ok form-control-feedback'></span>").insertAfter($(element));
+            }
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+            $(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+            $(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+        }
+    })
+});
+        //Untuk cek button apakah dia insert atau update
+        let check
+        const Add = () => {
+            check = false
+        }
+
+        //insert
+        function Insert() {
+            let obj = {
+                name: $("#departmentName").val(),
+                address: $("#address").val(),
+            };
+            console.log(obj);
+            $.ajax({
+                url: `https://localhost:7090/api/Departments`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(obj) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
+            }).done((result) => {
+                Swal.fire(
+                    'Insert!',
+                    'Data Berhasil Disimpan.',
+                    'success'
+                )
+                $('#department').DataTable().ajax.reload()
+            }).fail((error) => {
+                Swal.fire(
+                    'Failed!',
+                    'Data Gagal Disimpan.',
+                    'error'
+                )
+            }) //penutup ERROR
+        } //penutup insert()
+
+        //update
+        function Update(id) {
+            check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
+            $.ajax({
+                url: `https://localhost:7090/api/Departments/` + id,
+                dataType: "Json",
+                Type: "GET",
+                dataSrc: ""
+            }).done((result) => {
+                $('#departmentId').val(result.id);
+                $("#departmentName").val(result.name);
+                $("#address").val(result.address);
+                
+                console.log(result.id);
+            })
+        }
+
+        function prosesUpdate() {
+                event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
+                let coba = {
+                    id: $("#departmentId").val(),
+                    name: $("#departmentName").val(),
+                    address: $("#address").val(),
+                };
+                console.log(coba);
+                $.ajax({
+                    url: "https://localhost:7090/api/Departments",
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
+                }).done((result) => {
+                    console.log("success");
+                    Swal.fire(
+                        'Update!',
+                        'Data Berhasil Disimpan.',
+                        'success'
+                    );
+                    $('#department').modal('hide')
+                    $('#department').DataTable().ajax.reload()
+                }).fail((error) => {
+                    Swal.fire(
+                        'Failed!',
+                        'Data Gagal Disimpan.',
+                        'error'
+                    );
+                })
+            }
+
+        //delete
+        function Delete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You wont able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `https://localhost:7090/api/Departments/${id}`,
+                        success: () => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Employee has been deleted.',
+                                'success'
+                            )
+                            $('#department').DataTable().ajax.reload()
+                        },
+                        error: () => {
+                            Swal.fire(
+                                'Failed!',
+                                'Error deleting employee.',
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
+        }
+
+       // NAV-2
+       // GET DATA
+        $(document).ready(function () {
+            let tables = $('#jobs').DataTable({
+                ajax: {
+                    url: `https://localhost:7090/api/Jobs`,
+                    dataType: "Json",
+                    processData: false,
+                    dataSrc: ""
+                },
+                columns: [ //untuk nampilin nama kolom di datatable
+                    {
+                        "data": "id"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": null,
+                        render: function (data, type, row) {
+                            return 'Rp. ' + row["minSalary"];
+                        }
+                    },
+                    {
+                        "data": null,
+                        render: function (data, type, row) {
+                            return 'Rp. ' + row["maxSalary"];
+                        }
+                    },
+                    {
+                        "data": "id",
+                        render: function (data, type, row) {
+                            return `<td><button type="button" onclick="Update1('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#job"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                                                    <td><button type="button" onclick="Delete1('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
+                                                    `;
+                        }
+                    }
+                ],
+            });
+        });
+
+        //validate
+        $(document).ready(function () {
+            $('#formJobs').validate({
+                rules: {
+                    jobId: {
+                        required: true,
+                    },
+                    jobName: {
+                        required: true,
+                    },
+                    minSalary: {
+                        required: true,
+                    },
+                    maxSalary: {
+                        required: true
+                    },
+                },
+                messages: {
+                    jobId: "<h6>Silahkan Masukan Id</h6>",
+                    jobName: "<h6>Silahkan Masukan Nama</h6>",
+                    minSalary: "<h6>Silahkan Masukan Min Gaji</h6>",
+                    maxSalary: "<h6>Silahkan masukan Max Gaji</h6>",
+                },
+                submitHandler: () => {
+                    if (!check1) {
+                        Insert1()
+                    } else {
+                        prosesUpdate1()
+                    }
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    // Add the help-block class to the error element
+                    error.addClass("help-block");
+
+                    // Add has-feedback class to the parent div.form-group
+                    // in order to add icons to inputs
+                    element.parents(".col-sm-5").addClass("has-feedback");
+
+                    if (element.prop("type") === "checkbox") {
+                        error.insertAfter(element.parent("label"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+
+                    // Add the span element, if doesn't exists, and apply the icon classes to it.
+                    if (!element.next("span")[0]) {
+                        $("<span class='glyphicon glyphicon-remove form-control-feedback'></span>").insertAfter(element);
+                    }
+                },
+                success: function (label, element) {
+                    // Add the span element, if doesn't exists, and apply the icon classes to it.
+                    if (!$(element).next("span")[0]) {
+                        $("<span class='glyphicon glyphicon-ok form-control-feedback'></span>").insertAfter($(element));
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
+                    $(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
+                    $(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+                }
+            })
+        });
+        //Untuk cek button apakah dia insert atau update
+        let check1
+        const Add1 = () => {
+            check1 = false
+        }
+
+        //insert
+        function Insert1() {
+            let obj = {
+                name: $("#jobName").val(),
+                minSalary: $("#minSalary").val(),
+                maxSalary: $("#maxSalary").val(),
+            };
+            console.log(obj);
+            $.ajax({
+                url: `https://localhost:7090/api/Jobs`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(obj) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
+            }).done((result) => {
+                Swal.fire(
+                    'Insert!',
+                    'Data Berhasil Disimpan.',
+                    'success'
+                )
+                $('#jobs').modal('hide')
+                $('#jobs').DataTable().ajax.reload()
+            }).fail((error) => {
+                Swal.fire(
+                    'Failed!',
+                    'Data Gagal Disimpan.',
+                    'error'
+                )
+            }) //penutup ERROR
+        } //penutup insert()
+
+        //update
+        function Update1(id) {
+            check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
+            $.ajax({
+                url: `https://localhost:7090/api/Jobs/` + id,
+                dataType: "Json",
+                Type: "GET",
+                dataSrc: ""
+            }).done((result) => {
+                $('#jobId').val(result.id);
+                $("#jobName").val(result.name);
+                $("#minSalary").val(result.minSalary);
+                $("#maxSalary").val(result.maxSalary);
+
+                console.log(result.id);
+            })
+        }
+
+        function prosesUpdate1() {
+            event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
+            let coba = {
+                jobId: $("#departmentId").val(),
+                minSalary: $("#minSalary").val(),
+                maxSalary: $("#maxSalary").val(),
+            };
+            console.log(coba);
+            $.ajax({
+                url: "https://localhost:7090/api/Jobs",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
+            }).done((result) => {
+                console.log("success");
+                Swal.fire(
+                    'Update!',
+                    'Data Berhasil Disimpan.',
+                    'success'
+                );
+                $('#department').modal('hide')
+                $('#department').DataTable().ajax.reload()
+            }).fail((error) => {
+                Swal.fire(
+                    'Failed!',
+                    'Data Gagal Disimpan.',
+                    'error'
+                );
+            })
+        }
+
+        //delete
+        function Delete1(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You wont able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `https://localhost:7090/api/Jobs/${id}`,
+                        success: () => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Employee has been deleted.',
+                                'success'
+                            )
+                            $('#jobs').DataTable().ajax.reload()
+                        },
+                        error: () => {
+                            Swal.fire(
+                                'Failed!',
+                                'Error deleting employee.',
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
+        }
+
+
+       // NAV-3
+       // GET DATA
+        $(document).ready(function () {
+            let tables = $('#jobplacement').DataTable({
+                ajax: {
+                    url: `https://localhost:7090/api/JobPlacements`,
+                    dataType: "Json",
+                    dataSrc: ""
+                },
+                columns: [ //untuk nampilin nama kolom di datatable
+                    {
+                        "data": "id"
+                    },
+                    {
+                        "data": "employeeId"
+                    },
+                    {
+                        "data": "departmentId"
+                    },
+                    {
+                        "data": "jobId"
+                    },
+                    {
+                        "data": "id",
+                        render: function (data, type, row) {
+                            return `<td><button type="button" onclick="Update('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#modal"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                                                            <td><button type="button" onclick="Delete('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
+                                                            `;
+                        }
+                    }
+                ],
+            });
+        });
+
+        //Select2 for Employee ID
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+
+        //Select2 for Department ID
+        
+
+        //Select2 for Job ID
+
+        //validate
+
+        //insert
+
+        //update
+
+        //delete
+
+
+    </script>
+}
