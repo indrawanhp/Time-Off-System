@@ -1,16 +1,29 @@
 ﻿@{
     Layout = "_UserLayout";
+    ViewBag.Title = "Dashboard Manager";
 }
 
 @section navbar{
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menu
+    </div>
+
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManageTimeOff">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Manage Time Off </span>
         </a>
@@ -21,12 +34,9 @@
             <span> List Employee Approve </span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/Authentication/logout">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
-            <span> Logout </span>
-        </a>
-    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 }
 
 

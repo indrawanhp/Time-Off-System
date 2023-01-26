@@ -26,7 +26,24 @@ namespace Api.Controllers
             {
                 var result = _repo.EmployeeRequest(id, status);
                 return result.Count() == 0
-                ? Ok(new { statusCode = 204, message = "Data Not Found!" })
+                ? Ok(result)
+                : Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetRequestManager/{id}/{status}")]
+        public ActionResult GetRequestManager(int id, Status status)
+        {
+            try
+            {
+                var result = _repo.ManangeEmploye(id, status);
+                return result.Count() == 0
+                ? Ok(result)
                 : Ok(result);
             }
             catch (Exception e)

@@ -26,8 +26,8 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
         try
         {
             var result = _repo.GetEmployee(id);
-            return result == null
-            ? Ok(new { statusCode = 204, message = "Data Not Found!" })
+            return result.Count() == 0
+            ? Ok(result)
             : Ok(result);
         }
         catch (Exception e)

@@ -10,7 +10,9 @@ public class EmployeeRequestVM
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public int Duration { get; set; }
+    public int AllocationId { get; set; }
     public string Description { get; set; }
+    public string LeaveType { get; set; }
     public string Remark { get; set; }
     public Status Status { get; set; }
     public bool IsPublish { get; set; }

@@ -12,13 +12,12 @@ namespace Api.Repositories.Data
             _context = context;
         }
 
-        public AllocationLeave GetEmployee(int id)
+        public IEnumerable<AllocationLeave> GetEmployee(int id)
         {
             var result = (from leave in _context.AllocationsLeave
                           where leave.EmployeeId == id
-                          select leave).SingleOrDefault();
+                          select leave).ToList();
             return result;
-                    
         }
     }
 }

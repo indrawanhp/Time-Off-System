@@ -11,14 +11,13 @@ public class AllocationLeave
     public int Id { get; set; }
     [Required, Column("employee_id")]
     public int EmployeeId { get; set; }
+    [Required, Column("name")]
+    public string Name { get; set; }
     [Required, Column("remaining")]
     public int Remaining { get; set; }
 
     //Relation
-    [JsonIgnore]
-    [ForeignKey(nameof(EmployeeId))]
-    public Employee? Employee { get; set; }
 
     [JsonIgnore]
-    public RequestTimeOff? RequestTimeOff { get; set; }
+    public ICollection<RequestTimeOff>? RequestsTimeOff { get; set; }
 }

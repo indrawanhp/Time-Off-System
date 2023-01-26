@@ -37,8 +37,6 @@ public class Employee
     [JsonIgnore]
     public ICollection<RequestTimeOff>? requestTimeOff { get; set; }
     [JsonIgnore]
-    public AllocationLeave? AllocationLeave { get; set; }
-    [JsonIgnore]
     public Accounts? accounts { get; set; }
 }
 

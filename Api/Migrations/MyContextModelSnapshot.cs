@@ -82,19 +82,16 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("employee_id");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
                     b.Property<int>("Remaining")
                         .HasColumnType("int")
                         .HasColumnName("remaining");
 
-                    b.Property<int?>("RequestTimeOffId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.HasIndex("RequestTimeOffId");
 
                     b.ToTable("tb_m_allocations_leave");
                 });
@@ -255,6 +252,9 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("allocation_id");
 
+                    b.Property<int?>("AllocationLeave")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("description");
@@ -288,6 +288,8 @@ namespace Api.Migrations
                         .HasColumnName("is_publish");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AllocationLeave");
 
                     b.HasIndex("EmployeeId");
 
@@ -343,23 +345,6 @@ namespace Api.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Api.Models.AllocationLeave", b =>
-                {
-                    b.HasOne("Api.Models.Employee", "Employee")
-                        .WithOne("AllocationLeave")
-                        .HasForeignKey("Api.Models.AllocationLeave", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Api.Models.RequestTimeOff", "RequestTimeOff")
-                        .WithMany("Leaves")
-                        .HasForeignKey("RequestTimeOffId");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("RequestTimeOff");
-                });
-
             modelBuilder.Entity("Api.Models.JobPlacements", b =>
                 {
                     b.HasOne("Api.Models.Department", "department")
@@ -389,6 +374,10 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.RequestTimeOff", b =>
                 {
+                    b.HasOne("Api.Models.AllocationLeave", "allocationLeave")
+                        .WithMany("RequestsTimeOff")
+                        .HasForeignKey("AllocationLeave");
+
                     b.HasOne("Api.Models.Employee", "Employee")
                         .WithMany("requestTimeOff")
                         .HasForeignKey("EmployeeId")
@@ -396,11 +385,18 @@ namespace Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("allocationLeave");
                 });
 
             modelBuilder.Entity("Api.Models.Accounts", b =>
                 {
                     b.Navigation("AccountRoles");
+                });
+
+            modelBuilder.Entity("Api.Models.AllocationLeave", b =>
+                {
+                    b.Navigation("RequestsTimeOff");
                 });
 
             modelBuilder.Entity("Api.Models.Department", b =>
@@ -410,8 +406,6 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.Employee", b =>
                 {
-                    b.Navigation("AllocationLeave");
-
                     b.Navigation("Placements");
 
                     b.Navigation("accounts");
@@ -422,11 +416,6 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Models.Jobs", b =>
                 {
                     b.Navigation("JobPlacements");
-                });
-
-            modelBuilder.Entity("Api.Models.RequestTimeOff", b =>
-                {
-                    b.Navigation("Leaves");
                 });
 
             modelBuilder.Entity("Api.Models.Roles", b =>

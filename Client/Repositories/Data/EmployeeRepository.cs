@@ -49,4 +49,14 @@ public class EmployeeRepository : GeneralRepository<Employee, int>
         }
         return entity;
     }
+    public async Task<List<EmployeeRequestVM>> GetRequestManager(int id, Status status)
+    {
+        List<EmployeeRequestVM> entity = new List<EmployeeRequestVM>();
+        using (var response = await httpClient.GetAsync(request + "GetRequestManager/" + id + "/" + status))
+        {
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            entity = JsonConvert.DeserializeObject<List<EmployeeRequestVM>>(apiResponse);
+        }
+        return entity;
+    }
 }
