@@ -14,7 +14,7 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+//[Authorize(Roles = "Admin")]
 public class AccountsController : BaseController<AccountRepositories, Accounts, int>
 {
     private AccountRepositories _repositories;
@@ -77,7 +77,7 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
                         _config["JWT:Issuer"],
                         _config["JWT:Audience"],
                         claims,
-                        expires: DateTime.Now.AddMinutes(10),
+                        expires: DateTime.Now.AddMinutes(30),
                         signingCredentials: signIn
                         );
 

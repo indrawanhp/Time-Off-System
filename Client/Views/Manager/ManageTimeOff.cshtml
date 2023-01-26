@@ -1,0 +1,476 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Manager Time Off";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
+}
+
+@section navbar{
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menu
+    </div>
+
+    <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManageTimeOff">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Manage Time Off </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> List Employee Approve </span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+}
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h4 class="pb-2">@ViewBag.Title</h4>
+                <ul id="tabs" class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="" data-target="#requested" data-toggle="tab" class="nav-link active small text-uppercase">Requested</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#approved" data-toggle="tab" class="nav-link small text-uppercase">Approved</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#refused" data-toggle="tab" class="nav-link small text-uppercase">Refused</a>
+                    </li>
+                </ul>
+                <br>
+                <div id="tabsContent" class="tab-content">
+                    <div id="requested" class="tab-pane fade active show">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="table-responsive mt-3">
+                                <table id="myTableRequested" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="approved" class="tab-pane fade">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableApproved" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="refused" class="tab-pane fade">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableRefused" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Remark</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @*Request*@
+    <script>
+        console.log("Manage Time Off")
+        let tableRequest = $('#myTableRequested').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=0",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: ["status", "requestId"],
+                    render: (data, type, row) => {
+                        if (row.status == 0) {
+                            return `<a type="button" onclick="Approve(${row.requestId})" class="px-2 text-light bg-primary text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-solid fa-thumbs-up"></i></a> <a type="button" onclick="Refuse(${row.requestId})" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Refuse"><i class="fas fa-solid fa-xmark"></i></a>`
+                        }
+                    },
+                    className: "text-center"
+                }
+            ]
+        });
+
+        const Approve = (id) => {
+            Swal.fire({
+                title: 'Want to Approve?',
+                text: 'You wont able to revert this!',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "../Manager/GetRequestById/" + id,
+                        type: "GET"
+                    }).done((result) => {
+                        console.log(result)
+                        $.ajax({
+                            url: "https://localhost:7090/api/AllocationsLeave/" + result.allocationId,
+                            type: "GET"
+                        }).done((allocation) => {
+                            let remaining = {
+                                Id: allocation.id,
+                                EmployeeId: allocation.employeeId,
+                                Name: allocation.name,
+                                Remaining: allocation.remaining - result.duration
+                            };
+                            $.ajax({
+                                url: "../Manager/UpdateRemainingLeave",
+                                type: "PUT",
+                                contentType: "application/json",
+                                data: JSON.stringify(remaining),
+                            }).done(() => {
+                                console.log("success calculate remaining leave");
+                            }).fail(() => {
+                                console.log("failed calculate remaining leave");
+                            })
+                        })
+                        let approve = {
+                            Id: id,
+                            EmployeeId: result.employeeId,
+                            StartDate: result.startDate,
+                            EndDate: result.endDate,
+                            Duration: result.duration,
+                            AllocationId: result.allocationId,
+                            Description: result.description,
+                            Status: 1,
+                            Remark: result.remark,
+                            IsPublish: true
+                        }
+                        console.log(approve)
+                        $.ajax({
+                            url: "../Manager/ResponseRequest/",
+                            type: "PUT",
+                            contentType: "application/json",
+                            data: JSON.stringify(approve),
+                        }).done((result) => {
+                            console.log("success approve");
+                            Swal.fire({
+                                text: 'Request Approved!',
+                                icon: 'success',
+                                timer: 5000,
+                                timerProgressBar: true
+                            });
+                            tableRequest.ajax.reload()
+                            tableApproved.ajax.reload()
+                            tableApproved.ajax.reload()
+                        }).fail((error) => {
+                            console.log("failed approve");
+                            Swal.fire({
+                                text: 'Error Approving Request!',
+                                icon: 'error',
+                                timer: 5000,
+                                timerProgressBar: true
+                            });
+                        })
+                    })
+                }
+            })
+        };
+
+        const Refuse = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Refuse!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "../Manager/GetRequestById/" + id,
+                        type: "GET"
+                    }).done((data) => {
+                        Swal.fire({
+                            title: 'Enter reason for refusing',
+                            input: 'text',
+                            inputPlaceholder: 'Reason for refusing',
+                            showCancelButton: true
+                        }).then((result) => {
+                            let refuse = {
+                                Id: data.id,
+                                EmployeeId: data.employeeId,
+                                StartDate: data.startDate,
+                                EndDate: data.endDate,
+                                Duration: data.duration,
+                                AllocationId: data.allocationId,
+                                Description: data.description,
+                                Status: 2,
+                                Remark: result.value,
+                                IsPublish: true
+                            }
+                            $.ajax({
+                                url: "../Manager/ResponseRequest/",
+                                type: "PUT",
+                                contentType: "application/json",
+                                data: JSON.stringify(refuse),
+                            }).done(() => {
+                                console.log("success refuse");
+                                Swal.fire({
+                                    text: 'Request Refused!',
+                                    icon: 'success',
+                                    timer: 5000,
+                                    timerProgressBar: true
+                                });
+                                tableRequest.ajax.reload()
+                                tableApproved.ajax.reload()
+                                tableRefused.ajax.reload()
+                            }).fail((error) => {
+                            console.log("failed refusing");
+                            Swal.fire({
+                                text: 'Error Refusing Request!',
+                                icon: 'error',
+                                timer: 5000,
+                                timerProgressBar: true
+                            });
+                        })
+                        })
+                    })
+                }
+            })
+        }
+    </script>
+
+    @*Approved*@
+    <script>
+        let tableApproved = $('#myTableApproved').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=1",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                }
+            ]
+        });
+    </script>
+
+    @*Refused*@
+    <script>
+        let tableRefused = $('#myTableRefused').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=2",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "startDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "endDate",
+                    render: (data) => {
+                        return `<p>${moment(data).format('DD/MM/YYYY')}</p>`
+                    }
+                },
+                {
+                    data: "duration",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "description",
+                    render: (data) => {
+                        return `<p>${data}</p>`
+                    }
+                },
+                {
+                    data: "status",
+                    render: (data) => {
+                        switch (data) {
+                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
+                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                        }
+                    },
+                    className: "text-center"
+                },
+                {
+                    data: "remark",
+                    render: (data) => {
+                        return `<a type="button" class="px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" onclick="Swal.fire({ icon: 'error', title: 'Rejected', text: '${data}!'})">Note</a>`
+                    },
+                    className: "text-center"
+                },
+            ]
+        });
+    </script>
+}
