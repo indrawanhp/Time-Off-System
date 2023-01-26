@@ -12,5 +12,13 @@ namespace Client.Controllers
         {
             return View();
         }
+        public IActionResult Account()
+        {
+            return View();
+        }
+        public IActionResult AllocationsLeave()
+        {
+            return View();
+        }
     }
 }

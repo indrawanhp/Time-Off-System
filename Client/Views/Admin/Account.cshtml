@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Account";
+}
+@section navbar{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+            <i class="fas fa-user-circle"></i>
+            <span> Create Account </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
+            <i class="fas fa-user-clock"></i>
+            <span> Allocations Leave</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/Authentication/logout">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+            <span> Logout </span>
+        </a>
+    </li>
+
+}
+
+<style>
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error {
+        font-size: 12px;
+        border: 1px solid red;
+        color: red;
+        width: 470px;
+    }
+
+    .error {
+        color: red;
+        font-size: 20px;
+        position: relative;
+        line-height: 1;
+        width: 470px;
+    }
+</style>
+
+<section>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Account</h6>
+        </div>
+        <div class="card-body">
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createdAccount">
+                + Created New Account
+            </button><br /><br />
+            <div class="table-responsive">
+                <table class="table table-bordered" id="account" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="account">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+                       
+</section>
+<!-- Created Modal -->
+<div class="modal fade" id="createdAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Created Account</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="c">
+                <form class="row g-3 needs-validation" id="formValidation" method="post" novalidate>
+
+                    <div class="mb-3">
+                        <label class="form-label" style="margin-top: -10px;">Employee</label>
+                        <select class="js-example-data-array form-select" name="employeeId" id="employeeId">
+                        </select>
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="margin-top: -10px;">Email</label>
+                        <input type="text" class="form-control form-control-user" id="email" name="email" />
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="margin-top: -10px;">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" >
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="margin-top: -10px;">Role</label>
+                        <select class="form-select" name="txtrole" id="txtrole">
+                            
+                        </select>
+
+                    </div>
+                    <button id="btnAdd" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- getEditModal -->
+<div class="modal fade" id="getEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Account</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="c">
+
+                <input type="hidden" class="form-control" name="idAccountRole" id="idAccountRole">
+                <input type="hidden" class="form-control" name="idEmployee" id="idEmployee">
+                    <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" style="margin-top: -10px;">Role</label>
+                        <select class="form-select" name="roleS" id="roleS" required>
+                        </select>
+
+                    </div>
+                <button type="submit" name="btnEdit" data-bs-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        console.log("Test")
+    </script>
+}

@@ -1,0 +1,141 @@
+﻿@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Allocation Leave";
+}
+@section navbar{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+            <i class="fas fa-user-circle"></i>
+            <span> Create Account </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Check Total on Employee Time Off </span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/Authentication/logout">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+            <span> Logout </span>
+        </a>
+    </li>
+
+}
+<style>
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error {
+        font-size: 12px;
+        border: 1px solid red;
+        color: red;
+        width: 470px;
+    }
+    .error{
+        color: red;
+        font-size: 20px;
+        position: relative;
+        line-height: 1;
+        width: 470px;
+    }
+</style>
+<section>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Allocation Leave</h6>
+        </div>
+        <div class="card-body">
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#created">
+                + Created Allocation Leave
+            </button><br /><br />
+            <div class="table-responsive">
+                <table class="table table-bordered" id="allocationsleave" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Jabatan</th>
+                            <th>Departmen</th>
+                            <th>Sisa Cuti</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allocationsleave">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Created Modal -->
+<div class="modal fade" id="created" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Created Allocation Leave</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="c">
+                <form class="row g-3 needs-validation" id="formValidationAllocationLeave" method="post" novalidate>
+
+                    <div class="mb-3">
+                        <label class="form-label">Employee</label>
+                        <select class="form-select" name="employeeId" id="employeeId">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Useable Leave</label>
+                        <input type="number" class="form-control" name="remaining" id="remaining" required>
+                    </div>
+                    <button id="btnAddAl" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="getEditModalAllocationsLeave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Useable Leave</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="c">
+                    <input type="hidden" class="form-control" name="txtid" id="txtid">
+                    <input type="hidden" class="form-control" name="txtidEmployee" id="txtidEmployee">
+
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Useable Leave</label>
+                        <input type="number" class="form-control" name="txtremaining" id="txtremaining" required> 
+
+                    </div>
+                <button type="submit" name="btnEdit" data-bs-dismiss="modal" onclick="EditRemaining()" class="btn btn-primary">Submit</button>
+
+            </div>
+        </div>
+    </div>
+</div>

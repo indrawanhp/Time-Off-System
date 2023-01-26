@@ -1,10 +1,6 @@
 ﻿@{
     Layout = "_UserLayout";
 }
-
-@{
-    Layout = "_UserLayout";
-}
 @section navbar{
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
@@ -13,24 +9,17 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+            <i class="fas fa-user-circle"></i>
             <span> Create Account </span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Create Role</span>
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
+            <i class="fas fa-user-clock"></i>
+            <span> Allocations Leave</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Check Total on Employee Time Off </span>
-        </a>
-    </li>
-
     <li class="nav-item">
         <a class="nav-link" href="/Authentication/logout">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>

@@ -49,7 +49,7 @@ namespace Client.Controllers
             }
             else
             {
-                return RedirectToAction("index", "Authentication");
+                return RedirectToAction("Login", "Authentication");
             }
         }
 
