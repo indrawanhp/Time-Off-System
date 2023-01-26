@@ -89,9 +89,9 @@
             <!-- job placement-->
             <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
 				<br />
-                <button class="btn btn-primary mb-3 ms-3"  data-toggle="modal" data-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()"> Create Jobs Placements</button>
+                <button class="btn btn-primary mb-3 ms-3"  data-bs-toggle="modal" data-bs-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()"> Create Jobs Placements</button>
                 <div class="table-responsive text-center">
-                    <table id="Myjobplacement" class="table table-bordered table-hover table-group-divider bg-white display" width="100%">
+                    <table id="jobplacement" class="table table-bordered table-hover table-group-divider bg-white display" width="100%">
                         <thead class="table-light">
                             <tr class="text-black;">
                                 <th style="text-align: center;">ID</th>
@@ -120,11 +120,10 @@
       </div>
       <div class="modal-body">
                 <form id="formDepartment" name="form" autocomplete="off" >
-                   @* <div class="form-group">
+                    <div class="form-group">
                         <label for="id">ID:</label>
                         <input type="number" class="form-control" placeholder="Masukkan ID" id="departmentId" name="departmentId">
-                    </div>*@
-                    <input type="hidden" id="departmentId" name="departmentId">
+                    </div>
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" class="form-control" id="departmentName" placeholder="Masukkan Nama Department" name="departmentName" required>
@@ -154,11 +153,10 @@
             </div>
             <div class="modal-body">
                 <form id="formJobs" name="form" autocomplete="off">
-                    @*<div class="form-group">
+                    <div class="form-group">
                         <label for="id">ID:</label>
                         <input type="number" class="form-control" placeholder="Masukkan ID" id="jobId" name="jobId">
-                    </div>*@
-                    <input type="hidden" id="jobsId" name="jobId">
+                    </div>
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" class="form-control" id="jobName" placeholder="Masukkan Nama Job" name="jobName" required>
@@ -191,11 +189,10 @@
             </div>
             <div class="modal-body">
                 <form id="formJobdep" name="form" autocomplete="off">
-                   @* <div class="form-group">
+                    <div class="form-group">
                         <label for="id">ID:</label>
-                        <input type="number" class="form-control" placeholder="Masukkan ID" id="jpId" name="jpId" >
-                    </div>*@
-                    <input type="hidden" id="jpId" name="jpId">
+                        <input type="number" class="form-control" placeholder="Masukkan ID" id="jpId" name="jpId">
+                    </div>
                     <div class="form-group">
                         <label for="id">Employee ID:</label>
                         <select class="form-select" aria-label="Default select example" id="employee" name="employee">
@@ -232,7 +229,8 @@
         //CRUD
         // NAV-1
         // GET DATA
-        let departTable = $('#department').DataTable({
+        $(document).ready(function () {
+            let tables = $('#department').DataTable({
                 ajax: {
                     url: `https://localhost:7090/api/Departments`,
                     dataType: "Json",
@@ -240,9 +238,7 @@
                 },
                 columns: [ //untuk nampilin nama kolom di datatable
                     {
-                         "render": (data, type, row, meta) => {
-                         return meta.row + meta.settings._iDisplayStart + 1
-                    }
+                        "data": "id"
                     },
                     {
                         "data": "name"
@@ -260,6 +256,7 @@
                     }
                 ],
             });
+        });
 
         //validate
     $(document).ready(function () {
@@ -343,7 +340,7 @@
                     'Data Berhasil Disimpan.',
                     'success'
                 )
-                departTable.ajax.reload()
+                $('#department').DataTable().ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
@@ -391,7 +388,7 @@
                         'success'
                     );
                     $('#department').modal('hide')
-                departTable.ajax.reload()
+                    $('#department').DataTable().ajax.reload()
                 }).fail((error) => {
                     Swal.fire(
                         'Failed!',
@@ -422,7 +419,7 @@
                                 'Employee has been deleted.',
                                 'success'
                             )
-                            departTable.ajax.reload()
+                            $('#department').DataTable().ajax.reload()
                         },
                         error: () => {
                             Swal.fire(
@@ -443,13 +440,12 @@
                 ajax: {
                     url: `https://localhost:7090/api/Jobs`,
                     dataType: "Json",
+                    processData: false,
                     dataSrc: ""
                 },
                 columns: [ //untuk nampilin nama kolom di datatable
                     {
-                         "render": (data, type, row, meta) => {
-                        return meta.row + meta.settings._iDisplayStart + 1
-                        }
+                        "data": "id"
                     },
                     {
                         "data": "name"
@@ -468,7 +464,7 @@
                     },
                     {
                         "data": "id",
-                        render: function (data) {
+                        render: function (data, type, row) {
                             return `<td><button type="button" onclick="Update1('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#job"><i class="fa-regular fa-pen-to-square"></i></button></td>
                                                     <td><button type="button" onclick="Delete1('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
                                                     `;
@@ -502,7 +498,7 @@
                     maxSalary: "<h6>Silahkan masukan Max Gaji</h6>",
                 },
                 submitHandler: () => {
-                    if (check1 == false) {
+                    if (!check1) {
                         Insert1()
                     } else {
                         prosesUpdate1()
@@ -545,10 +541,7 @@
             })
         });
         //Untuk cek button apakah dia insert atau update
-        let check1 = false
-        console.log(check1);
-
-
+        let check1
         const Add1 = () => {
             check1 = false
         }
@@ -572,6 +565,7 @@
                     'Data Berhasil Disimpan.',
                     'success'
                 )
+                $('#jobs').modal('hide')
                 $('#jobs').DataTable().ajax.reload()
             }).fail((error) => {
                 Swal.fire(
@@ -584,14 +578,14 @@
 
         //update
         function Update1(id) {
-            check1 = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
+            check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
             $.ajax({
                 url: `https://localhost:7090/api/Jobs/` + id,
                 dataType: "Json",
                 Type: "GET",
                 dataSrc: ""
             }).done((result) => {
-                $("#jobsId").val(result.id);
+                $('#jobId').val(result.id);
                 $("#jobName").val(result.name);
                 $("#minSalary").val(result.minSalary);
                 $("#maxSalary").val(result.maxSalary);
@@ -603,14 +597,14 @@
         function prosesUpdate1() {
             event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
             let coba = {
-                id: $("#jobsId").val(),
+                jobId: $("#jobId").val(),
                 name: $("#jobName").val(),
                 minSalary: $("#minSalary").val(),
                 maxSalary: $("#maxSalary").val(),
             };
             console.log(coba);
             $.ajax({
-                url: `https://localhost:7090/api/Jobs`,
+                url: "https://localhost:7090/api/Jobs",
                 type: "PUT",
                 contentType: "application/json",
                 data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
@@ -670,41 +664,36 @@
 
        // NAV-3
        // GET DATA
-
-        let jobPlacementTable = $('#Myjobplacement').DataTable({
-            ajax: {
-                url: `https://localhost:7090/api/JobPlacements/JobPlacementMaster`,
-                dataType: "Json",
-                dataSrc: ""
-            },
-            columns: [ //untuk nampilin nama kolom di datatable
-                {
-                    "render": (data, type, row, meta) => {
-                        return meta.row + meta.settings._iDisplayStart + 1
-                    }
-                },
-                {
-                    "data": "name"
-                },
-                {
-                    "data": "department"
-                },
-                {
-                    "data": "job"
-                },
-                {
-                    "data": "id",
-                    render: function (data) {
-                        return `<td><button type="button" onclick="Update2('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#jobdep"><i class="fa-regular fa-pen-to-square"></i></button></td>
-                                       <td><button type="button" onclick="Delete2('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
-                                                                    `;
-                    }
-                }
-            ],
-        });
-
         $(document).ready(function () {
-            
+            let tables = $('#jobplacement').DataTable({
+                ajax: {
+                    url: `https://localhost:7090/api/JobPlacements`,
+                    dataType: "Json",
+                    dataSrc: ""
+                },
+                columns: [ //untuk nampilin nama kolom di datatable
+                    {
+                        "data": "id"
+                    },
+                    {
+                        "data": "employeeId"
+                    },
+                    {
+                        "data": "departmentId"
+                    },
+                    {
+                        "data": "jobId"
+                    },
+                    {
+                        "data": "id",
+                        render: function (data, type, row) {
+                            return `<td><button type="button" onclick="Update2('${data}')" class="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#jobdep"><i class="fa-regular fa-pen-to-square"></i></button></td>
+                                                            <td><button type="button" onclick="Delete2('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
+                                                            `;
+                        }
+                    }
+                ],
+            });
         });
 
         //Select2 for Employee ID
@@ -845,7 +834,7 @@
                     'success'
                 )
                 $('#jobdep').modal.hide()
-                jobPlacementTable.ajax.reload()
+                $('#jobdep').DataTable().ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
@@ -854,13 +843,9 @@
                 )
             }) //penutup ERROR
         } //penutup insert()
-        
-        //
-        let jpId = 0;
 
         //update
         function Update2(id) {
-            jpId = id;
             check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
             $.ajax({
                 url: `https://localhost:7090/api/JobPlacements/` + id,
@@ -868,7 +853,7 @@
                 Type: "GET",
                 dataSrc: ""
             }).done((result) => {
-                $("#jpid").val(id);
+                $("#jpId").val(result.id)
                 $("#employee").val(result.employeeId);
                 $("#deps").val(result.departmentId);
                 $("#jobb").val(result.jobId);
@@ -880,7 +865,7 @@
         function prosesUpdate2() {
             event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
             let coba = {
-                id: jpId,
+                id: $("#jpId").val(),
                 employeeId: $("#employee").val(),
                 departmentId: $("#deps").val(),
                 jobId: $("#jobb").val(),
@@ -899,7 +884,7 @@
                     'success'
                 );
                 $('#jobdep').modal('hide')
-                jobPlacementTable.ajax.reload()
+                $('#jobdep').DataTable().ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
@@ -930,7 +915,7 @@
                                 'Employee has been deleted.',
                                 'success'
                             )
-                            jobPlacementTable.ajax.reload()
+                            $('#jobdep').DataTable().ajax.reload()
                         },
                         error: () => {
                             Swal.fire(
