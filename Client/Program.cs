@@ -14,17 +14,17 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);//set 10 menit
 });
 
-builder.Services.AddScoped<AccountRepository>();
-builder.Services.AddScoped<AuthenticationRepository>();
-builder.Services.AddScoped<AccountRoleRepository>();
-builder.Services.AddScoped<AllocationLeaveRepository>();
-builder.Services.AddScoped<DepartmentRepository>();
-builder.Services.AddScoped<EmployeeRepository>();
-builder.Services.AddScoped<JobPlacementRepository>();
-builder.Services.AddScoped<JobRepository>();
-builder.Services.AddScoped<RequestTimeOffRepository>();
-builder.Services.AddScoped<RoleRepository>();
-builder.Services.AddScoped<Address>();
+builder.Services.AddTransient<AccountRepository>();
+builder.Services.AddTransient<AuthenticationRepository>();
+builder.Services.AddTransient<AccountRoleRepository>();
+builder.Services.AddTransient<AllocationLeaveRepository>();
+builder.Services.AddTransient<DepartmentRepository>();
+builder.Services.AddTransient<EmployeeRepository>();
+builder.Services.AddTransient<JobPlacementRepository>();
+builder.Services.AddTransient<JobRepository>();
+builder.Services.AddTransient<RequestTimeOffRepository>();
+builder.Services.AddTransient<RoleRepository>();
+builder.Services.AddTransient<Address>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
