@@ -1,5 +1,7 @@
 ﻿using Api.Models;
 using Client.Base;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
 
 namespace Client.Repositories.Data;
 
@@ -18,5 +20,16 @@ public class RequestTimeOffRepository : GeneralRepository<RequestTimeOff, int>
         {
             BaseAddress = new Uri(address.link)
         };
+    }
+
+    public async Task<RequestTimeOff> GetById(int id)
+    {
+        RequestTimeOff entity = null;
+        using (var response = await httpClient.GetAsync(request + id))
+        {
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            entity = JsonConvert.DeserializeObject<RequestTimeOff>(apiResponse);
+        }
+        return entity;
     }
 }

@@ -14,7 +14,7 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-/*[Authorize(Roles = "Admin")]*/
+//[Authorize(Roles = "Admin")]
 public class AccountsController : BaseController<AccountRepositories, Accounts, int>
 {
     private AccountRepositories _repositories;
@@ -27,13 +27,13 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
 
     [HttpPost]
     [Route("Register")]
-    public ActionResult Register(RegisterVM account)
+    public ActionResult Register(Accounts account)
     {
         try
         {
             var result = _repositories.Register(account);
             return result == 0 
-                ? BadRequest(new { statusCode = 204, message = "Email or Phone is Already Registered!" }) 
+                ? Ok(new { statusCode = 204, message = "Email or Phone is Already Registered!" }) 
                 : Ok(new { statusCode = 201, message = "Register Succesfully!" });
         }
         catch (Exception e)
@@ -77,7 +77,7 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
                         _config["JWT:Issuer"],
                         _config["JWT:Audience"],
                         claims,
-                        expires: DateTime.Now.AddMinutes(10),
+                        expires: DateTime.Now.AddMinutes(30),
                         signingCredentials: signIn
                         );
 
@@ -92,52 +92,4 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
             return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
         }
     }
-
-    [HttpGet]
-    [Route("AccountMaster")]
-    public ActionResult AccountMaster()
-    {
-        try
-        {
-            var result = _repositories.AccountMaster();
-            return result.Count() == 0
-            ? Ok(new { statusCode = 204, message = "Data Not Found!" })
-            : Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
-        }
-    }
-
-    [HttpPost]
-    [Route("ChangePassword")]
-    [AllowAnonymous]
-    public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
-    {
-        var data = _repositories.ChangePassword(changePasswordVM);
-        if(data == 1)
-        {
-            return Ok(new { statusCode = 200, message = "Success change user password" });
-        }
-        return BadRequest(new { statusCode = 400, message = "Failed change user password" });
-        
-    }/*
-
-    [HttpPost]
-    [Route("EditAccountMaster")]
-    public ActionResult EditAccountMaster(EditAccountMassterVM editAccountMassterVM)
-    {
-        try
-        {
-            var result = _repositories.EditAccountMaster(editAccountMassterVM);
-            return result == 0
-            ? BadRequest(new { statusCode = 204, message = "Failed change user account!" })
-            : Ok(new { statusCode = 201, message = "Success", data = result });
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
-        }
-    }*/
 }

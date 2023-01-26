@@ -4,15 +4,25 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Add Session
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(10);//set 10 menit
+    options.IdleTimeout = TimeSpan.FromMinutes(30);//set 30 menit
+    //options.Cookie.HttpOnly = true;
+    //options.Cookie.IsEssential = true;
 });
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<AccountRepository>();
 builder.Services.AddScoped<AuthenticationRepository>();
@@ -26,15 +36,17 @@ builder.Services.AddScoped<RequestTimeOffRepository>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<Address>();
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 //This is to configuration JWT
 builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+//    .AddCookie(x =>
+//{
+//    x.Cookie.Name = "token";
+//})
+    .AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
     options.SaveToken = true;
@@ -42,14 +54,20 @@ builder.Services.AddAuthentication(auth =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        //Usually, this is your application base URL
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        //If the JWT is created using a web service, then this would be the consumer URL.
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
+    //options.Events = new JwtBearerEvents
+    //{
+    //    OnMessageReceived = context =>
+    //    {
+    //        context.Token = context.Request.Cookies["token"];
+    //        return Task.CompletedTask;
+    //    }
+    //};
 });
 
 var app = builder.Build();
@@ -61,12 +79,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-else
-{
-    app.UseDeveloperExceptionPage();
-}
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -82,8 +97,10 @@ app.Use(async (context, next) =>
     }
     await next();
 });
+
 // Custome Error page
-app.UseStatusCodePages(async context => {
+app.UseStatusCodePages(async context =>
+{
     var request = context.HttpContext.Request;
     var response = context.HttpContext.Response;
 

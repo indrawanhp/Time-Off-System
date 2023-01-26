@@ -1,45 +1,54 @@
 ﻿@{
     Layout = "_UserLayout";
+    ViewBag.Title = "Dashboard";
 }
 
 @section navbar{
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
 
     <li class="nav-item active">
-        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menu
+    </div>
+
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Data Employee </span>
+            <i class="fas fa-solid fa-user-tie"></i>
+            <span>Data Employee </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="RequestTimeOff">
+            <i class="fas fa-solid fa-person-walking-arrow-right"></i>
+            <span>Request Time Off </span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>  Request Time Off </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> List Request </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/Authentication/logout">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
-            <span> Logout </span>
+            <i class="fas fa-solid fa-person-circle-question"></i>
+            <span>List Request </span>
         </a>
     </li>
 
+    <!-- Divider -->
+    <hr class="sidebar-divider">
 
 }
 
+
 @section scripts{
-        <script>
-            console.log("Test")
-        </script>
+    <script>
+        console.log("Dashboard")
+    </script>
 }

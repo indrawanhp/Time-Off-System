@@ -36,12 +36,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateAudience = false,
-            //Usually, this is your application base URL
-            //ValidAudience = builder.Configuration["JWT:Audience"],
-            ValidateIssuer = false,
-            //If the JWT is created using a web service, then this would be the consumer URL.
-            //ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
