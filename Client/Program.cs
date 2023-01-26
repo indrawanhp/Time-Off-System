@@ -14,9 +14,11 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
+
     options.IdleTimeout = TimeSpan.FromMinutes(30);//set 30 menit
     //options.Cookie.HttpOnly = true;
     //options.Cookie.IsEssential = true;
+
 });
 
 // Add services to the container.
