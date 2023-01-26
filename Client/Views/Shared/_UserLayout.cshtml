@@ -7,17 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true" />
-    <!-- DATATABLES GENERAL-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" type="text/javascript" href="https://code.jquery.com/jquery-3.5.1.js">
 
-    <!-- FONT AWESOME-->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
-    
-    <title> Dashboard</title>
+    <title>@ViewBag.Title</title>
+
     <!-- Custom fonts for this template-->
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -25,6 +17,11 @@
 
     <!-- Custom styles for this template-->
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">*@
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
 </head>
 
@@ -62,6 +59,7 @@
 
             <!-- Main Content -->
             <div id="content">
+
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -71,6 +69,7 @@
                     </button>
 
                     <!-- Topbar Navbar -->
+                    <div class="mb-4 font-weight-bold text-gray-800 mt-3 ml-3">@ViewBag.Title</div>
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -173,7 +172,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" asp-controller="Authentication" asp-action="logout">Logout</a>
                 </div>
             </div>
         </div>
@@ -187,38 +186,37 @@
     <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/sb-admin-2.min.js"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @*Sweet Alert 2*@
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     
 
     <!-- CUSTOM JS-->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 
-    <!-- UNTUK GET DATA FOR CHART-->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    @*Moment*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 
     <!-- UNTUK EXPORT -->
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" src="~/dist/jszip.js"></script>
     <script type="text/javascript" src="~/dist/jszip.min.js"></script>
 
     <!-- VISIBILITY CUSTOM BUTTON WITH COLUMN SELECTORS-->
-   <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.colVis.min.js"></script>
 
-    <!-- VALIDATION -->
+    @*Jquery Validation*@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
-   
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     @RenderSection("scripts", required: false)
 

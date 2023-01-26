@@ -28,14 +28,14 @@ public class BaseController<Entity, Repository, TId> : Controller
     }
 
     [HttpPost]
-    public JsonResult Post(Entity entity)
+    public JsonResult Post([FromBody] Entity entity)
     {
         var result = repository.Post(entity);
         return Json(result);
     }
 
     [HttpPut]
-    public JsonResult Put(Entity entity)
+    public JsonResult Put([FromBody] Entity entity)
     {
         var result = repository.Put(entity);
         return Json(result);

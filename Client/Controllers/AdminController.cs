@@ -4,19 +4,18 @@ using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Client.Controllers
-{
-    [Authorize]
-
+namespace Client.Controllers;
+[Authorize(Roles = "Admin")]
     public class AdminController : BaseController<Accounts, AccountRepository, int>
     {
+
         private readonly AccountRepository repository;
         public AdminController(AccountRepository repository) : base(repository)
         {
             this.repository = repository;
         }
 
-        [Authorize(Roles = "Admin")]
+        
         public IActionResult Index()
         {
             return View();
