@@ -60,14 +60,13 @@
         width: 470px;
     }
 </style>
-
 <section>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Data Account</h6>
         </div>
         <div class="card-body">
-            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createdAccount">
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#createdAccount">
                 + Created New Account
             </button><br /><br />
             <div class="table-responsive">
@@ -87,7 +86,7 @@
             </div>
         </div>
     </div>
-                       
+
 </section>
 <!-- Created Modal -->
 <div class="modal fade" id="createdAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -95,7 +94,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Created Account</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="c">
                 <form class="row g-3 needs-validation" id="formValidation" method="post" novalidate>
@@ -113,13 +112,12 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="margin-top: -10px;">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" >
+                        <input type="password" class="form-control" name="password" id="password">
 
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="margin-top: -10px;">Role</label>
                         <select class="form-select" name="txtrole" id="txtrole">
-                            
                         </select>
 
                     </div>
@@ -136,19 +134,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Account</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="c">
 
                 <input type="hidden" class="form-control" name="idAccountRole" id="idAccountRole">
                 <input type="hidden" class="form-control" name="idEmployee" id="idEmployee">
-                    <div class="mb-3">
+                <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" style="margin-top: -10px;">Role</label>
-                        <select class="form-select" name="roleS" id="roleS" required>
-                        </select>
+                    <select class="form-select" name="roleS" id="roleS" required>
+                    </select>
 
-                    </div>
-                <button type="submit" name="btnEdit" data-bs-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
+                </div>
+                <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </div>

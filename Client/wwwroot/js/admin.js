@@ -87,7 +87,7 @@ $(document).ready(function () {
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return `<button class="btn btn-success" title="Edit" onclick="getEditModal('${row.accountRoleId}')" data-bs-toggle="modal" data-bs-target="#getEditModal"><i class="bi bi-gear"></i></button>
+                    return `<button class="btn btn-success" title="Edit" onclick="getEditModal('${row.accountRoleId}')" data-toggle="modal" data-target="#getEditModal"><i class="bi bi-gear"></i></button>
                             <button class="btn btn-danger" title="Delete" onclick="Delete('${row.employeeId}')"><i class="bi bi-trash3"></i></button>`;
                 }
             }
@@ -397,7 +397,7 @@ $(document).ready(function () {
             {
                 "data": null,
                 "render": function (data, type, row) {
-                    return `<button class="btn btn-success" title="Edit" onclick="getEditModalAllocationLeave('${row.allocationsLeaveId}')" data-bs-toggle="modal" data-bs-target="#getEditModalAllocationsLeave"><i class="bi bi-gear"></i></button>
+                    return `<button class="btn btn-success" title="Edit" onclick="getEditModalAllocationLeave('${row.allocationsLeaveId}')" data-toggle="modal" data-target="#getEditModalAllocationsLeave"><i class="bi bi-gear"></i></button>
                             <button class="btn btn-danger" title="Delete" onclick="DeleteAllocationLeave('${row.allocationsLeaveId}')"><i class="bi bi-trash3"></i></button>`;
                 }
             }
@@ -437,8 +437,8 @@ $(function () {
 function InsertAllocationsLeave() {
     let obj = {
         employeeId: $("#employeeId").val(),
+        name: $("#name").val(),
         remaining: $("#remaining").val(),
-        
     };
     $.ajax({
         url: "https://localhost:7090/api/AllocationsLeave",
@@ -506,6 +506,7 @@ function getEditModalAllocationLeave(id) {
         dataSrc: ""
     }).done((result) => {
         $('#txtid').val(result.id);
+        $('#txtname').val(result.name)
         $('#txtidEmployee').val(result.employeeId);
         $('#txtremaining').val(result.remaining);
         console.log(result)
@@ -520,6 +521,7 @@ function EditRemaining() {
         //ini ngambil value dari tiap inputan di form nya
         // obj,
         id: $("#txtid").val(),
+        name: $("#txtname").val(),
         employeeId: $("#txtidEmployee").val(),
         remaining: $("#txtremaining").val()
 

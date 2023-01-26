@@ -10,4 +10,12 @@ public class AdminController : Controller
     {
         return View();
     }
+    public IActionResult Account()
+    {
+        return View();
+    }
+    public IActionResult AllocationsLeave()
+    {
+        return View();
+    }
 }

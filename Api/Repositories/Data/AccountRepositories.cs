@@ -134,41 +134,5 @@ public class AccountRepositories : GeneralRepository<Accounts, int>
                        where email == a.Email
                        select r.Name).ToList();
         return getRoles;
-    }/*
-
-    public int EditAccountMaster(EditAccountMassterVM editAccountMassterVM)
-    {
-        int result = 0;
-
-        var data = _context.Accounts
-            .FirstOrDefault(model => model.EmployeeId.Equals(editAccountMassterVM.EmployeeId));
-        var dataR = _context.AccountRoles
-            .FirstOrDefault(model => model.AccountId.Equals(editAccountMassterVM.EmployeeId));
-
-        if (data != null)
-        {
-            var newDataAccount = _context.Accounts.Find(data.EmployeeId);
-            
-            if (!CheckEmail(editAccountMassterVM.Email))
-            {
-                return 0; // Email atau Password sudah terdaftar
-            }
-            newDataAccount.EmployeeId = editAccountMassterVM.EmployeeId;
-            newDataAccount.Email = editAccountMassterVM.Email;
-            newDataAccount.Password = Hashing.HashPassword(editAccountMassterVM.Password);
-            _context.Accounts.Update(newDataAccount);
-            _context.SaveChanges();
-
-            var newDataAccountRole = _context.AccountRoles.Find(dataR.Id);
-            newDataAccountRole.AccountId = editAccountMassterVM.EmployeeId;
-            newDataAccountRole.RoleId = editAccountMassterVM.Role;
-            _context.AccountRoles.Update(newDataAccountRole);
-            _context.SaveChanges();
-
-            return 1;
-           
-        }
-
-        return result;
-    }*/
+    }
 }
