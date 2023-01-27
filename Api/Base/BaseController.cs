@@ -27,9 +27,7 @@ public class BaseController<Repository, Entity, TId> : ControllerBase
         try
         {
             var result = _repo.Get();
-            return result.Count() == 0
-            ? Ok(result)
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -45,9 +43,7 @@ public class BaseController<Repository, Entity, TId> : ControllerBase
         try
         {
             var result = _repo.Get(id);
-            return result == null
-            ? Ok(result)
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {

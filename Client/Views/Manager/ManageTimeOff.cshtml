@@ -25,16 +25,16 @@
         Menu
     </div>
 
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="JobAndDepartmentManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Jobs & Department Management</span>
+        </a>
+    </li>
     <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManageTimeOff">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Manage Time Off </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> List Employee Approve </span>
         </a>
     </li>
 
@@ -182,8 +182,8 @@
                     render: (data) => {
                         switch (data) {
                             case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
                         }
                     },
                     className: "text-center"
@@ -396,8 +396,8 @@
                     render: (data) => {
                         switch (data) {
                             case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
                         }
                     },
                     className: "text-center"
@@ -457,8 +457,8 @@
                     render: (data) => {
                         switch (data) {
                             case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
+                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
+                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
                         }
                     },
                     className: "text-center"

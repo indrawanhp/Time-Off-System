@@ -14,7 +14,7 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+/*[Authorize(Roles = "Admin")]*/
 public class AccountsController : BaseController<AccountRepositories, Accounts, int>
 {
     private AccountRepositories _repositories;
@@ -49,9 +49,7 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
         try
         {
             var result = _repositories.AccountMaster();
-            return result.Count() == 0
-            ? Ok(new { statusCode = 204, message = "Data Not Found!" })
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {

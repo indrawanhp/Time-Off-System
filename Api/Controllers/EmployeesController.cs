@@ -25,9 +25,7 @@ namespace Api.Controllers
             try
             {
                 var result = _repo.EmployeeRequest(id, status);
-                return result.Count() == 0
-                ? Ok(result)
-                : Ok(result);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -42,9 +40,22 @@ namespace Api.Controllers
             try
             {
                 var result = _repo.ManangeEmploye(id, status);
-                return result.Count() == 0
-                ? Ok(result)
-                : Ok(result);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
+
+        [HttpGet]
+        [Route("MasterEmployee")]
+        public ActionResult MasterEmployee()
+        {
+            try
+            {
+                var result = _repo.MasterEmployee();
+                return Ok(result);
             }
             catch (Exception e)
             {

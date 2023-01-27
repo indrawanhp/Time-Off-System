@@ -1,0 +1,501 @@
+﻿@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Employee Management";
+}
+@section navbar{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+            <i class="fas fa-user-circle"></i>
+            <span> Create Account </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
+            <i class="fas fa-user-clock"></i>
+            <span> Allocations Leave</span>
+        </a>
+    </li>
+        <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Employee Management</span>
+        </a>
+    </li>
+}
+
+<style>
+    .error {
+        font-size: 1rem;
+        padding: 2px;
+    }
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 1rem;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error, select.error {
+        width: 100%;
+        border: 1px solid red;
+        color: red;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <ul id="tabs" class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="" data-target="#employees" data-toggle="tab" class="nav-link active small text-uppercase">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" data-target="#management" data-toggle="tab" class="nav-link small text-uppercase">
+                            Management Employees
+                        </a>
+                    </li>
+                </ul>
+                <br>
+                <div id="tabsContent" class="tab-content">
+                    <div id="employees" class="tab-pane fade active show">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-md-12 px-0 mr-auto">
+                                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" data-toggle="modal" data-target="#modal-form" onclick="$('#EmployeeForm')[0].reset();">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                    <span class="text">Add Employee</span>
+                                </a>
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableEmployee" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Phone</th>
+                                            <th>Gender</th>
+                                            <th>Age</th>
+                                            <th>Contract length</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="management" class="tab-pane fade">
+                        <div class="row p-3 pb-0 mb-0">
+                            <div class="col-2 text-center mr-auto">
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table id="myTableApproved" class="table align-items-center" width="100%">
+                                    <thead style="font-size:14px;">
+                                        <tr>
+                                            <th class="text-uppercase">Id</th>
+                                            <th>Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">Form Data</h6>
+                <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="EmployeeForm" class="needs-validation" novalidate>
+                    <input type="hidden" name="employeeid" id="employeeid" />
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" id="first_name" name="first_name" class="form-control" required />
+                            <div class="invalid-feedback">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" id="last_name" name="last_name" class="form-control" required />
+                            <div class="invalid-feedback">
+                                Please provide a valid last name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="birth_date" class="form-label">Birth Date</label>
+                            <input type="date" name="birth_date" id="birth_date" class="form-control date" required />
+                            <div class="invalid-feedback">
+                                Please provide a valid birth date.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" name="phone" id="phone" class="form-control" required />
+                            <div class="invalid-feedback">
+                                Please provide a valid phone.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="hire_date" class="form-label">Start Working Date</label>
+                            <input type="date" name="hire_date" id="hire_date" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid start working date.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="release_date" class="form-label">End Working Date</label>
+                            <input type="date" name="release_date" id="release_date" class="form-control" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid end working date.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select id="gender" name="gender" class="form-control" required>
+                                <option selected disabled hidden value="">Select Gender</option>
+                                <option value="0">Male</option>
+                                <option value="1">Female</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid gender.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea name="address" id="address" cols="50" rows="3" class="form-control" required></textarea>
+                            <div class="invalid-feedback">
+                                Please provide a valid address.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save" type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @*Employee Crud*@
+    <script>
+        console.log("Employee Management")
+
+        let TableEmployee = $('#myTableEmployee').DataTable({
+            ajax: {
+                type: "GET",
+                url: "../Admin/GetAll",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: ["firstName", "lastName"],
+                    render: (data, type, row) => {
+                        return `<p>${row.firstName} ${row.lastName}</p>`;
+                    }
+                },
+                {
+                    data: "address",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+                },
+                {
+                    data: "phone",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+                },
+                {
+                    data: "gender",
+                    render: (data) => {
+                        return data == 0
+                            ? `<p>Male</p>`
+                            : `<p>Female</p>`;
+                    }
+                },
+                {
+                    data: "birthDate",
+                    render: (data) => {
+                        return `<p>${Age(data)}</p>`;
+                    }
+                },
+                {
+                    data: ["hireDate", "releaseDate"],
+                    render: (data, type, row) => {
+                        const hireDate = new Date(row.hireDate);
+                        const releaseDate = new Date(row.releaseDate);
+                        const contractLengthInMilliseconds = releaseDate - hireDate;
+                        const contractLengthInDays = contractLengthInMilliseconds / (1000 * 60 * 60 * 24);
+                        const years = Math.floor(contractLengthInDays / 365.25);
+                        const days = Math.floor(contractLengthInDays % 365.25);
+                        return `<p>${years} years ${days} days</p>`;
+                    }
+                },
+                {
+                    data: "id",
+                    render: (data) => {
+                        return `<a type="button"  data-toggle="modal" data-target="#modal-form" onclick="Edit(${data})" class="px-2 text-light bg-warning text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a> <a type="button" onclick="Delete(${data})" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`;
+                    }
+                }
+            ]
+        });
+
+        $(document).ready(function () {
+            $('#EmployeeForm').validate({
+                rules: {
+                    first_name: {
+                        required: true
+                    },
+                    last_name: {
+                        required: true
+                    },
+                    birthDate: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    hireDate: {
+                        required: true
+                    },
+                    releaseDate: {
+                        required: true
+                    },
+                    phone: {
+                        required: true
+                    },
+                    gender: {
+                        required: true
+                    }
+                },
+                messages: {
+                    first_name: {
+                        required: "First Name is Required."
+                    },
+                    last_name: {
+                        required: "Last Name is Required."
+                    },
+                    birthDate: {
+                        required: "Birth Date is Required."
+                    },
+                    address: {
+                        required: "Address is Required"
+                    },
+                    hireDate: {
+                        required: "Hire Date is Required"
+                    },
+                    releaseDate: {
+                        required: "Release Date is Required"
+                    },
+                    phone: {
+                        required: "Phone Number is Required."
+                    },
+                    gender: {
+                        required: "Gender is Required."
+                    }
+                },
+                submitHandler: () => {
+                    var Id = $('#employeeid').val();
+                    if (Id == "") {
+                        Insert();
+                    } else {
+                        Update();
+                    }
+                }
+            });
+        });
+
+        const Age = (date) => {
+            const birthDate = new Date(date);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const month = today.getMonth() - birthDate.getMonth();
+            if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        const Insert = () => {
+            var employee = {
+                firstName: $('#first_name').val(),
+                lastName: $('#last_name').val(),
+                birthDate: $('#birth_date').val(),
+                address: $('#address').val(),
+                hireDate: $('#hire_date').val(),
+                releaseDate: $('#release_date').val(),
+                phone: $('#phone').val(),
+                gender: parseInt($('#gender').val()),
+                age: Age($('#birth_date').val())
+            }
+            $.ajax({
+                url: "../Admin/Post",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(employee),
+            }).done((result) => {
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'New Employee Created!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                TableEmployee.ajax.reload()
+            }).fail((error) => {
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'Error Creating Employee!',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            })
+        };
+
+        const Update = () => {
+            var employee = {
+                id: parseInt($('#employeeid').val()),
+                firstName: $('#first_name').val(),
+                lastName: $('#last_name').val(),
+                birthDate: $('#birth_date').val(),
+                address: $('#address').val(),
+                hireDate: $('#hire_date').val(),
+                releaseDate: $('#release_date').val(),
+                phone: $('#phone').val(),
+                gender: parseInt($('#gender').val()),
+                age: Age($('#birth_date').val())
+            }
+            $.ajax({
+                url: "../Admin/Put",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(employee),
+            }).done((result) => {
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'Employee has been Updated!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                TableEmployee.ajax.reload()
+            }).fail((error) => {
+                console.log("failed update");
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'Error Updating Employee!',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            })
+        }
+
+        const Edit = (id) => {
+            $.ajax({
+                type: "GET",
+                url: "../Admin/Get/" + id,
+                success: (data) => {
+                    $('#employeeid').val(data.id);
+                    $('#first_name').val(data.firstName);
+                    $('#last_name').val(data.lastName);
+                    birthdate = (data.birthDate).substring(0, 10);
+                    $('#birth_date').val(birthdate);
+                    $('#address').val(data.address);
+                    hiredate = (data.hireDate).substring(0, 10);
+                    $('#hire_date').val(hiredate);
+                    releasedate = (data.releaseDate).substring(0, 10);
+                    $('#release_date').val(releasedate);
+                    $('#phone').val(data.phone);
+                    $('#gender').val(data.gender);
+                }
+            })
+        };
+
+        const Delete = (id) => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You wont able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `../Admin/Delete/${id}`,
+                        success: () => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Employee has been deleted.',
+                                'success'
+                            )
+                            TableEmployee.ajax.reload()
+                        },
+                        error: () => {
+                            Swal.fire(
+                                'Failed!',
+                                'Error deleting employee.',
+                                'error'
+                            )
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}
