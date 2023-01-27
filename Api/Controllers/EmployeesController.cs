@@ -51,5 +51,22 @@ namespace Api.Controllers
                 return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
             }
         }
+
+        [HttpGet]
+        [Route("MasterEmployee")]
+        public ActionResult MasterEmployee()
+        {
+            try
+            {
+                var result = _repo.MasterEmployee();
+                return result.Count() == 0
+                ? Ok(result)
+                : Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
     }
 }

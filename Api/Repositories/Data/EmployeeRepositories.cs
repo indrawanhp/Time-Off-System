@@ -1,5 +1,6 @@
 ﻿using Api.Contexts;
 using Api.Models;
+using Api.ViewModels.Admin;
 using Api.ViewModels.Employee;
 
 namespace Api.Repositories.Data;
@@ -32,6 +33,22 @@ public class EmployeeRepositories : GeneralRepository<Employee, int>
                     Remark = req.Remark,
                     Status = req.Status,
                     IsPublish = req.isPublish
+                }).ToList();
+    }
+
+    public IEnumerable<MEmployeeVM> MasterEmployee()
+    {
+        return (from m in _context.Employees
+                join e in _context.Employees on m.Id equals e.ManagerId
+                select new MEmployeeVM
+                {
+                    Id = e.Id,
+                    Name = e.FirstName + " " + e.LastName,
+                    Address = e.Address,
+                    Phone = e.Phone,
+                    Gender = e.Gender,
+                    Age = e.Age,
+                    ManagerName = m.FirstName + " " + m.LastName,
                 }).ToList();
     }
 
