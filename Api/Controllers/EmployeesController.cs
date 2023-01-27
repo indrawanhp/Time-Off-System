@@ -25,9 +25,7 @@ namespace Api.Controllers
             try
             {
                 var result = _repo.EmployeeRequest(id, status);
-                return result.Count() == 0
-                ? Ok(result)
-                : Ok(result);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -42,9 +40,7 @@ namespace Api.Controllers
             try
             {
                 var result = _repo.ManangeEmploye(id, status);
-                return result.Count() == 0
-                ? Ok(result)
-                : Ok(result);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -59,9 +55,7 @@ namespace Api.Controllers
             try
             {
                 var result = _repo.MasterEmployee();
-                return result.Count() == 0
-                ? Ok(result)
-                : Ok(result);
+                return Ok(result);
             }
             catch (Exception e)
             {

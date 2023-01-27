@@ -20,15 +20,28 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
     }
 
     [HttpGet]
+    [Route("AllocationLeaveMasters")]
+    public ActionResult AllocationLeaveMasters()
+    {
+        try
+        {
+            var result = _repo.AllocationLeaveMasters();
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+        }
+    }
+
+    [HttpGet]
     [Route("GetEmployee/{id}")]
     public ActionResult GetEmployee(int id)
     {
         try
         {
             var result = _repo.GetEmployee(id);
-            return result.Count() == 0
-            ? Ok(result)
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {

@@ -10,6 +10,7 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+@import url(https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css);
 :root {
   --blue: #4e73df;
   --indigo: #6610f2;
@@ -10970,10 +10971,8 @@ form.user .btn-user {
 
 .error {
   color: #5a5c69;
-  font-size: 7rem;
   position: relative;
   line-height: 1;
-  width: 12.5rem;
 }
 
 @-webkit-keyframes noise-anim {

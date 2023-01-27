@@ -24,4 +24,12 @@ public class AdminController : BaseController<Employee, EmployeeRepository, int>
         return View();
     }
 
+    public IActionResult Account()
+    {
+        return View();
+    }
+    public IActionResult AllocationsLeave()
+    {
+        return View();
+    }
 }

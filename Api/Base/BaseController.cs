@@ -27,9 +27,7 @@ public class BaseController<Repository, Entity, TId> : ControllerBase
         try
         {
             var result = _repo.Get();
-            return result.Count() == 0
-            ? Ok(new { statusCode = 204, message = "Data Not Found!" })
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -45,9 +43,7 @@ public class BaseController<Repository, Entity, TId> : ControllerBase
         try
         {
             var result = _repo.Get(id);
-            return result == null
-            ? Ok(new { statusCode = 204, message = $"Data With Id {id} Not Found!" })
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {
