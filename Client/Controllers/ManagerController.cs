@@ -24,7 +24,7 @@ public class ManagerController : BaseController<Employee, EmployeeRepository, in
         return View();
     }
 
-    public IActionResult ListJobAndDepartment()
+    public IActionResult JobAndDepartmentManagement()
     {
         return View();
     }

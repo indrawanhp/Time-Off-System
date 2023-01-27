@@ -20,7 +20,7 @@
     </div>
 
     <li class="nav-item active">
-        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="ListJobAndDepartment">
+        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="JobAndDepartmentManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Jobs & Department Management</span>
         </a>
@@ -344,6 +344,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
+                $('#dep').modal('hide');
                 Swal.fire(
                     'Insert!',
                     'Data Berhasil Disimpan.',
@@ -389,6 +390,7 @@
                 data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
                 console.log("success");
+                $('#dep').modal('hide');
                 Swal.fire(
                     'Update!',
                     'Data Berhasil Disimpan.',
@@ -565,6 +567,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
+                $('#job').modal('hide');
                 Swal.fire(
                     'Insert!',
                     'Data Berhasil Disimpan.',
@@ -611,6 +614,7 @@
                 data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
                 console.log("success");
+                $('#job').modal('hide');
                 Swal.fire(
                     'Update!',
                     'Data Berhasil Disimpan.',
@@ -728,7 +732,8 @@
         $.ajax({
             url: `https://localhost:7090/api/Jobs`,
             type: "GET",
-            dataType: "Json"
+            dataType: "Json",
+            dataSrc: ""
         }).done((result) => {
             let job = `<option value="" disabled selected> Pilih Job </option>`;
             $.each(result, (key, val) => {
@@ -821,6 +826,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
+                $('#jobdep').modal('hide');
                 Swal.fire(
                     'Insert!',
                     'Data Berhasil Disimpan.',
@@ -871,12 +877,12 @@
                 data: JSON.stringify(coba) //jika terkena 415 unsupported media type (tambahkan headertype Json & JSON.Stringify();)
             }).done((result) => {
                 console.log("success");
+                $('#jobdep').modal('hide');
                 Swal.fire(
                     'Update!',
                     'Data Berhasil Disimpan.',
                     'success'
                 );
-                $('#jobdep').modal('hide')
                 jobPlacementTable.ajax.reload()
             }).fail((error) => {
                 Swal.fire(
