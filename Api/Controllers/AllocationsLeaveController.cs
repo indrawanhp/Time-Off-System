@@ -26,9 +26,7 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
         try
         {
             var result = _repo.AllocationLeaveMasters();
-            return result.Count() == 0
-            ? BadRequest(result)
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -43,9 +41,7 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
         try
         {
             var result = _repo.GetEmployee(id);
-            return result.Count() == 0
-            ? Ok(result)
-            : Ok(result);
+            return Ok(result);
         }
         catch (Exception e)
         {

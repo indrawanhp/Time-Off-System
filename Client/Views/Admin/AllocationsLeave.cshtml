@@ -18,20 +18,18 @@
             <span> Create Account </span>
         </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
             <i class="fas fa-user-clock"></i>
             <span> Allocations Leave</span>
         </a>
     </li>
-
     <li class="nav-item">
-        <a class="nav-link" href="/Authentication/logout">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
-            <span> Logout </span>
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Employee Management</span>
         </a>
     </li>
-
 }
 <style>
 
@@ -233,7 +231,7 @@
                     dataSrc: '',
 
                 },
-                "columns": [
+                columns: [
                     {
                         "data": null,
                         "render": function (data, type, row, meta) {
