@@ -23,13 +23,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
+    
 </head>
 
 <body id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
+        <input id="sessionUserId" value="@ViewBag.Id" hidden />
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -99,15 +100,15 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle" src="/sat.png">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="Name" name="Name"></span>
+                                        <img class="img-profile rounded-circle" src="/sat.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changepass">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Change Password
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -164,7 +165,42 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" asp-controller="Authentication" asp-action="logout">Logout</a>
+                    <a class="btn btn-primary" href="/Authentication/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ChangePass Modal-->
+    <div class="modal fade" id="changepass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="a">
+                    <div class="mb-3">
+                        <input type="hidden" class="form-control" name="id" id="id" value="@Convert.ToInt32(Context.Session.GetInt32("ID"))" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label>Old Password</label>
+                        <input type="password" class="form-control" name="oldpass" id="oldpass" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" name="newpass" id="newpass" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Ulang Password</label>
+                        <input type="password" class="form-control" name="ceknewpass" id="ceknewpass" required oninput="cekPass()">
+                        <label class="pesan"></label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="submit" data-dismiss="modal" onclick="ChangePassword()" oninput="cekPass()" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>
@@ -210,5 +246,21 @@
     @RenderSection("scripts", required: false)
 
 </body>
+
+<script type="text/javascript">
+    document.getElementById("submit").disabled = true;
+    function cekPass() {
+        var password = document.getElementById("newpass").value;
+        var confirmPassword = document.getElementById("ceknewpass").value;
+        if (password != confirmPassword) {
+            document.getElementById("submit").disabled = true;
+            $('.pesan').html('<h5 class="text-danger"> Password tidak sesuai ! </h5>');
+            return false;
+        }
+        document.getElementById("submit").disabled = false;
+        $('.pesan').html('<h5 class="text-success"> Password sesuai ! </h5>');
+        return true;
+    }
+</script>
 
 </html>
