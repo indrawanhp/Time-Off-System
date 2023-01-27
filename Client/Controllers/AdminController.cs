@@ -14,6 +14,7 @@ public class AdminController : BaseController<Employee, EmployeeRepository, int>
     {
         _repository = repository;
     }
+    
     public IActionResult Index()
     {
         return View();
