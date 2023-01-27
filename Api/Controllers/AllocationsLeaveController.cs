@@ -27,7 +27,7 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
         {
             var result = _repo.AllocationLeaveMasters();
             return result.Count() == 0
-            ? BadRequest(new { statusCode = 204, message = "Data Not Found!" })
+            ? BadRequest(result)
             : Ok(result);
         }
         catch (Exception e)

@@ -27,6 +27,7 @@ namespace Api.Repositories.Data
                                Jabatan = j.Name,
                                Department = d.Name,
                                AllocationsLeaveId = al.Id,
+                               LeaveType = al.Name,
                                SisaCuti = al.Remaining
                            }).ToList();
             return results;
