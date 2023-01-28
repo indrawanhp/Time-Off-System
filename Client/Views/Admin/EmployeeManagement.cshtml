@@ -21,7 +21,7 @@
             <span> Allocations Leave</span>
         </a>
     </li>
-        <li class="nav-item active">
+    <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Employee Management</span>
@@ -74,7 +74,7 @@
                     <div id="employees" class="tab-pane fade active show">
                         <div class="row p-3 pb-0 mb-0">
                             <div class="col-md-12 px-0 mr-auto">
-                                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" data-toggle="modal" data-target="#modal-form" onclick="$('#EmployeeForm')[0].reset();">
+                                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#modal-form" onclick="$('#EmployeeForm')[0].reset();">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-plus"></i>
                                     </span>
@@ -92,7 +92,7 @@
                                             <th>Gender</th>
                                             <th>Age</th>
                                             <th>Contract length</th>
-                                            <th>Action</th>
+                                            <th width="10%">Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -101,20 +101,24 @@
                     </div>
                     <div id="management" class="tab-pane fade">
                         <div class="row p-3 pb-0 mb-0">
-                            <div class="col-2 text-center mr-auto">
+                            <div class="px-0 col-md-3 text-left mr-auto">
+                                <a type="button" id="employee_placement" value="employee_placement" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#modal-placement" onclick="$('#form-placement')[0].reset(); ModalPlacement();">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                    <span class="text">Employee Placement</span>
+                                </a>
                             </div>
                             <div class="table-responsive mt-3">
-                                <table id="myTableApproved" class="table align-items-center" width="100%">
+                                <table id="myTableManagement" class="table align-items-center" width="100%">
                                     <thead style="font-size:14px;">
                                         <tr>
                                             <th class="text-uppercase">Id</th>
                                             <th>Name</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Duration</th>
-                                            <th>Type</th>
-                                            <th>Description</th>
-                                            <th>Status</th>
+                                            <th>Manager</th>
+                                            <th>Job</th>
+                                            <th>Department</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -220,6 +224,71 @@
     </div>
 </div>
 
+<!-- Modal Placement-->
+<div class="modal fade" id="modal-placement" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">Form Placement</h6>
+                <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="form-placement" class="needs-validation" novalidate>
+                    <input type="hidden" id="flag" />
+                    <input type="hidden" id="managementplacementid" />
+                    <div class="form-group row">
+                        <div class="col-md-12 mb-0">
+                            <label for="selectemployee" class="form-label">Employee Name</label>
+                            <select class="form-control" id="selectemployee" name="selectemployee" style="width: 100%">
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 mb-0">
+                            <label for="selectmanager" class="form-label">Manager Name</label>
+                            <select class="form-control" id="selectmanager" name="selectmanager" style="width: 100%">
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12 mb-0">
+                            <label for="selectjob" class="form-label">Job Name</label>
+                            <select class="form-control" id="selectjob" name="selectjob" style="width: 100%">
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="selectdepartment" class="form-label">Department Name</label>
+                            <select class="form-control" id="selectdepartment" name="selectdepartment" style="width: 100%">
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid first name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     @*Employee Crud*@
     <script>
@@ -285,7 +354,7 @@
                 {
                     data: "id",
                     render: (data) => {
-                        return `<a type="button"  data-toggle="modal" data-target="#modal-form" onclick="Edit(${data})" class="px-2 text-light bg-warning text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a> <a type="button" onclick="Delete(${data})" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`;
+                        return `<div class="row"><a type="button" data-toggle="modal" data-target="#modal-form" onclick="Edit(${data})" class="btn btn-sm btn-success" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a> <a type="button" onclick="Delete(${data})" class="ml-2 btn btn-danger btn-sm" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></div>`;
                     }
                 }
             ]
@@ -497,5 +566,250 @@
                 }
             })
         }
+    </script>
+
+    @*Employees Management*@
+    <script>
+        let tableManagement = $('#myTableManagement').DataTable({
+            ajax: {
+                type: "GET",
+                url: "https://localhost:7090/api/Employees/MasterEmployee",
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: "name",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+                },
+                {
+                    data: "managerName",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+                },
+                {
+                    data: "job",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+
+                },
+                {
+                    data: "department",
+                    render: (data) => {
+                        return `<p>${data}</p>`;
+                    }
+                },
+                {
+                    data: ["employeeId", "placementId"],
+                    render: (data, type, row) => {
+                        return `<a type="button" data-toggle="modal" data-target="#modal-placement" onclick="EditManagement(${row.employeeId},${row.placementId})" class="px-2 btn btn-sm btn-success" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>`;
+                    },
+                    className: "text-center"
+                }
+            ]
+        })
+
+        $(document).ready(function () {
+
+
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/GetNameManager",
+                type: "GET",
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].idManager}">${result[i].managerName}</option>`
+                }
+                $('#selectmanager').html(`<option value="" selected hidden>Select Manager</option>` + options);
+            })
+
+            $.ajax({
+                url: "https://localhost:7090/api/Jobs",
+                type: "GET",
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].id}">${result[i].name}</option>`
+                }
+                $('#selectjob').html(`<option value="" selected hidden>Select Job</option>` + options);
+            })
+
+            $.ajax({
+                url: "https://localhost:7090/api/Departments",
+                type: "GET",
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].id}">${result[i].name}</option>`
+                }
+                $('#selectdepartment').html(`<option value="" selected hidden>Select Department</option>` + options);
+            })
+
+            $('#selectmanager').select2({
+                width: 'resolve',
+                placeholder: "Select a manager"
+            });
+            $('#selectjob').select2({
+                width: 'resolve',
+                placeholder: "Select a job"
+            });
+            $('#selectdepartment').select2({
+                width: 'resolve',
+                placeholder: "Select a department"
+            });
+        })
+
+        const ModalPlacement = () => {
+            $.ajax({
+                url: "../Admin/GetAll",
+                type: "GET",
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].id}">${result[i].firstName} ${result[i].lastName}</option>`
+                }
+                $('#selectemployee').html(`<option value="" selected hidden>Select Employee</option>` + options);
+            })
+
+            $('#selectemployee').select2({
+                width: 'resolve',
+                placeholder: "Select a employee"
+            });
+        }
+
+        $('#form-placement').submit((event) => {
+            event.preventDefault();
+            var flag = $('#flag').val();
+            if (flag == "") {
+                console.log("Add");
+                UpdateManager();
+                JobPlacement();
+            } else {
+                console.log("Update");
+                UpdateManager();
+                UpdateJobPlacement()
+            }
+        })
+
+        const UpdateManager = () => {
+            $.ajax({
+                url: "../Admin/Get/" + $('#selectemployee').val(),
+                type: "GET"
+            }).done((result) => {
+                result.managerId = parseInt($('#selectmanager').val())
+
+                $.ajax({
+                    url: "../Admin/Put",
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(result),
+                }).done((result) => {
+                    $('#modal-placement').modal('hide');
+                }).fail((error) => {
+                    console.log("gagal update manager")
+                })
+            })
+        }
+
+        const JobPlacement = () => {
+            var placement = {
+                employeeId: $('#selectemployee').val(),
+                departmentId: $('#selectdepartment').val(),
+                jobId: $('#selectjob').val()
+            };
+            $.ajax({
+                url: "https://localhost:7090/api/JobPlacements",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(placement),
+            }).done((result) => {
+                $('#modal-placement').modal('hide');
+                Swal.fire({
+                    text: 'Employee has been Updated!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                tableManagement.ajax.reload()
+            }).fail((error) => {
+                $('#modal-placement').modal('hide');
+                Swal.fire({
+                    text: 'Error Updating Employee!',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            })
+        }
+
+        const UpdateJobPlacement = () => {
+            var placement = {
+                id: $('#managementplacementid').val(),
+                employeeId: $('#selectemployee').val(),
+                jobId: $('#selectjob').val(),
+                departmentId: $('#selectdepartment').val(),
+            }
+            $.ajax({
+                url: "https://localhost:7090/api/JobPlacements",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(placement),
+            }).done((result) => {
+                $('#modal-placement').modal('hide');
+                Swal.fire({
+                    text: 'Employee has been Updated!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                tableManagement.ajax.reload()
+            }).fail((error) => {
+                $('#modal-placement').modal('hide');
+                Swal.fire({
+                    text: 'Error Updating Employee!',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            })
+        }
+
+        const EditManagement = (employeeId, placementId) => {
+            console.log(employeeId, placementId);
+            $('#flag').val("Update");
+            $('#managementplacementid').val(placementId);
+
+            $.ajax({
+                url: "../Admin/Get/" + employeeId,
+                type: "GET"
+            }).done((result) => {
+                $('#selectemployee').html(`<option value="${result.id}" selected>${result.firstName} ${result.lastName}</option>`)
+
+                $.ajax({
+                    url: "../Admin/Get/" + result.managerId,
+                    type: "GET"
+                }).done((result) => {
+                    var select = $("#selectmanager");
+                    var option = $("<option>", {
+                        value: result.id,
+                        text: result.firstName + " " + result.lastName
+                    });
+                    if (select.find("option[value='" + option.val() + "']").length) {
+                        return;
+                    }
+                    select.append(option);
+                })
+            })
+        }
+
     </script>
 }

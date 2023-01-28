@@ -62,5 +62,20 @@ namespace Api.Controllers
                 return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
             }
         }
+
+        [HttpGet]
+        [Route("GetNameManager")]
+        public ActionResult GetManagerName()
+        {
+            try
+            {
+                var result = _repo.ManagerName();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
     }
 }

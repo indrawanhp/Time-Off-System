@@ -24,6 +24,6 @@ public class MyContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Employee>().HasAlternateKey(e => e.Phone);
+        //modelBuilder.Entity<Employee>().HasAlternateKey(e => e.Phone);
     }
 }

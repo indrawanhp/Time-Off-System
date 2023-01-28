@@ -30,6 +30,7 @@ namespace Api.Repositories.Data
                                LeaveType = al.Name,
                                SisaCuti = al.Remaining
                            }).ToList();
+
             return results;
         }
 

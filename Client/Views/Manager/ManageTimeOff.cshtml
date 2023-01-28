@@ -1,9 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@inject IHttpContextAccessor HttpContextAccessor
-@{
+﻿@{
     Layout = "_UserLayout";
     ViewBag.Title = "Manager Time Off";
-    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
