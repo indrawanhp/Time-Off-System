@@ -33,4 +33,8 @@ public class AdminController : BaseController<Employee, EmployeeRepository, int>
     {
         return View();
     }
+    public IActionResult JobAndDepartmentManagement()
+    {
+        return View();
+    }
 }
