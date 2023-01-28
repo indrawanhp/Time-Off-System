@@ -5,34 +5,36 @@
 
 @section navbar{
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="">
+        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Menu
-    </div>
-
-    <li class="nav-item active">
-        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="JobAndDepartmentManagement">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Jobs & Department Management</span>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+            <i class="fas fa-user-circle"></i>
+            <span> Account </span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManageTimeOff">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Manage Time Off </span>
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
+            <i class="fas fa-user-clock"></i>
+            <span> Allocations Leave</span>
         </a>
     </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Employee Management</span>
+        </a>
+    </li>
+
+    <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> List Department & Jobs</span>
+        </a>
+    </li>
 }
 
 <!-- CSS -->
@@ -44,20 +46,20 @@
         margin-top: 20px;
     }
 
-    label.error {
-        color: red;
-        font-size: 12px;
-        display: block;
-        margin-top: 5px;
-    }
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
 
-   /* input.error, textarea.error, select.form-control {
-        font-size: 12px;
-        border: 1px solid red;
-        color: red;
-        width: 100%;
-        box-sizing: border-box;
-    }*/
+    /* input.error, textarea.error, select.form-control {
+                font-size: 12px;
+                border: 1px solid red;
+                color: red;
+                width: 100%;
+                box-sizing: border-box;
+            }*/
 
     h6 {
         margin-top: 8px;
@@ -94,37 +96,47 @@
 
             <!-- DEPARTMENT -->
             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-				<br />
-                <button type="button" class="btn btn-primary mb-3 ms-3" data-toggle="modal" data-target="#dep" onclick="$('#formDepartment')[0].reset(); Add()"> Create Departments</button>
+                <br />
+                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" onclick="$('#formDepartment')[0].reset(); Add()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">New Department</span>
+                </a>
                 <div class="table-responsive text-center">
-			    <table id="department" class="table table-bordered table-hover table-group-divider bg-white display" width="100%">
-				<thead class="table-light">
-					<tr class="text-dark;">
-						<th style="text-align: center;">ID</th>
-						<th style="text-align: center;">Name</th>
-						<th style="text-align: center;">Address</th>
-                        <th style="text-align: center;">Action</th>
-					</tr>
-				</thead>
-				<tbody class="text-dark">
-				</tbody>
-			</table>
-		    </div>
-        </div>
-
-            <!-- JOBS -->
-            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-				<br />
-                <button class="btn btn-primary mb-3 ms-3" data-toggle="modal" data-target="#job" onclick="$('#formJobs')[0].reset(); Add1()"> Create Jobs</button>
-                <div class="table-responsive text-center">
-                    <table id="jobs" class="table table-bordered table-hover table-group-divider bg-white display" width="100%">
+                    <table id="department" class="table align-items-center" width="100%">
                         <thead class="table-light">
                             <tr class="text-dark;">
                                 <th style="text-align: center;">ID</th>
                                 <th style="text-align: center;">Name</th>
+                                <th style="text-align: center;">Address</th>
+                                <th style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-dark">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- JOBS -->
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <br />
+                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" onclick="$('#formJobs')[0].reset(); Add1()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">New Jobs</span>
+                </a>
+                <div class="table-responsive text-center">
+                    <table id="jobs" class="table align-items-center" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">ID</th>
+                                <th style="text-align: center;">Name</th>
                                 <th style="text-align: center;">Min-Salary</th>
                                 <th style="text-align: center;">Max-Salary</th>
-                                <th style="text-align: center;" >Action</th>
+                                <th style="text-align: center;">Action</th>
                             </tr>
                         </thead>
                         <tbody class="text-dark">
@@ -135,12 +147,17 @@
 
             <!-- job placement-->
             <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-				<br />
-                <button class="btn btn-primary mb-3 ms-3"  data-toggle="modal" data-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()"> Create Jobs Placements</button>
+                <br />
+                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">New Jobs Placements</span>
+                </a>
                 <div class="table-responsive text-center">
-                    <table id="Myjobplacement" class="table table-bordered table-hover table-group-divider bg-white display" width="100%">
-                        <thead class="table-light">
-                            <tr class="text-dark;">
+                    <table id="Myjobplacement" class="table align-items-center" width="100%">
+                        <thead>
+                            <tr>
                                 <th style="text-align: center; width: 5%;">No. </th>
                                 <th style="text-align: center; width: 25%;">Employee</th>
                                 <th style="text-align: center; width: 40%;">Department</th>
@@ -302,9 +319,7 @@
                 {
                     "data": "id",
                     render: function (data, type, row) {
-                        return `<td><button type="button" onclick="Update('${data}')" class="btn btn-primary bg-success" data-toggle="modal" data-target="#dep"><i class="fa-regular fa-pen-to-square"></i></button></td>
-                                                    <td><button type="button" onclick="Delete('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
-                                                    `;
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
                     }
                 }
             ],
@@ -482,45 +497,44 @@
         // GET DATA
 
         let jobTables = $('#jobs').DataTable({
-                ajax: {
-                    url: `https://localhost:7090/api/Jobs`,
-                    dataType: "Json",
-                    dataSrc: ""
-                },
-                columns: [ //untuk nampilin nama kolom di datatable
-                    {
-                        "render": (data, type, row, meta) => {
-                            return meta.row + meta.settings._iDisplayStart + 1
-                        }
-                    },
-                    {
-                        "data": "name"
-                    },
-                    {
-                        "data": null,
-                        render: function (data, type, row) {
-                            return 'Rp. ' + row["minSalary"];
-                        }
-                    },
-                    {
-                        "data": null,
-                        render: function (data, type, row) {
-                            return 'Rp. ' + row["maxSalary"];
-                        }
-                    },
-                    {
-                        "data": "id",
-                        render: function (data) {
-                            return `<td><button type="button" onclick="Update1('${data}')" class="btn btn-primary bg-success" data-toggle="modal" data-target="#job"><i class="fa-regular fa-pen-to-square"></i></button></td>
-                                                            <td><button type="button" onclick="Delete1('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
-                                                            `;
-                        }
+            ajax: {
+                url: `https://localhost:7090/api/Jobs`,
+                dataType: "Json",
+                dataSrc: ""
+            },
+            columns: [ //untuk nampilin nama kolom di datatable
+                {
+                    "render": (data, type, row, meta) => {
+                        return meta.row + meta.settings._iDisplayStart + 1
                     }
-                ],
-            });
+                },
+                {
+                    "data": "name"
+                },
+                {
+                    "data": null,
+                    render: function (data, type, row) {
+                        return 'Rp. ' + row["minSalary"];
+                    }
+                },
+                {
+                    "data": null,
+                    render: function (data, type, row) {
+                        return 'Rp. ' + row["maxSalary"];
+                    }
+                },
+                {
+                    "data": "id",
+                    render: function (data) {
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update1('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete1('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
+                        
+                    }
+                }
+            ],
+        });
 
         $(document).ready(function () {
-            
+
         });
         //validate
         $(document).ready(function () {
@@ -728,9 +742,7 @@
                 {
                     "data": "id",
                     render: function (data) {
-                        return `<td><button type="button" onclick="Update2('${data}')" class="btn btn-primary bg-success" data-toggle="modal" data-target="#jobdep"><i class="fa-regular fa-pen-to-square"></i></button></td>
-                                               <td><button type="button" onclick="Delete2('${data}')" class="btn btn-primary bg-danger"><i class="fa-solid fa-trash"></i></button></td>
-                                                                            `;
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update2('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete2('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
                     }
                 }
             ],
@@ -749,7 +761,7 @@
         }).fail((error) => {
             alert(error);
         });
-        
+
         //Select2 for Department ID
         $.ajax({
             url: `https://localhost:7090/api/Departments`,
@@ -765,7 +777,7 @@
         }).fail((error) => {
             console.log(error);
         });
-        
+
         //Select2 for Job ID
         $.ajax({
             url: `https://localhost:7090/api/Jobs`,
