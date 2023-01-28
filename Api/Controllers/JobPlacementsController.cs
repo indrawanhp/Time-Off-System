@@ -36,5 +36,20 @@ namespace Api.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("GetEmployee/{id}")]
+        public ActionResult GetEmployee(int id)
+        {
+            try
+            {
+                var result = _repo.GetEmployee(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
     }
 }

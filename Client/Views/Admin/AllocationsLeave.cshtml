@@ -1,9 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@inject IHttpContextAccessor HttpContextAccessor
-@{
+﻿@{
     Layout = "_UserLayout";
     ViewBag.Title = "Allocation Leave";
-    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 @section navbar{
     <li class="nav-item">
