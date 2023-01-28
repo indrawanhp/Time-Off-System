@@ -3,19 +3,6 @@
 
 // Write your JavaScript code.
 
-const IdLogin = parseInt($("#sessionUserId").val());
-console.log(IdLogin)
-let Name = document.getElementById("Name");
-$.ajax({
-    url: "https://localhost:7090/api/Employees/" + IdLogin,
-    dataType: "Json"
-}).done((result) => {
-    Name.innerHTML = result.firstName + " " + result.lastName;
-    console.log(result.firstName);
-}).fail((error) => {
-    console.log(error);
-});
-
 function ChangePassword() {
     var obj = {
         EmployeeId: IdLogin,
