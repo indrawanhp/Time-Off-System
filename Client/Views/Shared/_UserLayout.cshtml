@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -7,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
 
     <title>@ViewBag.Title</title>
 
@@ -23,14 +29,15 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
-    
+    @*select2*@
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 
 <body id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-        <input id="sessionUserId" value="@ViewBag.Id" hidden />
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -100,8 +107,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="Name" name="Name"></span>
-                                        <img class="img-profile rounded-circle" src="/sat.png">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="Name" name="Name"></span>
+                                <img class="img-profile rounded-circle" src="/sat.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -206,6 +213,9 @@
         </div>
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -216,19 +226,40 @@
     <!-- Custom scripts for all pages-->
     <script src="~/js/sb-admin-2.min.js"></script>
 
-
     @*Sweet Alert 2*@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <!-- CUSTOM JS-->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 
     @*Moment*@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
 
+
+    <!-- JS BARU UNTUK DATETIME-->
+    @*<script src="https://cdn.datatables.net/plug-ins/1.11.3/dataRender/datetime.js"></script>*@
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>*@
+    @*<script type="text/javascript"  charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+
+
+    <!-- JS BARU UNTUK DATETIME-->
+    @*<script src="https://cdn.datatables.net/plug-ins/1.11.3/dataRender/datetime.js"></script>*@
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>*@
+    @*<script type="text/javascript"  charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+
     <!-- UNTUK EXPORT -->
+    @*<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>*@
+    @*<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>*@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
@@ -241,9 +272,22 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
+    @*select2 js*@
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     @RenderSection("scripts", required: false)
+
+    <script>
+        let Name = document.getElementById("Name");
+        $.ajax({
+            url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+            dataType: "Json"
+        }).done((result) => {
+            Name.innerHTML = result.firstName + " " + result.lastName;
+        })
+    </script>
 
 </body>
 

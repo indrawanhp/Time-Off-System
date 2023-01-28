@@ -1,9 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@inject IHttpContextAccessor HttpContextAccessor
-@{
+﻿@{
     Layout = "_UserLayout";
     ViewBag.Title = "Allocation Leave";
-    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 @section navbar{
     <li class="nav-item">
@@ -52,7 +49,8 @@
         color: red;
         width: 470px;
     }
-    .error{
+
+    .error {
         color: red;
         font-size: 20px;
         position: relative;
@@ -66,11 +64,14 @@
             <h6 class="m-0 font-weight-bold text-primary">Allocation Leave</h6>
         </div>
         <div class="card-body">
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#created">
-                + Created Allocation Leave
-            </button><br /><br />
+            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#created">
+                <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Allocation Leave</span>
+            </a>
             <div class="table-responsive">
-                <table class="table table-bordered" id="allocationsleave" width="100%" cellspacing="0">
+                <table class="table align-items-center" id="allocationsleave" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -79,7 +80,7 @@
                             <th>Departmen</th>
                             <th>Leave Type</th>
                             <th>Remaining Days Off</th>
-                            <th>Action</th>
+                            <th width="10%">Action</th>
                         </tr>
                     </thead>
                     <tbody id="allocationsleave">
@@ -119,7 +120,7 @@
                         <input type="number" class="form-control" name="remaining" id="remaining" required>
                     </div>
                     <div class="modal-footer">
-                    <button id="btnAddAl" type="submit" class="btn btn-primary">Submit</button>
+                        <button id="btnAddAl" type="submit" class="btn btn-primary">Submit</button>
                         <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -141,13 +142,13 @@
             <div class="modal-body" id="c">
                 <input type="hidden" class="form-control" name="txtid" id="txtid">
                 <input type="hidden" class="form-control" name="txtname" id="txtname">
-                    <input type="hidden" class="form-control" name="txtidEmployee" id="txtidEmployee">
+                <input type="hidden" class="form-control" name="txtidEmployee" id="txtidEmployee">
 
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Useable Leave</label>
-                        <input type="number" class="form-control" name="txtremaining" id="txtremaining" required> 
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Useable Leave</label>
+                    <input type="number" class="form-control" name="txtremaining" id="txtremaining" required>
 
-                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditRemaining()" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
@@ -185,46 +186,42 @@
                 buttons: [
                     {
                         extend: 'pageLength',
-                        className: 'button bg-info'
-                    },
-                    {
-                        extend: 'copyHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
-                        },
-                        titleAttr: 'Copy',
-                        className: 'button bg-primary',
-                        text: '<i class="fa-regular fa-clone"></i>'
+                        className: 'btn btn-sm text-light bg-info',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000;"
+                        }
                     },
                     {
                         extend: 'excelHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5]
                         },
                         titleAttr: 'Excel',
-                        className: 'button bg-success',
-                        text: '<i class="fa-regular fa-file-excel"></i>'
-                    },
-                    {
-                        extend: 'csvHtml5',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
-                        },
-                        titleAttr: 'CSV',
-                        className: 'button bg-warning',
-                        text: '<i class="fa-solid fa-align-left"></i>'
+                        className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                        text: '<i class="fas fa-file-pdf text-lg" aria-hidden="true"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000;"
+                        }
                     },
                     {
                         extend: 'pdfHtml5',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4]
+                            columns: [0, 1, 2, 3, 4, 5]
                         },
                         titleAttr: 'Pdf',
-                        className: 'button bg-danger',
-                        text: '<i class="fa-regular fa-file-pdf"></i>'
+                        className: 'btn btn-sm btn-danger',
+                        text: '<i class="fa-regular fa-file-pdf"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000;"
+                        }
                     }
                     /*'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'*/
                 ],
+                initComplete: () => {
+                    $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                    $('.buttons-pdf').removeClass('buttons-pdf');
+
+                },
                 ajax: {
                     url: "https://localhost:7090/api/AllocationsLeave/AllocationLeaveMasters",
                     dataType: "Json",
@@ -271,9 +268,9 @@
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return `<button class="btn btn-success" title="Edit" onclick="getEditModalAllocationLeave('${row.allocationsLeaveId}')" data-toggle="modal" data-target="#getEditModalAllocationsLeave"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <button class="btn btn-danger" title="Delete" onclick="DeleteAllocationLeave('${row.allocationsLeaveId}')"><i class="fa-solid fa-trash-can"></i></button>`;
-                        }
+                            return `<div class="row"><div class="mx-auto"><a type="button" class="btn btn-sm btn-success" style="box-shadow:3px 3px #000;" title="Edit" onclick="getEditModalAllocationLeave('${row.allocationsLeaveId}')" data-toggle="modal" data-target="#getEditModalAllocationsLeave"><i class="fa-solid fa-pen-to-square"></i></a> <a type="button" class="ml-2 btn btn-sm btn-danger" style="box-shadow:3px 3px #000;" title="Delete" onclick="DeleteAllocationLeave('${row.allocationsLeaveId}')"><i class="fa-solid fa-trash-can"></i></a></div></div>`;
+                        },
+                        className: "text-center"
                     }
                 ]
 
@@ -432,8 +429,8 @@
                         console.log('Waiting')
                     }
                 }),
-                /*            $('#editEmployee').modal('hide');
-                */        Table.ajax.reload()
+                        /*            $('#editEmployee').modal('hide');
+                        */        Table.ajax.reload()
 
             }).fail((error) => {
 

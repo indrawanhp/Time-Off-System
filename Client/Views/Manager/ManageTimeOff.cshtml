@@ -1,9 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@inject IHttpContextAccessor HttpContextAccessor
-@{
+﻿@{
     Layout = "_UserLayout";
     ViewBag.Title = "Manager Time Off";
-    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
@@ -25,6 +22,12 @@
         Menu
     </div>
 
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="manager" asp-action="JobAndDepartmentManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Jobs & Department Management</span>
+        </a>
+    </li>
     <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Manager" asp-action="ManageTimeOff">
             <i class="fas fa-fw fa-tachometer-alt"></i>

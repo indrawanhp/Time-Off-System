@@ -166,7 +166,7 @@ namespace Api.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("phone");
 
                     b.Property<DateTime>("ReleaseDate")
@@ -174,8 +174,6 @@ namespace Api.Migrations
                         .HasColumnName("release_date");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("Phone");
 
                     b.ToTable("tb_m_employees");
                 });

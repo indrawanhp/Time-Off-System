@@ -24,6 +24,11 @@ public class ManagerController : BaseController<Employee, EmployeeRepository, in
         return View();
     }
 
+    public IActionResult JobAndDepartmentManagement()
+    {
+        return View();
+    }
+
     public IActionResult ManageTimeOff()
     {
         return View();
