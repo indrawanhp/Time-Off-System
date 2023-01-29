@@ -50,12 +50,51 @@
 }
 
 
+<style>
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error {
+        font-size: 15px;
+        border: 1px solid red;
+        color: red;
+        width: 220px;
+    }
+
+    .error {
+        color: red;
+        font-size: 15px;
+        position: relative;
+        line-height: 1;
+        width: 220px;
+    }
+</style>
+
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card shadow mb-4">
             <div class="card-body">
                 <div class="card-block text-dark">
-                    <h4 class="m-b-20 p-b-5 ">Detail Employee</h4>
+                    <h4 class="m-b-20 p-b-5 ">Detail Employee
+                    <a type="button" id="request" value="request" style="float: right; margin-bottom: 11px;" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit" onclick="ModalEdit();">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </span>
+                        <span class="text">Edit</span>
+                    </a>
+                    </h4>
+                    <container>
                     <table class="table table-hover" id="tableDetail">
                         <tbody>
                             <tr>
@@ -77,13 +116,6 @@
                                 <td width="1%" class="pt-3">:</td>
                                 <td width="800px">
                                     <h6 class="text-dark font-weight-bold pt-2" id="birthdate"></h6>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="300px" class="text-left pt-3">Age</td>
-                                <td width="1%" class="pt-3">:</td>
-                                <td width="800px">
-                                    <h6 class="text-dark font-weight-bold pt-2" id="age"></h6>
                                 </td>
                             </tr>
                             <tr>
@@ -146,13 +178,8 @@
 
                         </tbody>
                     </table>
+                    </container>
 
-                    <a type="button" id="request" value="request" class="btn btn-primary btn-sm btn-icon-split ms-auto" data-toggle="modal" data-target="#modal-edit" onclick="ModalEdit();">
-                        <span class="icon text-white-50">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </span>
-                        <span class="text">Edit</span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -199,11 +226,8 @@
                                 <label class="form-label">Phone</label>
                                 <input type="text" class="form-control" name="editphone" id="editphone">
                             </div>
+                                <input type="hidden" class="form-control" name="editage" id="editage">
                             <div class="col-md-6">
-                                <label class="form-label">Age</label>
-                                <input type="text" class="form-control" name="editage" id="editage">
-                            </div>
-                            <div class="col-md-12">
                                 <label class="form-label">Gender</label>
                                 <select class="form-control" name="editgender" id="editgender">
                                     <option selected disabled value="">Choose...</option>
@@ -229,7 +253,6 @@
         let fullName = document.getElementById("fullName");
         let address = document.getElementById("address");
         let birthdate = document.getElementById("birthdate");
-        let age = document.getElementById("age");
         let phone = document.getElementById("phone");
         let hiredate = document.getElementById("hiredate");
         let releasedate = document.getElementById("releasedate");
@@ -245,7 +268,6 @@
             fullName.innerHTML = result.firstName + " " + result.lastName;
             address.innerHTML = result.address;
             birthdate.innerHTML = moment(result.birthDate).format('DD-MM-YYYY');
-            age.innerHTML = result.age + " Years old";
             phone.innerHTML = result.phone;
             hiredate.innerHTML = moment(result.hireDate).format('DD-MM-YYYY');
             releasedate.innerHTML = moment(result.releaseDate).format('DD-MM-YYYY');
