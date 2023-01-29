@@ -1,65 +1,32 @@
 ﻿@{
-    Layout = null;
+    Layout = "";
 }
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>401 - Unauthorized</title>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="~/css/ErrorPage.css" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized</title>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-preset-fountain@2/tsparticles.preset.fountain.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/errorpage/index.css">
 </head>
-
 <body>
-
-
-
-    <h1>401</h1>
-    <div>
-        <p>> <span>ERROR CODE</span>: "<i>HTTP 401 Unauthorized</i>"</p>
-        <p>> <span>ERROR DESCRIPTION</span>: "<i>Access Denied. You Do Not Have The Permission To Access This Page On This Server</i>"</p>
-        <p>> <span>ERROR POSSIBLY CAUSED BY</span>: [<b>execute access forbidden, read access forbidden, write access forbidden, ssl required, ssl 128 required, ip address rejected, client certificate required, site access denied, too many users, invalid configuration, password change, mapper denied access, client certificate revoked, directory listing denied, client access licenses exceeded, client certificate is untrusted or invalid, client certificate has expired or is not yet valid, passport logon failed, source access denied, infinite depth is denied, too many requests from the same client ip</b>...]</p>
-        <p>> <span>SOME PAGES ON THIS SERVER THAT YOU DO HAVE PERMISSION TO ACCESS</span>: [<a id="countdown"></a>> <span>HAVE A NICE DAY SIR AXLEROD :-)</span></p>
-    </div>
-
-    <a class="avatar" href="https://codepen.io/leenalavanya/" title="If you liked this pen, don't forget to heart, share and follow ❤"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/157344/profile/profile-512.jpg?1535437978" /></a>
-
-
-
+    <main class="container">
+        <div class="content">
+            <div class="header">
+                <div class="header__title">
+                    <h1 class="header__h1">Error 401</h1>
+                    <img class="header__ilustration" src="~/errorpage/assets/compass.svg" alt="Minimalist compass color gray">
+                </div>
+                <p class="header__text">Access is alowed only for registered user.</p>
+                <a class="header__button" href="/">Return to home</a>
+            </div>
+            <div class="ilustration-container">
+                <img class="ilustration" src="~/errorpage/assets/routes.svg" alt="random figures pattern">
+            </div>
+        </div>
+    </main>
+    <script src="~/errorpage/index.js"></script>
 </body>
-
-<script>
-    let timer = 5
-    setInterval(() => {
-        document.getElementById('countdown').innerHTML = timer;
-        timer--;
-
-        if (timer === 0) {
-            location.href = "/Authentication/Login";
-        }
-    }, 1000)
-
-
-
-    var str = document.getElementsByTagName('div')[0].innerHTML.toString();
-    var i = 0;
-    document.getElementsByTagName('div')[0].innerHTML = "";
-
-    setTimeout(function () {
-        var se = setInterval(function () {
-            i++;
-            document.getElementsByTagName('div')[0].innerHTML = str.slice(0, i) + "|";
-            if (i == str.length) {
-                clearInterval(se);
-                document.getElementsByTagName('div')[0].innerHTML = str;
-            }
-        }, 10);
-    }, 0);
-
-
-</script>
 </html>
