@@ -82,9 +82,9 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
             switch(result)
             {
                 case 0: 
-                    return NotFound(new { message = "Account Not Found"});
+                    return Ok(new { message = "Account Not Found"});
                 case 1:
-                    return Unauthorized(new { message = "Wrong Password"});
+                    return Ok(new { message = "Wrong Password"});
                 default:
                     var roles = _repositories.UserRoles(loginVM.Email);
                     var id = _repositories.userID(loginVM.Email);

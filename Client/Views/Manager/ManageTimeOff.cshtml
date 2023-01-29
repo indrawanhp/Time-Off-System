@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Manager Time Off";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
@@ -36,8 +39,10 @@
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary text-center"> @ViewBag.Title </h5>
+            </div>
             <div class="card-body">
-                <h4 class="pb-2">@ViewBag.Title</h4>
                 <ul id="tabs" class="nav nav-tabs">
                     <li class="nav-item">
                         <a href="" data-target="#requested" data-toggle="tab" class="nav-link active small text-uppercase">Requested</a>
@@ -125,6 +130,49 @@
     <script>
         console.log("Manage Time Off")
         let tableRequest = $('#myTableRequested').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=0",
@@ -171,11 +219,7 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-warning" style="box-shadow:3px 3px #000;">Requested</span>`;
                     },
                     className: "text-center"
                 },
@@ -183,7 +227,7 @@
                     data: ["status", "requestId"],
                     render: (data, type, row) => {
                         if (row.status == 0) {
-                            return `<a type="button" onclick="Approve(${row.requestId})" class="px-2 text-light bg-primary text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-solid fa-thumbs-up"></i></a> <a type="button" onclick="Refuse(${row.requestId})" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Refuse"><i class="fas fa-solid fa-xmark"></i></a>`
+                            return `<a type="button" onclick="Approve(${row.requestId})" class="px-2 btn btn-sm btn-primary text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Approve"><i class="fas fa-solid fa-thumbs-up"></i></a> <a type="button" onclick="Refuse(${row.requestId})" class="ml-2 px-2 btn btn-sm btn-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Refuse"><i class="fas fa-solid fa-thumbs-down"></i></a>`
                         }
                     },
                     className: "text-center"
@@ -339,6 +383,49 @@
     @*Approved*@
     <script>
         let tableApproved = $('#myTableApproved').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=1",
@@ -385,11 +472,7 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-success" style="box-shadow:3px 3px #000;">Approved</span>`;
                     },
                     className: "text-center"
                 }
@@ -400,6 +483,49 @@
     @*Refused*@
     <script>
         let tableRefused = $('#myTableRefused').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=2",
@@ -446,18 +572,14 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-danger" style="box-shadow:3px 3px #000;">Refused</span>`;
                     },
                     className: "text-center"
                 },
                 {
                     data: "remark",
                     render: (data) => {
-                        return `<a type="button" class="px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" onclick="Swal.fire({ icon: 'error', title: 'Rejected', text: '${data}!'})">Note</a>`
+                        return `<a type="button" class="px-2 btn btn-sm btn-danger text-center" style="box-shadow:3px 3px #000;" onclick="Swal.fire({ icon: 'error', title: 'Rejected', text: '${data}!'})">Note</a>`
                     },
                     className: "text-center"
                 },

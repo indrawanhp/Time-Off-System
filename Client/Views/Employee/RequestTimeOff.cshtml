@@ -5,6 +5,7 @@
     ViewBag.Title = "Request Time Off";
     ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
+
 @section navbar{
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
@@ -25,21 +26,15 @@
     </div>
 
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="DataEmployee">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="">
             <i class="fas fa-solid fa-user-tie"></i>
             <span>Data Employee </span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" asp-area="" asp-controller="Employee" asp-action="LeaveRequest">
+        <a class="nav-link active" asp-area="" asp-controller="Employee" asp-action="RequestTimeOff">
             <i class="fas fa-solid fa-person-walking-arrow-right"></i>
             <span>Request Time Off </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-solid fa-person-circle-question"></i>
-            <span>List Request </span>
         </a>
     </li>
 
@@ -48,31 +43,8 @@
 }
 
 <style>
-    .button span:after {
-        content: '\00bb';
-        position: absolute;
-        opacity: 0;
-        top: 0;
-        right: -20px;
-        transition: 0.5s;
-    }
-
-    label {
-        width: 300px;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-        label.error {
-            color: red;
-            font-size: 12px;
-            display: block;
-            margin-top: 5px;
-        }
-
-    input.error, textarea.error {
-        font-size: 12px;
-        border: 1px solid red;
+    .error {
+        font-size: 14px;
         color: red;
     }
 </style>
@@ -97,10 +69,10 @@
                 <div id="tabsContent" class="tab-content">
                     <div id="request" class="tab-pane fade active show">
                         <div class="row p-3 pb-0 mb-0">
-                            <div class="col-md-2 text-center mr-auto">
-                                <a type="button" id="request" value="request" class="btn btn-primary btn-sm btn-icon-split ms-auto" data-toggle="modal" data-target="#modal-form" onclick="ModalRequest();">
+                            <div class="px-0 col-md-3 text-left mr-auto">
+                                <a type="button" id="request" value="request" class="btn btn-primary btn-sm btn-icon-split ms-auto" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#modal-form" onclick="ModalRequest();">
                                     <span class="icon text-white-50">
-                                        <i class="fas fa-brands fa-leanpub"></i>
+                                        <i class="fas fa-plus"></i>
                                     </span>
                                     <span class="text">Leave Forms</span>
                                 </a>
@@ -194,7 +166,6 @@
                             <div class="col-md-12">
                                 <label for="allocation_id" class="form-label">Leave Type</label>
                                 <select class="form-control" id="allocation_id" name="allocation_id" required>
-                                    
                                 </select>
                             </div>
                         </div>
@@ -215,7 +186,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" id="description" cols="50" rows="3" class="form-control"></textarea>
+                                <textarea name="description" id="description" cols="50" rows="3" class="form-control" required></textarea>
                             </div>
                         </div>
                     </div>
@@ -233,6 +204,49 @@
     @*Tabs Request*@
     <script>
         let tableRequest = $('#myTableRequest').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=0",
@@ -286,11 +300,7 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-dark bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-dark bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-warning" style="box-shadow:3px 3px #000;">Request</span>`;
                     },
                     className: "text-center"
                 },
@@ -298,9 +308,9 @@
                     data: ["isPublish", "requestId"],
                     render: (data, type, row) => {
                         if (row.isPublish == false) {
-                            return `<a type="button" onclick="Publish(${row.requestId})" class="px-2 text-light bg-success text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Publish"><i class="fas fa-solid fa-arrow-up-long"></i></a> <a type="button" onclick="Delete(${row.requestId});" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`
+                            return `<div class="row"><div class="mx-auto"><a type="button" onclick="Publish(${row.requestId})" class="btn btn-sm btn-success text-center" style="box-shadow:3px 3px #000; border-radius: 0.2rem;" data-toggle="tooltip" data-placement="top" title="Publish"><i class="fas fa-solid fa-cloud-arrow-up"></i></a> <a type="button" onclick="Delete(${row.requestId});" class="ml-2 btn btn-sm btn-danger text-center" style="box-shadow:3px 3px #000; border-radius: 0.2rem;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a></div></div>`
                         } else {
-                            return `<p class="text-light bg-info text-center" style="box-shadow:3px 3px #000;">Published</p>`
+                            return `<span class="badge badge-info" style="box-shadow:3px 3px #000;">Published</span>`;
                         }
                     },
                     className: "text-center"
@@ -379,18 +389,23 @@
                     }
                 },
                 messages: {
-                    start_date: {
-                        required: "Enter the Date.",
-                    },
-                    end_date: {
-                        required: "Enter the Date.",
-                    },
-                    description: {
-                        required: "Enter Description of your leave"
-                    }
+                    start_date: "Choose the Date.",
+                    end_date: "Choose the Date.",
+                    description: "Enter Description of your leave"
                 },
                 submitHandler: () => {
                     AddRequest();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
         });
@@ -401,10 +416,10 @@
                 type: "GET"
             }).done((result) => {
                 let options = "";
-                for(let i = 0; i < result.length; i++){
+                for (let i = 0; i < result.length; i++) {
                     options += `<option value="${result[i].id}">${result[i].name} Remaining : ${result[i].remaining}</option>`
                 }
-                $('#allocation_id').html(`<option id="select" selected disabled>Select type</option>` + options);
+                $('#allocation_id').html(`<option id="select" value="" selected disabled>Select type</option>` + options);
             });
         }
 
@@ -429,31 +444,47 @@
                 Status: 0,
                 IsPublish: false
             }
-            console.log(requestleave);
+
             $.ajax({
-                url: "../Employee/InsertRequest",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(requestleave),
+                url: "https://localhost:7090/api/AllocationsLeave/" + $('#allocation_id').val(),
+                type: "GET"
             }).done((result) => {
-                $("#modal-form").modal("hide");
-                Swal.fire({
-                    text: 'New Request Created!',
-                    icon: 'success',
-                    timer: 5000,
-                    timerProgressBar: true
-                });
-                tableRequest.ajax.reload()
-            }).fail((error) => {
-                console.log("failed");
-                $("#modal-form").modal("hide");
-                Swal.fire({
-                    text: 'Error Creating Employee!',
-                    icon: 'error',
-                    timer: 5000,
-                    timerProgressBar: true
-                });
-            });
+                if (result.remaining < duration) {
+                    $("#modal-form").modal("hide");
+                    Swal.fire({
+                        text: 'You do not have sufficient amount of time off!',
+                        icon: 'error',
+                        timer: 5000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    $.ajax({
+                        url: "../Employee/InsertRequest",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(requestleave),
+                    }).done((result) => {
+                        $("#modal-form").modal("hide");
+                        Swal.fire({
+                            text: 'New Request Created!',
+                            icon: 'success',
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
+                        tableRequest.ajax.reload()
+                    }).fail((error) => {
+                        console.log("failed");
+                        $("#modal-form").modal("hide");
+                        Swal.fire({
+                            text: 'Error Creating Employee!',
+                            icon: 'error',
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
+                    });
+                }
+            })
+
         };
 
         const Delete = (id) => {
@@ -495,6 +526,49 @@
     @*Tabs Approve*@
     <script>
         let tableApproved = $('#myTableApproved').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=1",
@@ -548,11 +622,7 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-success" style="box-shadow:3px 3px #000;">Approved</span>`;
                     },
                     className: "text-center"
                 }
@@ -563,6 +633,49 @@
     @*Tabs Refused*@
     <script>
         let tableRefused = $('#myTableRefused').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Employee/GetRequestEmployee/?id=" + @ViewBag.Id + "&status=2",
@@ -609,25 +722,21 @@
                 {
                     data: "status",
                     render: (data) => {
-                        switch (data) {
-                            case 0: return `<p class="text-light bg-warning text-center" style="box-shadow:3px 3px #000;">Requested</p>`
-                            case 1: return `<p class="text-light bg-success text-center" style="box-shadow:3px 3px #000;">Approved</p>`
-                            default: return `<p class="text-light bg-danger text-center" style="box-shadow:3px 3px #000;">Refused</p>`
-                        }
+                        return `<span class="badge badge-danger" style="box-shadow:3px 3px #000;">Refused</span>`;
                     },
                     className: "text-center"
                 },
                 {
                     data: "remark",
                     render: (data) => {
-                        return `<a type="button" class="px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" onclick="Swal.fire({ icon: 'error', title: 'Oops... Rejected', text: '${data}!'})">Note</a>`
+                        return `<a type="button" class="btn btn-sm text-light bg-danger text-center" style="box-shadow:3px 3px #000; border-radius: 0.2rem;" onclick="Swal.fire({ icon: 'error', title: 'Oops... Rejected', text: '${data}!'})">Note</a>`
                     },
                     className: "text-center"
                 },
                 {
                     data: "requestId",
                     render: (data) => {
-                        return `<a type="button" onclick="Delete(${data});" class="ml-2 px-2 text-light bg-danger text-center" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`
+                        return `<a type="button" onclick="Delete(${data});" class="ml-2 btn btn-sm text-light bg-danger text-center" style="box-shadow:3px 3px #000; border-radius: 0.2rem;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></a>`
                     },
                     className: "text-center"
                 }

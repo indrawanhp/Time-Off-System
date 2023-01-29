@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Account";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 @section navbar{
     <li class="nav-item">
@@ -30,17 +33,12 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> List Department & Jobs</span>
+            <span> Department & Jobs Management</span>
         </a>
     </li>
 }
 
 <style>
-
-    .error {
-        font-size: 1rem;
-        padding: 2px;
-    }
 
     label {
         width: 300px;
@@ -50,35 +48,33 @@
 
         label.error {
             color: red;
-            font-size: 1rem;
+            font-size: 12px;
             display: block;
             margin-top: 5px;
         }
 
-    input.error, textarea.error, select.error {
-        width: 100%;
+    input.error, textarea.error {
+        font-size: 12px;
         border: 1px solid red;
         color: red;
-    }
-    .select2-selection__rendered {
-        line-height: 40px !important;
+        width: 470px;
     }
 
-    .select2-container .select2-selection--single {
-        height: 41px !important;
-    }
-
-    .select2-selection__arrow {
-        height: 41px !important;
+    .error {
+        color: red;
+        font-size: 20px;
+        position: relative;
+        line-height: 1;
+        width: 470px;
     }
 </style>
 <section>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Account</h6>
+            <h5 class="m-0 font-weight-bold text-primary text-center"> @ViewBag.Title </h5>
         </div>
         <div class="card-body">
-            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#createdAccount" onclick="$('#formValidation')[0].reset(); ModalPlacement();">
+            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#createdAccount">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
@@ -104,8 +100,8 @@
 
 </section>
 <!-- Created Modal -->
-<div class="modal fade" id="createdAccount" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
-    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+<div class="modal fade" id="createdAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" id="modal-title-default">Created Account</h6>
@@ -114,36 +110,32 @@
                 </button>
             </div>
             <div class="modal-body" id="c">
-                <form class="needs-validation" id="formValidation" novalidate>
-                    <input type="hidden" name="employeeid" id="employeeid" />
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label for="first_name" class="form-label">Employee</label>
-                            <select class="form-control" id="employeeId" name="employeeId" style="width: 100%;" required>
-                            </select>
-                        </div>
+                <form class="row g-3 needs-validation" id="formValidation" method="post" novalidate>
+
+                    <div class="col-md-12">
+                        <label class="form-label" style="margin-top: -10px;">Employee</label>
+                        <select class="form-control" name="employeeId" id="employeeId">
+                        </select>
+
                     </div>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label for="phone" class="form-label">Email</label>
-                            <input type="text" name="email" id="email" class="form-control" required />
-                        </div>
+                    <div class="col-md-12">
+                        <label class="form-label" style="margin-top: -10px;">Email</label>
+                        <input type="text" class="form-control form-control-user" id="email" name="email" />
+
                     </div>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label for="hire_date" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
-                        </div>
+                    <div class="col-md-12">
+                        <label class="form-label" style="margin-top: -10px;">Password</label>
+                        <input type="password" class="form-control" name="password" id="password">
+
                     </div>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label for="gender" class="form-label">Role</label>
-                            <select class="form-control" name="txtrole" id="txtrole">
-                            </select>
-                        </div>
+                    <div class="col-md-12">
+                        <label class="form-label" style="margin-top: -10px;">Role</label>
+                        <select class="form-control" name="txtrole" id="txtrole">
+                        </select>
+
                     </div>
                     <div class="modal-footer">
-                        <button id="save" type="submit" class="btn btn-primary">Save</button>
+                        <button id="btnAdd" type="submit" class="btn btn-primary">Submit</button>
                         <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -173,7 +165,7 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="submit" name="btnEdit" onclick="EditAccount()" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -212,8 +204,12 @@
                     },
                     {
                         extend: 'pdfHtml5',
+                        customize: function (doc) {
+                            doc.content[1].table.widths =
+                                Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        },
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3]
                         },
                         titleAttr: 'Pdf',
                         className: 'btn btn-sm btn-danger',
@@ -290,27 +286,22 @@
             console.log(error);
         });
 
-       
+        $.ajax({
+            url: "https://localhost:7090/api/Employees",
+            type: "GET",
+            dataType: "Json"
+        }).done((result) => {
 
-        const ModalPlacement = () => {
-            $.ajax({
-                url: "https://localhost:7090/api/Employees",
-                type: "GET",
-                dataType: "Json"
-            }).done((result) => {
-                let options = "";
-                for (let i = 0; i < result.length; i++) {
-                    options += `<option value="${result[i].id}">${result[i].firstName} ${result[i].lastName}</option>`
-                }
-                $('#employeeId').html(`<option value="" selected hidden>Select Employee</option>` + options);
+            let emp = `<option value="" disabled selected>Please select employee</option>`;
+
+            $.each(result, (key, val) => {
+                emp += `<option value="${val.id}" >${val.firstName + " " + val.lastName}</option>`;
             })
 
-            $('#employeeId').select2({
-                width: 'resolve',
-                height: 'resolve',
-                placeholder: "Select a employee"
-            });
-        }
+            $("#employeeId").html(emp);
+        }).fail((error) => {
+            console.log(error);
+        });
 
 
 
@@ -334,34 +325,26 @@
                 },
                 messages: {
                     employeeId: {
-                        required: "Please select a employee"
+                        required: "Select user.",
                     },
                     email: {
-                        required: "Please input a email"
+                        required: "Enter user email.",
+                        email: "xxx@xxx.xxx"
                     },
                     password: {
-                        required: "Please input a password"
+                        required: "Enter user password"
                     },
                     txtrole: {
-                        required: "Please select a role"
+                        required: "Select user role"
                     }
-                },
-                submitHandler: () => {
-                    Insert();
-                },
-                errorElement: "em",
-                errorPlacement: function (error, element) {
-                    error.addClass("invalid-feedback mt-2");
-                    error.appendTo(element.parent());
-                },
-                highlight: function (element, errorClass, validClass) {
-                    $(element).addClass("is-invalid").removeClass("is-valid");
-                },
-                unhighlight: function (element, errorClass, validClass) {
-                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
-            
+            $('#btnAdd').click(function (e) {
+                e.preventDefault();
+                if ($('#formValidation').valid() == true) {
+                    Insert();
+                }
+            });
         });
 
         function Insert() {
@@ -377,23 +360,21 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
-                $("#createdAccount").modal("hide");
+                $('#createdAccount').modal('hide');
                 swal.fire({
-                    text: 'Data added successfully!!',
-                    icon: 'success',
-                    timer: 5000,
-                    timerProgressBar: true
-                });
+                    title: "Good job!",
+                    text: "Data added successfully!!",
+                    icon: "success"
+
+                })
                 TableAccount.ajax.reload();
             }).fail((error) => {
-                $("#createdAccount").modal("hide");
                 // jika gagal
                 swal.fire({
                     title: "Failed!",
                     text: "email or this user has been registered!!",
                     icon: "error",
-                    timer: 5000,
-                    timerProgressBar: true
+                    button: "Close",
                 });
             })
         }
@@ -416,12 +397,13 @@
                         type: "delete",
                         dataType: 'json'
                     }).done((result) => {
+                        $('#createdAccount').modal('hide');
                         swal.fire({
                             icon: 'success',
                             title: 'Success',
                             text: 'Delete data from database',
-                        }),
-                            TableAccount.ajax.reload()
+                        })
+                        TableAccount.ajax.reload()
                     }).fire((error) => {
                         swal({
                             icon: 'error',
@@ -461,38 +443,21 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
-                $("#getEditModal").modal("hide");
-                let timerInterval
-                swal.fire({
-                    title: 'Saving Data!',
-                    html: 'Wait a minute <b></b> milliseconds.',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        swal.showLoading()
-                        const b = swal.getHtmlContainer().querySelector('b')
-                        timerInterval = setInterval(() => {
-                            b.textContent = swal.getTimerLeft()
-                        }, 100)
-                    },
-                    willClose: () => {
-                       clearInterval(timerInterval)
-                    }
-                }).then((result) => {
-                    if (result.dismiss === swal.DismissReason.timer) {
-                        console.log('Waiting')
-                    }
-                }),
-        /*            $('#editEmployee').modal('hide');
-        */        TableAccount.ajax.reload()
-
+                $('#createdAccount').modal('hide');
+                Swal.fire({
+                    text: 'Account has been Updated!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                TableAccount.ajax.reload()
             }).fail((error) => {
-
-                swal.fire({
+                Swal.fire({
+                    text: 'Error Updating Account!',
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Failed Edit Account ',
-                })
+                    timer: 5000,
+                    timerProgressBar: true
+                });
             })
         }
     </script>
