@@ -5,6 +5,7 @@ using Client.Repositories.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers;
 
@@ -48,19 +49,19 @@ public class AuthenticationController : BaseController<Accounts, AuthenticationR
 
         if (role == "Admin")
         {
-            return RedirectToAction("index", "Admin");
+            return Content(Url.Action("index", "Admin"));
         }
         else if (role == "Manager")
         {
-            return RedirectToAction("index", "Manager");
+            return Content(Url.Action("index", "Manager"));
         }
         else if (role == "Employee")
         {
-            return RedirectToAction("index", "Employee");
+            return Content(Url.Action("index", "Employee"));
         }
         else
         {
-            return RedirectToAction("index", "Authentication");
+            return Content(Url.Action("index", "Authentication"));
         }
     }
 
@@ -74,11 +75,6 @@ public class AuthenticationController : BaseController<Accounts, AuthenticationR
     {
         return View(); 
     }
-    public IActionResult Register()
-    {
-        return View();
-    }
-
 
     [HttpGet("/Unauthorized")]
     public IActionResult Unauthorized()

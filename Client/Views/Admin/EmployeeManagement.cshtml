@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Employee Management";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 @section navbar{
     <li class="nav-item">
@@ -12,7 +15,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
             <i class="fas fa-user-circle"></i>
-            <span> Create Account </span>
+            <span> Account </span>
         </a>
     </li>
     <li class="nav-item">
@@ -27,30 +30,18 @@
             <span> Employee Management</span>
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> Department & Jobs Management</span>
+        </a>
+    </li>
 }
 
 <style>
     .error {
-        font-size: 1rem;
-        padding: 2px;
-    }
-
-    label {
-        width: 300px;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-        label.error {
-            color: red;
-            font-size: 1rem;
-            display: block;
-            margin-top: 5px;
-        }
-
-    input.error, textarea.error, select.error {
-        width: 100%;
-        border: 1px solid red;
+        font-size: 14px;
         color: red;
     }
 </style>
@@ -58,6 +49,9 @@
 <div class="row">
     <div class="col-xl-12 col-lg-12">
         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h5 class="m-0 font-weight-bold text-primary text-center"> @ViewBag.Title </h5>
+            </div>
             <div class="card-body">
                 <ul id="tabs" class="nav nav-tabs">
                     <li class="nav-item">
@@ -110,7 +104,7 @@
                                 </a>
                             </div>
                             <div class="table-responsive mt-3">
-                                <table id="myTableManagement" class="table align-items-center" width="100%">
+                                <table id="myTableManagement" class="table align-items-center" width="100%" cellspacing="0">
                                     <thead style="font-size:14px;">
                                         <tr>
                                             <th class="text-uppercase">Id</th>
@@ -118,7 +112,7 @@
                                             <th>Manager</th>
                                             <th>Job</th>
                                             <th>Department</th>
-                                            <th>Action</th>
+                                            <th width="10%">Action</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -148,48 +142,30 @@
                         <div class="col-md-6">
                             <label for="first_name" class="form-label">First Name</label>
                             <input type="text" id="first_name" name="first_name" class="form-control" required />
-                            <div class="invalid-feedback">
-                                Please provide a valid first name.
-                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="last_name" class="form-label">Last Name</label>
                             <input type="text" id="last_name" name="last_name" class="form-control" required />
-                            <div class="invalid-feedback">
-                                Please provide a valid last name.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6">
                             <label for="birth_date" class="form-label">Birth Date</label>
                             <input type="date" name="birth_date" id="birth_date" class="form-control date" required />
-                            <div class="invalid-feedback">
-                                Please provide a valid birth date.
-                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="phone" class="form-label">Phone</label>
                             <input type="text" name="phone" id="phone" class="form-control" required />
-                            <div class="invalid-feedback">
-                                Please provide a valid phone.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6">
                             <label for="hire_date" class="form-label">Start Working Date</label>
                             <input type="date" name="hire_date" id="hire_date" class="form-control" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid start working date.
-                            </div>
                         </div>
                         <div class="col-md-6">
                             <label for="release_date" class="form-label">End Working Date</label>
                             <input type="date" name="release_date" id="release_date" class="form-control" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid end working date.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -200,18 +176,12 @@
                                 <option value="0">Male</option>
                                 <option value="1">Female</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a valid gender.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
                             <label for="address" class="form-label">Address</label>
                             <textarea name="address" id="address" cols="50" rows="3" class="form-control" required></textarea>
-                            <div class="invalid-feedback">
-                                Please provide a valid address.
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -244,9 +214,6 @@
                             <label for="selectemployee" class="form-label">Employee Name</label>
                             <select class="form-control" id="selectemployee" name="selectemployee" style="width: 100%">
                             </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid first name.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -254,9 +221,6 @@
                             <label for="selectmanager" class="form-label">Manager Name</label>
                             <select class="form-control" id="selectmanager" name="selectmanager" style="width: 100%">
                             </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid first name.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -264,9 +228,6 @@
                             <label for="selectjob" class="form-label">Job Name</label>
                             <select class="form-control" id="selectjob" name="selectjob" style="width: 100%">
                             </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid first name.
-                            </div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -274,9 +235,6 @@
                             <label for="selectdepartment" class="form-label">Department Name</label>
                             <select class="form-control" id="selectdepartment" name="selectdepartment" style="width: 100%">
                             </select>
-                            <div class="invalid-feedback">
-                                Please provide a valid first name.
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -295,6 +253,49 @@
         console.log("Employee Management")
 
         let TableEmployee = $('#myTableEmployee').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "../Admin/GetAll",
@@ -421,6 +422,17 @@
                     } else {
                         Update();
                     }
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
         });
@@ -571,6 +583,49 @@
     @*Employees Management*@
     <script>
         let tableManagement = $('#myTableManagement').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 type: "GET",
                 url: "https://localhost:7090/api/Employees/MasterEmployee",
@@ -686,18 +741,65 @@
             });
         }
 
+        $(document).ready(function () {
+            $('#form-placement').validate({
+                rules: {
+                    selectemployee: {
+                        required: true
+                    },
+                    selectmanager: {
+                        required: true
+                    },
+                    selectjob: {
+                        required: true
+                    },
+                    selectdepartment: {
+                        required: true
+                    }
+                },
+                messages: {
+                    selectemployee: {
+                        required: "Employee is Required."
+                    },
+                    selectmanager: {
+                        required: "Manager is Required."
+                    },
+                    selectjob: {
+                        required: "Job is Required."
+                    },
+                    selectdepartment: {
+                        required: "Department is Required"
+                    },
+                },
+                submitHandler: () => {
+                    var flag = $('#flag').val();
+                    if (flag == "") {
+                        console.log("Add");
+                        UpdateManager();
+                        JobPlacement();
+                    } else {
+                        console.log("Update");
+                        UpdateManager();
+                        UpdateJobPlacement()
+                    }
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+        });
+
         $('#form-placement').submit((event) => {
             event.preventDefault();
-            var flag = $('#flag').val();
-            if (flag == "") {
-                console.log("Add");
-                UpdateManager();
-                JobPlacement();
-            } else {
-                console.log("Update");
-                UpdateManager();
-                UpdateJobPlacement()
-            }
+            
         })
 
         const UpdateManager = () => {
