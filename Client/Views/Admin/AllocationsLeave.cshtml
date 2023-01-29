@@ -12,7 +12,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
             <i class="fas fa-user-circle"></i>
-            <span> Create Account </span>
+            <span> Account </span>
         </a>
     </li>
     <li class="nav-item active">
@@ -25,6 +25,12 @@
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span> Employee Management</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span> List Department & Jobs</span>
         </a>
     </li>
 }
@@ -198,7 +204,7 @@
                         },
                         titleAttr: 'Excel',
                         className: 'btn mx-1 btn-sm btn-success text-light bg-success',
-                        text: '<i class="fas fa-file-pdf text-lg" aria-hidden="true"></i>',
+                        text: '<i class="fas fa-solid fa-file-excel"></i>',
                         attr: {
                             style: "box-shadow: 3px 3px #000;"
                         }
