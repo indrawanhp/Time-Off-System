@@ -304,16 +304,6 @@
         $('.pesan').html('<h5 class="text-success"> Password sesuai ! </h5>');
         return true;
     }
-    let Name = document.getElementById("Name");
-    $.ajax({
-        url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
-        dataType: "Json"
-    }).done((result) => {
-        Name.innerHTML = result.firstName + " " + result.lastName;
-        console.log(result.firstName);
-    }).fail((error) => {
-        console.log(error);
-    });
 
     function ChangePassword() {
         var obj = {

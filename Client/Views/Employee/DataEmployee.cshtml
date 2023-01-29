@@ -94,7 +94,7 @@
                         <span class="text">Edit</span>
                     </a>
                     </h4>
-                    <container>
+                    <container id="cont">
                     <table class="table table-hover" id="tableDetail">
                         <tbody>
                             <tr>
@@ -116,6 +116,13 @@
                                 <td width="1%" class="pt-3">:</td>
                                 <td width="800px">
                                     <h6 class="text-dark font-weight-bold pt-2" id="birthdate"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Age</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="age"></h6>
                                 </td>
                             </tr>
                             <tr>
@@ -226,7 +233,6 @@
                                 <label class="form-label">Phone</label>
                                 <input type="text" class="form-control" name="editphone" id="editphone">
                             </div>
-                                <input type="hidden" class="form-control" name="editage" id="editage">
                             <div class="col-md-6">
                                 <label class="form-label">Gender</label>
                                 <select class="form-control" name="editgender" id="editgender">
@@ -253,6 +259,7 @@
         let fullName = document.getElementById("fullName");
         let address = document.getElementById("address");
         let birthdate = document.getElementById("birthdate");
+        let age = document.getElementById("age");
         let phone = document.getElementById("phone");
         let hiredate = document.getElementById("hiredate");
         let releasedate = document.getElementById("releasedate");
@@ -268,6 +275,7 @@
             fullName.innerHTML = result.firstName + " " + result.lastName;
             address.innerHTML = result.address;
             birthdate.innerHTML = moment(result.birthDate).format('DD-MM-YYYY');
+            age.innerHTML = result.age + " Years Old"
             phone.innerHTML = result.phone;
             hiredate.innerHTML = moment(result.hireDate).format('DD-MM-YYYY');
             releasedate.innerHTML = moment(result.releaseDate).format('DD-MM-YYYY');
@@ -321,7 +329,6 @@
                 $('#editreleaseDate').val(result.releaseDate);
                 $('#editphone').val(result.phone);
                 $('#editgender').val(result.gender);
-                $('#editage').val(result.age);
                 $('#editmanagerId').val(result.managerId);
                 console.log(result.address);
             }).fail((error) => {
@@ -346,9 +353,6 @@
                     },
                     editgender: {
                         required: true
-                    },
-                    editage: {
-                        required: true
                     }
                 },
                 messages: {
@@ -366,16 +370,37 @@
                     },
                     editgender: {
                         required: "Chose Gender"
-                    },
-                    editage: {
-                        required: "Enter Age"
                     }
                 },
                 submitHandler: () => {
                     Edit();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
         });
+
+
+        const Age = (date) => {
+            const birthDate = new Date(date);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const month = today.getMonth() - birthDate.getMonth();
+            if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
         const Edit = () => {
             let edit = {
                 id: @ViewBag.Id,
@@ -387,7 +412,7 @@
                 releaseDate: $('#editreleaseDate').val(),
                 phone: $('#editphone').val(),
                 gender: parseInt($('#editgender').val()),
-                age: $('#editage').val(),
+                age: Age($('#editbirthDate').val()),
                 managerId: $('#editmanagerId').val(),
             }
             $.ajax({
@@ -398,23 +423,72 @@
             }).done((result) => {
                 $("#modal-edit").modal("hide");
                 Swal.fire({
-                    text: 'New Request Created!',
+                    text: 'Data Successfully edited',
                     icon: 'success',
                     timer: 5000,
                     timerProgressBar: true
                 });
-                location.reload();
+                $('#cont').html(hasil());
             }).fail((error) => {
                 console.log("failed");
                 $("#modal-form").modal("hide");
                 Swal.fire({
-                    text: 'Error Creating Employee!',
+                    text: 'Error !',
                     icon: 'error',
                     timer: 5000,
                     timerProgressBar: true
                 });
             });
         };
+
+        function hasil(){
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+                dataType: "Json"
+            }).done((result) => {
+                fullName.innerHTML = result.firstName + " " + result.lastName;
+                address.innerHTML = result.address;
+                birthdate.innerHTML = moment(result.birthDate).format('DD-MM-YYYY');
+                phone.innerHTML = result.phone;
+                hiredate.innerHTML = moment(result.hireDate).format('DD-MM-YYYY');
+                releasedate.innerHTML = moment(result.releaseDate).format('DD-MM-YYYY');
+                age.innerHTML = result.age + " Years Old";
+
+                const hDate = new Date(result.hireDate);
+                const rDate = new Date(result.releaseDate);
+                const contractLengthInMilliseconds = rDate - hDate;
+                const contractLengthInDays = contractLengthInMilliseconds / (1000 * 60 * 60 * 24);
+                const years = Math.floor(contractLengthInDays / 365.25);
+                contractLength.innerHTML = years + " Years";
+                $.ajax({
+                    url: "https://localhost:7090/api/Employees/" + result.managerId,
+                    dataType: "Json"
+                }).done((results) => {
+                    manager.innerHTML = results.firstName + " " + results.lastName;
+                });
+
+                $.ajax({
+                    url: "https://localhost:7090/api/Accounts/" + @ViewBag.Id,
+                    dataType: "Json"
+                }).done((dataa) => {
+                    email.innerHTML = dataa.email;
+                });
+
+                $.ajax({
+                    url: "https://localhost:7090/api/JobPlacements/GetEmployee/" + @ViewBag.Id,
+                    dataType: "Json"
+                }).done((jobs) => {
+                    console.log(jobs[0].department);
+                    department.innerHTML = jobs[0].department;
+                    job.innerHTML = jobs[0].job;
+                })
+
+
+                console.log(result.firstName);
+            }).fail((error) => {
+                console.log(error);
+            });
+        }
 
     </script>
 }

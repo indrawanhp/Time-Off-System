@@ -1,8 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Request Time Off";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
-
 @section navbar{
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
@@ -427,6 +429,7 @@
                 Status: 0,
                 IsPublish: false
             }
+            console.log(requestleave);
             $.ajax({
                 url: "../Employee/InsertRequest",
                 type: "POST",

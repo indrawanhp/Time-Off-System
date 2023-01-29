@@ -58,11 +58,24 @@
 
     .error {
         color: red;
-        font-size: 20px;
+        font-size: 100%;
         position: relative;
         line-height: 1;
-        width: 470px;
+        width: 100%;
     }
+
+    .select2-selection__rendered {
+        line-height: 40px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 41px !important;
+    }
+
+    .select2-selection__arrow {
+        height: 41px !important;
+    }
+
 </style>
 <section>
     <div class="card shadow mb-4">
@@ -70,7 +83,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Allocation Leave</h6>
         </div>
         <div class="card-body">
-            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#created">
+            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#created" onclick="$('#formValidationAllocationLeave')[0].reset(); ModalPlacement();">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
@@ -99,7 +112,8 @@
 </section>
 
 <!-- Created Modal -->
-<div class="modal fade" id="created" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="created" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,17 +127,17 @@
 
                     <div class="col-md-12">
                         <label class="form-label">Employee</label>
-                        <select class="form-control" name="employeeId" id="employeeId">
+                        <select class="form-control" name="employeeId" id="employeeId" style="width:100%;">
                         </select>
                     </div>
                     <div class="col-md-12">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" required>
+                        <label class="form-label">Leave Type</label>
+                        <input type="text" class="form-control" name="name" id="name">
 
                     </div>
                     <div class="col-md-12">
                         <label class="form-label">Useable Leave</label>
-                        <input type="number" class="form-control" name="remaining" id="remaining" required>
+                        <input type="number" class="form-control" name="remaining" id="remaining">
                     </div>
                     <div class="modal-footer">
                         <button id="btnAddAl" type="submit" class="btn btn-primary">Submit</button>
@@ -166,22 +180,25 @@
 
 @section scripts{
     <script>
-        $.ajax({
-            url: "https://localhost:7090/api/Employees",
-            type: "GET",
-            dataType: "Json"
-        }).done((result) => {
 
-            let emp = `<option value="" disabled selected>Please select employee</option>`;
-
-            $.each(result, (key, val) => {
-                emp += `<option value="${val.id}" >${val.firstName + " " + val.lastName}</option>`;
+        const ModalPlacement = () => {
+            $.ajax({
+                url: "https://localhost:7090/api/Employees",
+                type: "GET",
+                dataType: "Json"
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].id}">${result[i].firstName} ${result[i].lastName}</option>`
+                }
+                $('#employeeId').html(`<option value="" selected hidden>Select Employee</option>` + options);
             })
 
-            $("#employeeId").html(emp);
-        }).fail((error) => {
-            console.log(error);
-        });
+            $('#employeeId').select2({
+                placeholder: "Select a employee"
+            });
+        }
+
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -290,6 +307,9 @@
                     employeeId: {
                         required: true
                     },
+                    name: {
+                        required: true
+                    },
                     remaining: {
                         required: true
                     }
@@ -298,15 +318,26 @@
                     employeeId: {
                         required: "Please Select Employee"
                     },
+                    name: {
+                        required: "Please enter leave type"
+                    },
                     remaining: {
-                        required: "Please enter Remaining Out</h6>"
+                        required: "Please enter Remaining Out"
                     }
-                }
-            });
-            $('#btnAddAl').click(function (e) {
-                e.preventDefault();
-                if ($('#formValidationAllocationLeave').valid() == true) {
+                },
+                submitHandler: () => {
                     InsertAllocationsLeave();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
         });
@@ -323,12 +354,13 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
+                $("#created").modal("hide");
                 swal.fire({
-                    title: "Good job!",
-                    text: "Data added successfully!!",
-                    icon: "success",
-
-                })
+                    text: 'Data added successfully!!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
                 Table.ajax.reload();
             }).fail((error) => {
                 // jika gagal
@@ -363,6 +395,8 @@
                             icon: 'success',
                             title: 'Success',
                             text: 'Delete Employee from database',
+                            timer: 5000,
+                            timerProgressBar: true
                         }),
                             Table.ajax.reload()
                     }).fire((error) => {
@@ -423,11 +457,6 @@
                         }, 100)
                     },
                     willClose: () => {
-                        swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Upload Employee',
-                        })
                         clearInterval(timerInterval)
                     }
                 }).then((result) => {

@@ -37,6 +37,11 @@
 
 <style>
 
+    .error {
+        font-size: 1rem;
+        padding: 2px;
+    }
+
     label {
         width: 300px;
         display: inline-block;
@@ -45,24 +50,26 @@
 
         label.error {
             color: red;
-            font-size: 12px;
+            font-size: 1rem;
             display: block;
             margin-top: 5px;
         }
 
-    input.error, textarea.error {
-        font-size: 12px;
+    input.error, textarea.error, select.error {
+        width: 100%;
         border: 1px solid red;
         color: red;
-        width: 470px;
+    }
+    .select2-selection__rendered {
+        line-height: 40px !important;
     }
 
-    .error {
-        color: red;
-        font-size: 20px;
-        position: relative;
-        line-height: 1;
-        width: 470px;
+    .select2-container .select2-selection--single {
+        height: 41px !important;
+    }
+
+    .select2-selection__arrow {
+        height: 41px !important;
     }
 </style>
 <section>
@@ -71,7 +78,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Data Account</h6>
         </div>
         <div class="card-body">
-            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#createdAccount">
+            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#createdAccount" onclick="$('#formValidation')[0].reset(); ModalPlacement();">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
@@ -97,8 +104,8 @@
 
 </section>
 <!-- Created Modal -->
-<div class="modal fade" id="createdAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog">
+<div class="modal fade" id="createdAccount" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title" id="modal-title-default">Created Account</h6>
@@ -107,32 +114,36 @@
                 </button>
             </div>
             <div class="modal-body" id="c">
-                <form class="row g-3 needs-validation" id="formValidation" method="post" novalidate>
-
-                    <div class="col-md-12">
-                        <label class="form-label" style="margin-top: -10px;">Employee</label>
-                        <select class="form-control" name="employeeId" id="employeeId">
-                        </select>
-
+                <form class="needs-validation" id="formValidation" novalidate>
+                    <input type="hidden" name="employeeid" id="employeeid" />
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="first_name" class="form-label">Employee</label>
+                            <select class="form-control" id="employeeId" name="employeeId" style="width: 100%;" required>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label" style="margin-top: -10px;">Email</label>
-                        <input type="text" class="form-control form-control-user" id="email" name="email" />
-
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="phone" class="form-label">Email</label>
+                            <input type="text" name="email" id="email" class="form-control" required />
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label" style="margin-top: -10px;">Password</label>
-                        <input type="password" class="form-control" name="password" id="password">
-
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="hire_date" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control" required>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label" style="margin-top: -10px;">Role</label>
-                        <select class="form-control" name="txtrole" id="txtrole">
-                        </select>
-
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="gender" class="form-label">Role</label>
+                            <select class="form-control" name="txtrole" id="txtrole">
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button id="btnAdd" type="submit" class="btn btn-primary">Submit</button>
+                        <button id="save" type="submit" class="btn btn-primary">Save</button>
                         <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -162,7 +173,7 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
+                <button type="submit" name="btnEdit" onclick="EditAccount()" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -279,22 +290,27 @@
             console.log(error);
         });
 
-        $.ajax({
-            url: "https://localhost:7090/api/Employees",
-            type: "GET",
-            dataType: "Json"
-        }).done((result) => {
+       
 
-            let emp = `<option value="" disabled selected>Please select employee</option>`;
-
-            $.each(result, (key, val) => {
-                emp += `<option value="${val.id}" >${val.firstName + " " + val.lastName}</option>`;
+        const ModalPlacement = () => {
+            $.ajax({
+                url: "https://localhost:7090/api/Employees",
+                type: "GET",
+                dataType: "Json"
+            }).done((result) => {
+                let options = "";
+                for (let i = 0; i < result.length; i++) {
+                    options += `<option value="${result[i].id}">${result[i].firstName} ${result[i].lastName}</option>`
+                }
+                $('#employeeId').html(`<option value="" selected hidden>Select Employee</option>` + options);
             })
 
-            $("#employeeId").html(emp);
-        }).fail((error) => {
-            console.log(error);
-        });
+            $('#employeeId').select2({
+                width: 'resolve',
+                height: 'resolve',
+                placeholder: "Select a employee"
+            });
+        }
 
 
 
@@ -318,26 +334,34 @@
                 },
                 messages: {
                     employeeId: {
-                        required: "Select user.",
+                        required: "Please select a employee"
                     },
                     email: {
-                        required: "Enter user email.",
-                        email: "xxx@xxx.xxx"
+                        required: "Please input a email"
                     },
                     password: {
-                        required: "Enter user password"
+                        required: "Please input a password"
                     },
                     txtrole: {
-                        required: "Select user role"
+                        required: "Please select a role"
                     }
-                }
-            });
-            $('#btnAdd').click(function (e) {
-                e.preventDefault();
-                if ($('#formValidation').valid() == true) {
+                },
+                submitHandler: () => {
                     Insert();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
                 }
             });
+            
         });
 
         function Insert() {
@@ -353,20 +377,23 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
+                $("#createdAccount").modal("hide");
                 swal.fire({
-                    title: "Good job!",
-                    text: "Data added successfully!!",
-                    icon: "success"
-
-                })
+                    text: 'Data added successfully!!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
                 TableAccount.ajax.reload();
             }).fail((error) => {
+                $("#createdAccount").modal("hide");
                 // jika gagal
                 swal.fire({
                     title: "Failed!",
                     text: "email or this user has been registered!!",
                     icon: "error",
-                    button: "Close",
+                    timer: 5000,
+                    timerProgressBar: true
                 });
             })
         }
@@ -434,6 +461,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
+                $("#getEditModal").modal("hide");
                 let timerInterval
                 swal.fire({
                     title: 'Saving Data!',
