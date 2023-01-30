@@ -38,33 +38,9 @@
     </li>
 }
 <style>
-
-    label {
-        width: 300px;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-        label.error {
-            color: red;
-            font-size: 12px;
-            display: block;
-            margin-top: 5px;
-        }
-
-    input.error, textarea.error {
-        font-size: 12px;
-        border: 1px solid red;
-        color: red;
-        width: 470px;
-    }
-
     .error {
+        font-size: 14px;
         color: red;
-        font-size: 100%;
-        position: relative;
-        line-height: 1;
-        width: 100%;
     }
 
     .select2-selection__rendered {
@@ -78,7 +54,6 @@
     .select2-selection__arrow {
         height: 41px !important;
     }
-
 </style>
 <section>
     <div class="card shadow mb-4">
@@ -86,7 +61,7 @@
             <h5 class="m-0 font-weight-bold text-primary text-center"> @ViewBag.Title </h5>
         </div>
         <div class="card-body">
-            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#created" onclick="$('#formValidationAllocationLeave')[0].reset(); ModalPlacement();">
+            <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#created" onclick="$('#formValidationAllocationLeave')[0].reset(); ModalCreatedAl();">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
@@ -126,21 +101,25 @@
                 </button>
             </div>
             <div class="modal-body" id="c">
-                <form class="row g-3 needs-validation" id="formValidationAllocationLeave" method="post" novalidate>
-
-                    <div class="col-md-12">
-                        <label class="form-label">Employee</label>
-                        <select class="form-control" name="employeeId" id="employeeId" style="width:100%;">
-                        </select>
+                <form id="formValidationAllocationLeave" class="needs-validation" novalidate>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="employeeId" class="form-label">Employee</label>
+                            <select class="form-control" name="employeeId" id="employeeId" style="width: 100%">
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Leave Type</label>
-                        <input type="text" class="form-control" name="name" id="name">
-
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="name" class="form-label">Leave Type</label>
+                            <input type="text" name="name" id="name" class="form-control" required />
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Useable Leave</label>
-                        <input type="number" class="form-control" name="remaining" id="remaining">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <label for="remaining" class="form-label">Useable Leave</label>
+                            <input type="text" name="remaining" id="remaining" class="form-control" required>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button id="btnAddAl" type="submit" class="btn btn-primary">Submit</button>
@@ -163,6 +142,8 @@
                 </button>
             </div>
             <div class="modal-body" id="c">
+                <form id="editAL" class="needs-validation" novalidate>
+
                 <input type="hidden" class="form-control" name="txtid" id="txtid">
                 <input type="hidden" class="form-control" name="txtname" id="txtname">
                 <input type="hidden" class="form-control" name="txtidEmployee" id="txtidEmployee">
@@ -173,9 +154,10 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditRemaining()" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="btnEdit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -184,11 +166,10 @@
 @section scripts{
     <script>
 
-        const ModalPlacement = () => {
+        const ModalCreatedAl = () => {
             $.ajax({
-                url: "https://localhost:7090/api/Employees",
-                type: "GET",
-                dataType: "Json"
+                url: "../Admin/GetAll",
+                type: "GET"
             }).done((result) => {
                 let options = "";
                 for (let i = 0; i < result.length; i++) {
@@ -434,6 +415,35 @@
             });
         }
 
+        $(function () {
+            $("#editAL").validate({
+                rules: {
+                    txtremaining: {
+                        required: true
+                    }
+                },
+                messages: {
+                    txtremaining: {
+                        required: "Enter Useable Leave.",
+                    }
+                },
+                submitHandler: () => {
+                    EditRemaining();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+        });
+
         function EditRemaining() {
             var obj = { //sesuaikan sendiri nama objectnya dan beserta isinya
                 //ini ngambil value dari tiap inputan di form nya
@@ -450,6 +460,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
+                $("#getEditModalAllocationsLeave").modal("hide");
                 let timerInterval
                 swal.fire({
                     title: 'Saving Data!',
