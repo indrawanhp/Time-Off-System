@@ -57,12 +57,12 @@
         }
 
     /* input.error, textarea.error, select.form-control {
-                font-size: 12px;
-                border: 1px solid red;
-                color: red;
-                width: 100%;
-                box-sizing: border-box;
-            }*/
+                                font-size: 12px;
+                                border: 1px solid red;
+                                color: red;
+                                width: 100%;
+                                box-sizing: border-box;
+                            }*/
 
     h6 {
         margin-top: 8px;
@@ -100,7 +100,7 @@
             <!-- DEPARTMENT -->
             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                 <br />
-                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" onclick="$('#formDepartment')[0].reset(); Add()">
+                <a type="button" id="insert" value="insert" class="mb-3 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" onclick="$('#formDepartment')[0].reset(); Add()">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                     </span>
@@ -125,7 +125,7 @@
             <!-- JOBS -->
             <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                 <br />
-                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" onclick="$('#formJobs')[0].reset(); Add1()">
+                <a type="button" id="insert" value="insert" class="mb-3 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" onclick="$('#formJobs')[0].reset(); Add1()">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                     </span>
@@ -151,7 +151,7 @@
             <!-- job placement-->
             <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
                 <br />
-                <a type="button" id="insert" value="insert" class="m-0 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()">
+                <a type="button" id="insert" value="insert" class="mb-3 btn btn-primary btn-sm btn-icon-split" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" onclick="$('#formJobdep')[0].reset(); Add2()">
                     <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                     </span>
@@ -253,7 +253,7 @@
 </div>
 
 <!-- Modal MENU 3-->
-<div class="modal fade" id="jobdep" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="jobdep" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -264,24 +264,20 @@
             </div>
             <div class="modal-body">
                 <form id="formJobdep" name="form" autocomplete="off" class="needs-validation" novalidate>
-                    @* <div class="form-group">
-                    <label for="id">ID:</label>
-                    <input type="number" class="form-control" placeholder="Masukkan ID" id="jpId" name="jpId" >
-                    </div>*@
                     <input type="hidden" id="jpId" name="jpId">
                     <div class="form-group">
-                        <label for="id">Employee:</label>
-                        <select class="form-control" aria-label="Default select example" id="employee" name="employee" required>
+                        <label for="employee" class="form-label">Employee:</label>
+                        <select class="form-control" id="employee" name="employee" style="width:100%" required>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id">Department:</label>
-                        <select class="form-control" aria-label="Default select example" id="deps" name="deps" required>
+                        <label for="deps" class="form-label">Department:</label>
+                        <select class="form-control" id="deps" name="deps" style="width:100%" required>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id">Job:</label>
-                        <select class="form-control" aria-label="Default select example" id="jobb" name="jobb" required>
+                        <label for="jobb" class="form-label">Job:</label>
+                        <select class="form-control" id="jobb" name="jobb" style="width:100%" required>
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -302,6 +298,49 @@
         // NAV-1
         // GET DATA
         let departTable = $('#department').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 url: `https://localhost:7090/api/Departments`,
                 dataType: "Json",
@@ -500,6 +539,49 @@
         // GET DATA
 
         let jobTables = $('#jobs').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 url: `https://localhost:7090/api/Jobs`,
                 dataType: "Json",
@@ -530,7 +612,7 @@
                     "data": "id",
                     render: function (data) {
                         return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update1('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete1('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
-                        
+
                     }
                 }
             ],
@@ -722,6 +804,49 @@
         // NAV-3
         // GET DATA
         let jobPlacementTable = $('#Myjobplacement').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pageLength',
+                    className: 'btn btn-sm text-light bg-info',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    titleAttr: 'Excel',
+                    className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                    text: '<i class="fas fa-solid fa-file-excel"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    customize: function (doc) {
+                        doc.content[1].table.widths =
+                            Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                    },
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    titleAttr: 'Pdf',
+                    className: 'btn btn-sm btn-danger',
+                    text: '<i class="fa-regular fa-file-pdf"></i>',
+                    attr: {
+                        style: "box-shadow: 3px 3px #000;"
+                    }
+                }
+            ],
+            initComplete: () => {
+                $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                $('.buttons-pdf').removeClass('buttons-pdf');
+
+            },
             ajax: {
                 url: `https://localhost:7090/api/JobPlacements/JobPlacementMaster`,
                 dataType: "Json",
@@ -751,6 +876,7 @@
             ],
         });
         //Select2 for Employee ID
+
         $.ajax({
             url: `https://localhost:7090/api/Employees`,
             type: "GET",
@@ -766,6 +892,7 @@
         });
 
         //Select2 for Department ID
+
         $.ajax({
             url: `https://localhost:7090/api/Departments`,
             type: "GET",
@@ -782,6 +909,7 @@
         });
 
         //Select2 for Job ID
+
         $.ajax({
             url: `https://localhost:7090/api/Jobs`,
             type: "GET",
@@ -865,6 +993,21 @@
         let check2
         const Add2 = () => {
             check2 = false
+
+            $('#employee').select2({
+                width: 'resolve',
+                placeholder: "Select a employee"
+            });
+
+            $('#deps').select2({
+                width: 'resolve',
+                placeholder: "Select a department"
+            });
+
+            $('#jobb').select2({
+                width: 'resolve',
+                placeholder: "Select a job"
+            });
         }
         function Insert2() {
             let obj = {
