@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Job And Department Management";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
@@ -32,7 +35,7 @@
     <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> List Department & Jobs</span>
+            <span> Department & Jobs Management</span>
         </a>
     </li>
 }

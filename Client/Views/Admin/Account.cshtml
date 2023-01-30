@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Account";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 @section navbar{
     <li class="nav-item">
@@ -30,7 +33,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> List Department & Jobs</span>
+            <span> Department & Jobs Management</span>
         </a>
     </li>
 }
@@ -68,7 +71,7 @@
 <section>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Account</h6>
+            <h5 class="m-0 font-weight-bold text-primary text-center"> @ViewBag.Title </h5>
         </div>
         <div class="card-body">
             <a type="button" class="m-0 btn btn-primary btn-sm btn-icon-split mb-3" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#createdAccount">
@@ -162,7 +165,7 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
+                    <button type="submit" name="btnEdit" data-dismiss="modal" onclick="EditAccount()" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -201,8 +204,12 @@
                     },
                     {
                         extend: 'pdfHtml5',
+                        customize: function (doc) {
+                            doc.content[1].table.widths =
+                                Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        },
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [0, 1, 2, 3]
                         },
                         titleAttr: 'Pdf',
                         className: 'btn btn-sm btn-danger',
@@ -353,6 +360,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
+                $('#createdAccount').modal('hide');
                 swal.fire({
                     title: "Good job!",
                     text: "Data added successfully!!",
@@ -389,12 +397,13 @@
                         type: "delete",
                         dataType: 'json'
                     }).done((result) => {
+                        $('#createdAccount').modal('hide');
                         swal.fire({
                             icon: 'success',
                             title: 'Success',
                             text: 'Delete data from database',
-                        }),
-                            TableAccount.ajax.reload()
+                        })
+                        TableAccount.ajax.reload()
                     }).fire((error) => {
                         swal({
                             icon: 'error',
@@ -434,37 +443,21 @@
                 contentType: "application/json",
                 data: JSON.stringify(obj)
             }).done((result) => {
-                let timerInterval
-                swal.fire({
-                    title: 'Saving Data!',
-                    html: 'Wait a minute <b></b> milliseconds.',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        swal.showLoading()
-                        const b = swal.getHtmlContainer().querySelector('b')
-                        timerInterval = setInterval(() => {
-                            b.textContent = swal.getTimerLeft()
-                        }, 100)
-                    },
-                    willClose: () => {
-                       clearInterval(timerInterval)
-                    }
-                }).then((result) => {
-                    if (result.dismiss === swal.DismissReason.timer) {
-                        console.log('Waiting')
-                    }
-                }),
-        /*            $('#editEmployee').modal('hide');
-        */        TableAccount.ajax.reload()
-
+                $('#createdAccount').modal('hide');
+                Swal.fire({
+                    text: 'Account has been Updated!',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                TableAccount.ajax.reload()
             }).fail((error) => {
-
-                swal.fire({
+                Swal.fire({
+                    text: 'Error Updating Account!',
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Failed Edit Account ',
-                })
+                    timer: 5000,
+                    timerProgressBar: true
+                });
             })
         }
     </script>
