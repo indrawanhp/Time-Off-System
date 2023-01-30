@@ -29,6 +29,11 @@ public class EmployeeController : BaseController<Employee, EmployeeRepository, i
         return View();
     }
 
+    public IActionResult DataEmployee()
+    {
+        return View();
+    }
+
     [HttpGet]
     public async Task<JsonResult> GetRequestEmployee(int id, Status status)
     {

@@ -33,7 +33,7 @@ public class AccountsController : BaseController<AccountRepositories, Accounts, 
         {
             var result = _repositories.Register(registerVM);
             return result == 0 
-                ? Ok(new { statusCode = 204, message = "Email or Phone is Already Registered!" }) 
+                ? BadRequest(new { statusCode = 204, message = "Email or Phone is Already Registered!" }) 
                 : Ok(new { statusCode = 201, message = "Register Succesfully!" });
         }
         catch (Exception e)

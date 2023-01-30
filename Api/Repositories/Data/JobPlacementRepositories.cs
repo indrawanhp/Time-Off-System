@@ -23,6 +23,24 @@ public class JobPlacementRepositories : GeneralRepository<JobPlacements, int>
                     Name = e.FirstName + " " + e.LastName,
                     Department = d.Name,
                     Job = j.Name,
+                    Id = jp.Id,
+                    employeeId = jp.EmployeeId
+                }).ToList();
+    }
+
+    public IEnumerable<MJobPlacementVM> GetEmployee(int id)
+    {
+        return (from jp in _context.JobPlacements
+                join e in _context.Employees on jp.EmployeeId equals e.Id
+                join d in _context.Departments on jp.DepartmentId equals d.Id
+                join j in _context.Jobs on jp.JobId equals j.Id
+                where jp.EmployeeId == id
+                select new MJobPlacementVM
+                {
+                    Name = e.FirstName + " " + e.LastName,
+                    Department = d.Name,
+                    Job = j.Name,
+                    employeeId = jp.EmployeeId,
                     Id = jp.Id
                 }).ToList();
     }

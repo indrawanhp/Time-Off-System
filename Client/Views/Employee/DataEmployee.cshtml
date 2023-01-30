@@ -1,0 +1,500 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "_UserLayout";
+    ViewBag.Title = "Data Employee";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
+}
+
+@section navbar{
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item active">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Menu
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="DataEmployee">
+            <i class="fas fa-solid fa-user-tie"></i>
+            <span>Data Employee </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="RequestTimeOff">
+            <i class="fas fa-solid fa-person-walking-arrow-right"></i>
+            <span>Request Time Off </span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
+            <i class="fas fa-solid fa-person-circle-question"></i>
+            <span>List Request </span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+}
+
+
+<style>
+
+    label {
+        width: 300px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        label.error {
+            color: red;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+    input.error, textarea.error {
+        font-size: 15px;
+        border: 1px solid red;
+        color: red;
+        width: 220px;
+    }
+
+    .error {
+        color: red;
+        font-size: 15px;
+        position: relative;
+        line-height: 1;
+        width: 220px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="card-block text-dark">
+                    <h4 class="m-b-20 p-b-5 ">Detail Employee
+                    <a type="button" id="request" value="request" style="float: right; margin-bottom: 11px;" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit" onclick="ModalEdit();">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </span>
+                        <span class="text">Edit</span>
+                    </a>
+                    </h4>
+                    <container id="cont">
+                    <table class="table table-hover" id="tableDetail">
+                        <tbody>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Name</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="fullName"> </h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Address</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="address"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Date of birth</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="birthdate"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Age</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="age"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Phone</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="phone"></h6>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Email</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="email"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Manager</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="manager"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Department</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="department"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Job</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="job"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Hire Date</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="hiredate"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Release Date</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="releasedate"></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="300px" class="text-left pt-3">Contract Length</td>
+                                <td width="1%" class="pt-3">:</td>
+                                <td width="800px">
+                                    <h6 class="text-dark font-weight-bold pt-2" id="contractLength"></h6>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    </container>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default">Edit</h6>
+                <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="EditForm" class="needs-validation" novalidate>
+                    <input type="hidden" value="@ViewBag.Id" name="employee_id" id="employee_id" required />  
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="lastName" id="lastName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Birth Date</label>
+                                <input type="date" class="form-control" name="editbirthDate" id="editbirthDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="editaddress" id="editaddress">
+                            </div>
+                            
+                            <input type="hidden" class="form-control" name="edithireDate" id="edithireDate">
+                            <input type="hidden" class="form-control" name="editreleaseDate" id="editreleaseDate">
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="editphone" id="editphone">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                <select class="form-control" name="editgender" id="editgender">
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="0"> Male </option>
+                                    <option value="1"> Female </option>
+                                </select>
+                            </div>
+                            <input type="hidden" class="form-control" name="editmanagerId" id="editmanagerId">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save" type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        let fullName = document.getElementById("fullName");
+        let address = document.getElementById("address");
+        let birthdate = document.getElementById("birthdate");
+        let age = document.getElementById("age");
+        let phone = document.getElementById("phone");
+        let hiredate = document.getElementById("hiredate");
+        let releasedate = document.getElementById("releasedate");
+        let contractLength = document.getElementById("contractLength");
+        let manager = document.getElementById("manager");
+        let email = document.getElementById("email");
+        let department = document.getElementById("department");
+        let job = document.getElementById("job");
+        $.ajax({
+            url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+            dataType: "Json"
+        }).done((result) => {
+            fullName.innerHTML = result.firstName + " " + result.lastName;
+            address.innerHTML = result.address;
+            birthdate.innerHTML = moment(result.birthDate).format('DD-MM-YYYY');
+            age.innerHTML = result.age + " Years Old"
+            phone.innerHTML = result.phone;
+            hiredate.innerHTML = moment(result.hireDate).format('DD-MM-YYYY');
+            releasedate.innerHTML = moment(result.releaseDate).format('DD-MM-YYYY');
+
+            const hDate = new Date(result.hireDate);
+            const rDate = new Date(result.releaseDate);
+            const contractLengthInMilliseconds = rDate - hDate;
+            const contractLengthInDays = contractLengthInMilliseconds / (1000 * 60 * 60 * 24);
+            const years = Math.floor(contractLengthInDays / 365.25);
+            contractLength.innerHTML = years + " Years";
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/" + result.managerId,
+                dataType: "Json"
+            }).done((results) => {
+                manager.innerHTML = results.firstName + " " + results.lastName;
+            });
+
+            $.ajax({
+                url: "https://localhost:7090/api/Accounts/" + @ViewBag.Id,
+                dataType: "Json"
+            }).done((dataa) =>{
+                email.innerHTML = dataa.email;
+            });
+
+            $.ajax({
+                url: "https://localhost:7090/api/JobPlacements/GetEmployee/" + @ViewBag.Id,
+                dataType: "Json"
+            }).done((jobs) => {
+                console.log(jobs[0].department);
+                department.innerHTML = jobs[0].department;
+                job.innerHTML = jobs[0].job;
+            })
+
+
+            console.log(result.firstName);
+        }).fail((error) => {
+            console.log(error);
+        });
+
+        function ModalEdit() {
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+                dataType: "Json",
+                dataSrc: ""
+            }).done((result) => {
+                $('#firstName').val(result.firstName);
+                $('#lastName').val(result.lastName);
+                $('#editbirthDate').val(result.birthDate);
+                $('#editaddress').val(result.address);
+                $('#edithireDate').val(result.hireDate);
+                $('#editreleaseDate').val(result.releaseDate);
+                $('#editphone').val(result.phone);
+                $('#editgender').val(result.gender);
+                $('#editmanagerId').val(result.managerId);
+                console.log(result.address);
+            }).fail((error) => {
+                console.log(error);
+            });
+        }
+
+        $(document).ready(function () {
+            $('#EditForm').validate({
+                rules: {
+                    firstName: {
+                        required: true
+                    },
+                    lastName: {
+                        required: true
+                    },
+                    editbirthDate: {
+                        required: true
+                    },
+                    editaddress: {
+                        required: true
+                    },
+                    editphone: {
+                        required: true
+                    },
+                    editgender: {
+                        required: true
+                    }
+                },
+                messages: {
+                    firstName: {
+                        required: "Enter First Name."
+                    },
+                    lastName: {
+                        required: "Enter Last Name."
+                    },
+                    editbirthDate: {
+                        required: "Enter BirthDate"
+                    },
+                    editaddress: {
+                        required: "Enter Address"
+                    },
+                    editphone: {
+                        required: "Enter Phone"
+                    },
+                    editgender: {
+                        required: "Chose Gender"
+                    }
+                },
+                submitHandler: () => {
+                    Edit();
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback mt-2");
+                    error.appendTo(element.parent());
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+        });
+
+
+        const Age = (date) => {
+            const birthDate = new Date(date);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const month = today.getMonth() - birthDate.getMonth();
+            if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        const Edit = () => {
+            let edit = {
+                id: @ViewBag.Id,
+                firstName: $('#firstName').val(),
+                lastName: $('#lastName').val(),
+                birthDate: $('#editbirthDate').val(),
+                address: $('#editaddress').val(),
+                hireDate: $('#edithireDate').val(),
+                releaseDate: $('#editreleaseDate').val(),
+                phone: $('#editphone').val(),
+                gender: parseInt($('#editgender').val()),
+                age: Age($('#editbirthDate').val()),
+                managerId: $('#editmanagerId').val(),
+            }
+            $.ajax({
+                url: "https://localhost:7090/api/Employees",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(edit),
+            }).done((result) => {
+                $("#modal-edit").modal("hide");
+                Swal.fire({
+                    text: 'Data Successfully edited',
+                    icon: 'success',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+                $('#cont').html(hasil());
+            }).fail((error) => {
+                console.log("failed");
+                $("#modal-form").modal("hide");
+                Swal.fire({
+                    text: 'Error !',
+                    icon: 'error',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            });
+        };
+
+        function hasil(){
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+                dataType: "Json"
+            }).done((result) => {
+                fullName.innerHTML = result.firstName + " " + result.lastName;
+                address.innerHTML = result.address;
+                birthdate.innerHTML = moment(result.birthDate).format('DD-MM-YYYY');
+                phone.innerHTML = result.phone;
+                hiredate.innerHTML = moment(result.hireDate).format('DD-MM-YYYY');
+                releasedate.innerHTML = moment(result.releaseDate).format('DD-MM-YYYY');
+                age.innerHTML = result.age + " Years Old";
+
+                const hDate = new Date(result.hireDate);
+                const rDate = new Date(result.releaseDate);
+                const contractLengthInMilliseconds = rDate - hDate;
+                const contractLengthInDays = contractLengthInMilliseconds / (1000 * 60 * 60 * 24);
+                const years = Math.floor(contractLengthInDays / 365.25);
+                contractLength.innerHTML = years + " Years";
+                $.ajax({
+                    url: "https://localhost:7090/api/Employees/" + result.managerId,
+                    dataType: "Json"
+                }).done((results) => {
+                    manager.innerHTML = results.firstName + " " + results.lastName;
+                });
+
+                $.ajax({
+                    url: "https://localhost:7090/api/Accounts/" + @ViewBag.Id,
+                    dataType: "Json"
+                }).done((dataa) => {
+                    email.innerHTML = dataa.email;
+                });
+
+                $.ajax({
+                    url: "https://localhost:7090/api/JobPlacements/GetEmployee/" + @ViewBag.Id,
+                    dataType: "Json"
+                }).done((jobs) => {
+                    console.log(jobs[0].department);
+                    department.innerHTML = jobs[0].department;
+                    job.innerHTML = jobs[0].job;
+                })
+
+
+                console.log(result.firstName);
+            }).fail((error) => {
+                console.log(error);
+            });
+        }
+
+    </script>
+}
