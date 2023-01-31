@@ -1,43 +1,249 @@
 ﻿@{
-    Layout = "_UserLayout";
-    ViewBag.Title = "Dashboard";
+	Layout = "_UserLayout";
+	ViewBag.Title = "Dashboard";
 }
 @section navbar{
-    <li class="nav-item active">
-        <a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
-            <i class="fas fa-user-circle"></i>
-            <span> Account </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
-            <i class="fas fa-user-clock"></i>
-            <span> Allocations Leave</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Employee Management</span>
-        </a>
-    </li>
-    
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span> Department & Jobs Management</span>
-        </a>
-    </li>
+	<li class="nav-item active">
+		<a class="nav-link" asp-area="" asp-controller="admin" asp-action="">
+			<i class="fas fa-fw fa-tachometer-alt"></i>
+			<span>Dashboard</span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Account">
+			<i class="fas fa-user-circle"></i>
+			<span> Account </span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" asp-area="" asp-controller="Admin" asp-action="AllocationsLeave">
+			<i class="fas fa-user-clock"></i>
+			<span> Allocations Leave</span>
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" asp-area="" asp-controller="Admin" asp-action="EmployeeManagement">
+			<i class="fas fa-fw fa-tachometer-alt"></i>
+			<span> Employee Management</span>
+		</a>
+	</li>
+
+	<li class="nav-item">
+		<a class="nav-link" asp-area="" asp-controller="Admin" asp-action="JobAndDepartmentManagement">
+			<i class="fas fa-fw fa-tachometer-alt"></i>
+			<span> Department & Jobs Management</span>
+		</a>
+	</li>
 }
 
+<!-- CSS -->
+<style>
+	#bar, #donut {
+		padding: 10px;
+		box-shadow: 3px 3px 3px 3px #d0d0d0;
+	}
+</style>
+
+<!-- BODY -->
+
+<div class="row">
+	<!-- Earnings (Monthly) Card Example -->
+	<div class="col-xl-6 col-md-6 mb-4">
+		<div class="card border-left-primary shadow h-100 py-2">
+			<div class="card-body" id="emp">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+							Total Employee
+						</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800"><span id="totalemployee"></span></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-duotone fa-users fa-2x text-gray-300"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Earnings (Monthly) Card Example -->
+	<div class="col-xl-6 col-md-6 mb-4">
+		<div class="card border-left-success shadow h-100 py-2">
+			<div class="card-body" id="manage">
+				<div class="row no-gutters align-items-center">
+					<div class="col mr-2">
+						<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+							Total Manager
+						</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-800"><span id="totalmanager"></span></div>
+					</div>
+					<div class="col-auto">
+						<i class="fas fa-duotone fa-user-tie fa-2x text-gray-300"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-1 mb-4">
+	<div class="col-md-6">
+		<div class="card">
+			<div id="bar"></div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="card">
+			<div id="donut"></div>
+		</div>
+	</div>
+</div>
+
+<!-- END BODY -->
 @section scripts{
-    <script>
-        console.log("Test")
-    </script>
+
+	<!-- Total Employee-->
+	<script>
+		$.ajax({
+			url: `https://localhost:7090/api/Employees`,
+			type: "GET"
+		}).done((result) => {
+			const count = result.length;
+			$('#totalemployee').html(count);
+		})
+	</script>
+
+	<!-- Total Manager-->
+	<script>
+		$.ajax({
+			url: `https://localhost:7090/api/Employees/GetNameManager`,
+			type: "GET"
+		}).done((result) => {
+			const count = result.length;
+			$('#totalmanager').html(count);
+		})
+	</script>
+
+	<!-- CHART BAR-->
+	<script>
+		$.ajax({
+			url: `https://localhost:7090/api/Employees`,
+		}).done((data) => {
+			console.log(data);
+			var gender = data.map(x => ({ gender: x.gender }));
+			var { male, female } = gender.reduce((previous, current) => {
+				if (current.gender === 0) {
+					return { ...previous, male: previous.male + 1 }
+				} if (current.gender === 1) {
+					return { ...previous, female: previous.female + 1 }
+				}
+			}, { male: 0, female: 0 })
+
+			var options = {
+				series: [{
+					name: "Total",
+					data: [male, female]
+				}],
+				chart: {
+					height: 300,
+					type: 'bar',
+					events: {
+						click: function (chart, w, e) {
+							// console.log(chart, w, e)
+						}
+					}
+				},
+				title: {
+					text: 'Total Employee Based On Gender',
+					align: 'left'
+				},
+				plotOptions: {
+					bar: {
+						borderRadius: 4,
+						columnWidth: '45%',
+						distributed: true,
+					}
+				},
+				dataLabels: {
+					enabled: false
+				},
+				legend: {
+					show: false
+				},
+				xaxis: {
+					categories: [
+						['Total Male'],
+						['Total Female'],
+					],
+					labels: {
+						style: {
+							fontSize: '12px'
+						}
+					}
+				}
+			};
+			var chart = new ApexCharts(document.querySelector("#bar"), options);
+			chart.render();
+		});
+	</script>
+
+	<!-- CHART DONUT-->
+	<script>
+		
+		$.ajax({
+			url: `https://localhost:7090/api/Employees/GetSubordinateManager/`,
+			type: "GET"
+		}).done((result) => {
+			console.log(result);
+
+			var series = result.map((item) => {
+				return item.subordinates;
+			});
+
+			var labels = result.map((item) => {
+				return item.managerName;
+			});
+
+			var optionDonut = {
+				chart: {
+					type: 'donut',
+					width: '100%',
+					height: 275
+				},
+				dataLabels: {
+					enabled: true,
+					formatter: function (value, { seriesIndex, dataPointIndex, w }) {
+						return w.config.series[seriesIndex]
+					},
+				},
+				plotOptions: {
+					pie: {
+						customScale: 1,
+						donut: {
+							size: '50%',
+						},
+						offsetY: 20,
+					},
+					stroke: {
+						colors: undefined
+					}
+				},
+				
+				title: {
+					text: 'Total Employee Based On Manager',
+					style: {
+						fontSize: '18px'
+					}
+				},
+				series: series,
+				labels: labels,
+				legend: {
+					position: 'left',
+					offsetY: 80
+				}
+			}
+			var donut = new ApexCharts(document.querySelector("#donut"),optionDonut)
+			donut.render();
+		});
+	</script>
 }

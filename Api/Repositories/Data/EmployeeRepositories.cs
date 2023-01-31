@@ -91,16 +91,16 @@ public class EmployeeRepositories : GeneralRepository<Employee, int>
                 }).ToList();
     }
 
-    public IEnumerable<SubordinatesVm> GetSubordinates(int id)
+    public IEnumerable<GetSubordinateVM> SubordinateManager()
     {
-        return (from e in _context.Employees
-                join e1 in _context.Employees on e.ManagerId equals e1.Id
-                where e.ManagerId == id
-                select new SubordinatesVm
-                {
-                    ManagerId = e.ManagerId,
-                    Name = e.FirstName + " " + e.LastName,
-                    ManagerName = e1.FirstName + " " + e1.LastName
-                }).ToList();
-    }
+		return (from m in _context.Employees
+				join e in _context.Employees on m.Id equals e.ManagerId
+				group e by m into managerGroup
+				select new GetSubordinateVM
+				{
+					ManagerId = managerGroup.Key.Id,
+					ManagerName = managerGroup.Key.FirstName + " " + managerGroup.Key.LastName,
+					Subordinates = managerGroup.Count()
+				}).ToList();
+	}
 }

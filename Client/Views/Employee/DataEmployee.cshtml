@@ -10,7 +10,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="Index">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
@@ -25,7 +25,7 @@
         Menu
     </div>
 
-    <li class="nav-item">
+    <li class="nav-item active">
         <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="DataEmployee">
             <i class="fas fa-solid fa-user-tie"></i>
             <span>Data Employee </span>
@@ -35,12 +35,6 @@
         <a class="nav-link" asp-area="" asp-controller="Employee" asp-action="RequestTimeOff">
             <i class="fas fa-solid fa-person-walking-arrow-right"></i>
             <span>Request Time Off </span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-solid fa-person-circle-question"></i>
-            <span>List Request </span>
         </a>
     </li>
 
@@ -87,7 +81,7 @@
             <div class="card-body">
                 <div class="card-block text-dark">
                     <h4 class="m-b-20 p-b-5 ">Detail Employee
-                    <a type="button" id="request" value="request" style="float: right; margin-bottom: 11px;" class="btn btn-primary" data-toggle="modal" data-target="#modal-edit" onclick="ModalEdit();">
+                        <a type="button" id="request" value="request" style="float: right; margin-bottom: 11px; box-shadow: 3px 3px #000;" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-edit" onclick="ModalEdit();">
                         <span class="icon text-white-50">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </span>

@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Dashboard";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
@@ -34,21 +37,190 @@
             <span>Request Time Off </span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="" asp-action="">
-            <i class="fas fa-solid fa-person-circle-question"></i>
-            <span>List Request </span>
-        </a>
-    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
 
 }
 
+<div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Request Refuse
+                        </div>
+                        <div id="refused" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-solid fa-thumbs-down fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Request Approved
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div id="approved" class="h5 mb-0 mr-3 font-weight-bold text-gray-800"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-solid fa-thumbs-up fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Pending Requests
+                        </div>
+                        <div id="pending" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow ">
+            <div class="card-body p-3">
+                <div class="chart">
+                    <div id="chart" class="chart-canvas"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="text-center">
+                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 11rem;"
+                         src="~/img/time off.svg" alt="...">
+                </div>
+                <p>
+                    Sometimes you have to take your time for leave and enjoy your time either with your family or friends by enjoying the leave that the office provides for you
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     <script>
         console.log("Dashboard")
+        $(document).ready(function () {
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/GetRequestEmployee/" + @ViewBag.Id + "/0",
+                type: "GET"
+            }).done((result) => {
+                const count = result.length;
+                $('#pending').html(count);
+            })
+
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/GetRequestEmployee/" + @ViewBag.Id + "/1",
+                type: "GET"
+            }).done((result) => {
+                const count = result.length;
+                $('#approved').html(count);
+            })
+
+            $.ajax({
+                url: "https://localhost:7090/api/Employees/GetRequestEmployee/" + @ViewBag.Id + "/2",
+                type: "GET"
+            }).done((result) => {
+                const count = result.length;
+                $('#refused').html(count);
+            })
+        })
+    </script>
+
+    @*Radial Bar*@
+    <script>
+        $.ajax({
+            url: "https://localhost:7090/api/AllocationsLeave/GetEmployee/" + @ViewBag.Id,
+            type: "GET"
+        }).done((result) => {
+            console.log(result);
+
+            var series = result.map((item) => {
+                return item.remaining;
+            });
+
+            var labels = result.map((item) => {
+                return item.name;
+            });
+
+            var options = {
+                series: [{
+                    name: "Remaining",
+                    data: series
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 250
+                },
+                title: {
+                    text: 'Leave Remaining Overview',
+                    align: 'left'
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        vertical: true,
+                        distributed: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                labels: labels,
+                xaxis: {
+                    categories: labels,
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        })
+    </script>
+
+    <script>
+
+        let ProfileName = document.getElementById("Name");
+        $.ajax({
+            url: "https://localhost:7090/api/Employees/" + @ViewBag.Id,
+            dataType: "Json"
+        }).done((result) => {
+            ProfileName.innerHTML = result.firstName + " " + result.lastName;
+        })
     </script>
 }
