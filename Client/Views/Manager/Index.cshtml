@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     Layout = "_UserLayout";
     ViewBag.Title = "Dashboard Manager";
+    ViewBag.Id = HttpContextAccessor.HttpContext.Session.GetInt32("ID");
 }
 
 @section navbar{
@@ -33,33 +36,102 @@
     <hr class="sidebar-divider">
 }
 
+
 <!-- Body -->
-<div class="card shadow	mb-4">
-<div class="card-header py-3">
-    <h5 class="m-0 font-weight-bold text-primary text-center"> Data </h5>
-</div>
-<div class="card-body">
-    <div class="container mb-2">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="chart1">
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    </div>
+
+    <div class="row">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Jabatan
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="jabatan">-</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-computer fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Annual) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Department
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="department">-</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-city fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Subordinates
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="subordinates">-</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Pending Requests
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="pendingreq">-</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-reply fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="chart2">
-                        </div>
-                    </div>
-                </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Approved Employees Time Off</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-bar" id="chart">
             </div>
+            <hr>
         </div>
     </div>
-</div>
 </div>
 
 
@@ -67,54 +139,115 @@
 
 @section scripts{
     <script>
-        //CHART 1
-        var options = {
-            series: [60, 40],
-            chart: {
-                width: 450,
-                type: 'pie',
-            },
-            labels: ['Employee', 'Admin'],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 400
+
+        $.ajax({
+            url: "https://localhost:7090/api/Employees/GetRequestManager/" + @ViewBag.Id + "/1",
+            type: "GET"
+        }).done((result) => {
+           console.log(result);
+            var series = result.map((item) => {
+                return item.name;
+            });
+
+            var dataR = result.map((item) => {
+                return item.duration;
+            });
+            console.log(dataR);
+
+            var options = {
+                series: [{
+                    name: "Duration",
+                    data: dataR
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: true
                     },
-                    legend: {
-                        position: 'bottom'
+                    zoom: {
+                        enabled: true
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            position: 'bottom',
+                            offsetX: -10,
+                            offsetY: 0
+                        }
+                    }
+                }], 
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 4,
+                        distributed: true,
+                        dataLabels: {
+                            total: {
+                                enabled: false,
+                                style: {
+                                    fontSize: '13px',
+                                    fontWeight: 900
+                                }
+                            }
+                        }
+                    },
+                },
+                xaxis: {
+                    categories: series,
+                },
+                legend: {
+                    position: 'right',
+                    offsetY: 40
+                },
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (dataR) {
+                            return dataR + " Days"
+                        }
                     }
                 }
-            }]
-        };
+            };
 
-        var chart = new ApexCharts(document.querySelector("#chart1"), options);
-        chart.render();
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        }).fail((error) => {
+            console.log(error);
+        })
 
-        //CHART 2
-        var options = {
-            series: [{
-                data: [4, 6]
-            }],
-            chart: {
-                type: 'bar',
-                height: 300
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: 4,
-                    horizontal: true,
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            xaxis: {
-                categories: ['Admin', 'Employee'],
-            }
-        };
+       
 
-        var chart = new ApexCharts(document.querySelector("#chart2"), options);
-        chart.render();
+        let jabatan = document.getElementById("jabatan");
+        let department = document.getElementById("department");
+        $.ajax({
+            url: "https://localhost:7090/api/JobPlacements/GetEmployee/" + @ViewBag.Id,
+            dataType: "Json"
+        }).done((result) => {
+            jabatan.innerHTML = result[0].job;
+            department.innerHTML = result[0].department;
+        })
+
+        let subordinates = document.getElementById("subordinates");
+        $.ajax({
+            url: "https://localhost:7090/api/Employees/GetSubordinates/" + @ViewBag.Id,
+            dataType: "Json"
+        }).done((result) => {
+            subordinates.innerHTML = result.length;
+        })
+
+        let pendingreq = document.getElementById("pendingreq");
+        $.ajax({
+            url: "../Manager/GetRequestManager/?id=" + @ViewBag.Id + "&status=0",
+            dataType: "Json"
+        }).done((result) => {
+            pendingreq.innerHTML = result.length;
+        })
+
     </script>
 }
