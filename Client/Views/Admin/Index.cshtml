@@ -129,7 +129,6 @@
 		$.ajax({
 			url: `https://localhost:7090/api/Employees`,
 		}).done((data) => {
-			console.log(data);
 			var gender = data.map(x => ({ gender: x.gender }));
 			var { male, female } = gender.reduce((previous, current) => {
 				if (current.gender === 0) {
@@ -194,7 +193,6 @@
 			url: `https://localhost:7090/api/Employees/GetSubordinateManager/`,
 			type: "GET"
 		}).done((result) => {
-			console.log(result);
 
 			var series = result.map((item) => {
 				return item.subordinates;
