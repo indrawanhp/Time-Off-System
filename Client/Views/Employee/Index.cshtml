@@ -110,9 +110,6 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card shadow ">
-            <div class="card-header py-3">
-                <div class="m-0 font-weight-bold text-primary">Leave Remaining overview</div>
-            </div>
             <div class="card-body p-3">
                 <div class="chart">
                     <div id="chart" class="chart-canvas"></div>
@@ -123,9 +120,6 @@
 
     <div class="col-md-8">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Quotes for time off</h6>
-            </div>
             <div class="card-body">
                 <div class="text-center">
                     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 11rem;"
@@ -194,10 +188,15 @@
                     type: 'bar',
                     height: 250
                 },
+                title: {
+                    text: 'Leave Remaining Overview',
+                    align: 'left'
+                },
                 plotOptions: {
                     bar: {
                         borderRadius: 4,
                         vertical: true,
+                        distributed: true,
                     }
                 },
                 dataLabels: {
@@ -212,9 +211,6 @@
             var chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         })
-
-
-
     </script>
 
     <script>

@@ -141,6 +141,7 @@
 
 			var options = {
 				series: [{
+					name: "Total",
 					data: [male, female]
 				}],
 				chart: {
@@ -158,6 +159,7 @@
 				},
 				plotOptions: {
 					bar: {
+						borderRadius: 4,
 						columnWidth: '45%',
 						distributed: true,
 					}
@@ -233,8 +235,8 @@
 						fontSize: '18px'
 					}
 				},
-				series: [series[0], series[1], series[2]],
-				labels: [labels[0], labels[1], labels[2]],
+				series: series,
+				labels: labels,
 				legend: {
 					position: 'left',
 					offsetY: 80
