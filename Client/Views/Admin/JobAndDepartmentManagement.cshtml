@@ -81,7 +81,7 @@
 <!-- BODY -->
 <div class="card shadow	mb-4">
     <div class="card-header py-3">
-        <h5 class="m-0 font-weight-bold text-primary text-center"> Job And Department Management </h5>
+        <h6 class="m-0 font-weight-bold text-primary"> Job And Department Management </h6>
     </div>
     <div class="card-body">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -295,7 +295,7 @@
 @section scripts{
     <script>
         //CRUD
-        // NAV-1
+        // DEPARTMENTS
         // GET DATA
         let departTable = $('#department').DataTable({
             dom: 'Bfrtip',
@@ -361,10 +361,49 @@
                 {
                     "data": "id",
                     render: function (data, type, row) {
-                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="UpdateDepartment('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#dep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="DeleteDepartment('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
                     }
                 }
             ],
+            dom: 'Bfrtip',
+            buttons: [
+                    {
+                        extend: 'pageLength',
+                        className: 'btn btn-sm text-light bg-info',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        titleAttr: 'Excel',
+                        className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                        text: '<i class="fas fa-solid fa-file-excel"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [0,1,2]
+                        },
+                        titleAttr: 'Pdf',
+                        className: 'btn btn-sm btn-danger',
+                        text: '<i class="fa-regular fa-file-pdf"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    }
+                ],
+                initComplete: () => {
+                    $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                    $('.buttons-pdf').removeClass('buttons-pdf');
+
+                },
         });
         //validate
         $(document).ready(function () {
@@ -383,9 +422,9 @@
                 },
                 submitHandler: () => {
                     if (!check) {
-                        Insert()
+                        InsertDepartment()
                     } else {
-                        prosesUpdate()
+                        prosesUpdateDepartment()
                     }
                 },
                 errorElement: "em",
@@ -427,7 +466,7 @@
             check = false
         }
         //insert
-        function Insert() {
+        function InsertDepartment() {
             let obj = {
                 name: $("#departmentName").val(),
                 address: $("#address").val(),
@@ -455,7 +494,7 @@
             }) //penutup ERROR
         } //penutup insert()
         //update
-        function Update(id) {
+        function UpdateDepartment(id) {
             check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
             $.ajax({
                 url: `https://localhost:7090/api/Departments/` + id,
@@ -470,7 +509,7 @@
                 console.log(result.id);
             })
         }
-        function prosesUpdate() {
+        function prosesUpdateDepartment() {
             event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
             let coba = {
                 id: $("#departmentId").val(),
@@ -502,7 +541,7 @@
             })
         }
         //delete
-        function Delete(id) {
+        function DeleteDepartment(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You wont able to revert this!',
@@ -535,9 +574,9 @@
                 }
             })
         }
-        // NAV-2
+        
+        // JOBS
         // GET DATA
-
         let jobTables = $('#jobs').DataTable({
             dom: 'Bfrtip',
             buttons: [
@@ -611,11 +650,50 @@
                 {
                     "data": "id",
                     render: function (data) {
-                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update1('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete1('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
-
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="UpdateJob('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#job" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="DeleteJob('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
+                        
                     }
                 }
             ],
+            dom: 'Bfrtip',
+            buttons: [
+                    {
+                        extend: 'pageLength',
+                        className: 'btn btn-sm text-light bg-info',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        titleAttr: 'Excel',
+                        className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                        text: '<i class="fas fa-solid fa-file-excel"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        titleAttr: 'Pdf',
+                        className: 'btn btn-sm btn-danger',
+                        text: '<i class="fa-regular fa-file-pdf"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    }
+                ],
+                initComplete: () => {
+                    $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                    $('.buttons-pdf').removeClass('buttons-pdf');
+
+                },
         });
 
         $(document).ready(function () {
@@ -646,9 +724,9 @@
                 },
                 submitHandler: () => {
                     if (check1 == false) {
-                        Insert1()
+                        InsertJob()
                     } else {
-                        prosesUpdate1()
+                        prosesUpdateJob()
                     }
                 },
                 errorElement: "em",
@@ -691,7 +769,7 @@
             check1 = false
         }
         //insert
-        function Insert1() {
+        function InsertJob() {
             let obj = {
                 name: $("#jobName").val(),
                 minSalary: $("#minSalary").val(),
@@ -720,7 +798,7 @@
             }) //penutup ERROR
         } //penutup insert()
         //update
-        function Update1(id) {
+        function UpdateJob(id) {
             check1 = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
             $.ajax({
                 url: `https://localhost:7090/api/Jobs/` + id,
@@ -735,7 +813,7 @@
                 console.log(result.id);
             })
         }
-        function prosesUpdate1() {
+        function prosesUpdateJob() {
             event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
             let coba = {
                 id: $("#jobsId").val(),
@@ -768,7 +846,7 @@
             })
         }
         //delete
-        function Delete1(id) {
+        function DeleteJob(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You wont able to revert this!',
@@ -801,7 +879,7 @@
                 }
             })
         }
-        // NAV-3
+        // JOB PLACEMENT
         // GET DATA
         let jobPlacementTable = $('#Myjobplacement').DataTable({
             dom: 'Bfrtip',
@@ -874,6 +952,45 @@
                     }
                 }
             ],
+            dom: 'Bfrtip',
+            buttons: [
+                    {
+                        extend: 'pageLength',
+                        className: 'btn btn-sm text-light bg-info',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        titleAttr: 'Excel',
+                        className: 'btn mx-1 btn-sm btn-success text-light bg-success',
+                        text: '<i class="fas fa-solid fa-file-excel"></i>',
+                        attr: {
+                            style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        titleAttr: 'Pdf',
+                        className: 'btn btn-sm btn-danger',
+                        text: '<i class="fa-regular fa-file-pdf"></i>',
+                        attr: {
+                        style: "box-shadow: 3px 3px #000; margin-top: 13px;"
+                        }
+                    }
+                ],
+                initComplete: () => {
+                    $('.dt-button').removeClass('dt-button buttons-excel buttons-html5');
+                    $('.buttons-pdf').removeClass('buttons-pdf');
+
+                },
         });
         //Select2 for Employee ID
 
@@ -951,9 +1068,9 @@
                 },
                 submitHandler: () => {
                     if (!check) {
-                        Insert2()
+                        InsertJobPlacement()
                     } else {
-                        prosesUpdate2()
+                        prosesUpdateJobPlacement()
                     }
                 },
                 errorElement: "em",
@@ -1009,7 +1126,7 @@
                 placeholder: "Select a job"
             });
         }
-        function Insert2() {
+        function InsertJobPlacement() {
             let obj = {
                 employeeId: $("#employee").val(),
                 departmentId: $("#deps").val(),
@@ -1041,7 +1158,7 @@
         //
         let jpId = 0;
         //update
-        function Update2(id) {
+        function UpdateJobPlacement(id) {
             jpId = id;
             check = true //NILAI TRUE UNTUK UPDATE, YANG AKAN MASUK KE CHECK
             $.ajax({
@@ -1057,7 +1174,7 @@
                 console.log(result.id);
             })
         }
-        function prosesUpdate2() {
+        function prosesUpdateJobPlacement() {
             event.preventDefault(); //untuk memberhentikan proses/action sebelumnya
             let coba = {
                 id: jpId,
@@ -1089,7 +1206,7 @@
             })
         }
         //delete
-        function Delete2(id) {
+        function DeleteJobPlacement(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You wont able to revert this!',
@@ -1124,14 +1241,12 @@
         }
     </script>
 
+    <!-- FOR VALIDATION WITH RED ALERTS-->
     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
             'use strict';
             window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
                 var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
                 var validation = Array.prototype.filter.call(forms, function (form) {
                     form.addEventListener('submit', function (event) {
                         if (form.checkValidity() === false) {
