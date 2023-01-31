@@ -77,5 +77,20 @@ namespace Api.Controllers
                 return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
             }
         }
+
+        [HttpGet]
+        [Route("GetSubordinates/{id}")]
+        public ActionResult GetSubordinatesGetSubordinates(int id)
+        {
+            try
+            {
+                var result = _repo.GetSubordinates(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
+            }
+        }
     }
 }

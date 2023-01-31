@@ -48,4 +48,5 @@ public class AllocationsLeaveController : BaseController<AllocationLeaveReposito
             return BadRequest(new { statusCode = 500, message = $"Something Wrong! : {e.Message}" });
         }
     }
+
 }
