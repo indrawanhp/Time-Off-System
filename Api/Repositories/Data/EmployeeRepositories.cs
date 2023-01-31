@@ -89,4 +89,17 @@ public class EmployeeRepositories : GeneralRepository<Employee, int>
                     ManagerName = e.FirstName + " " + e.LastName
                 }).ToList();
     }
+
+    public IEnumerable<GetSubordinateVM> SubordinateManager()
+    {
+		return (from m in _context.Employees
+				join e in _context.Employees on m.Id equals e.ManagerId
+				group e by m into managerGroup
+				select new GetSubordinateVM
+				{
+					ManagerId = managerGroup.Key.Id,
+					ManagerName = managerGroup.Key.FirstName + " " + managerGroup.Key.LastName,
+					Subordinates = managerGroup.Count()
+				}).ToList();
+	}
 }
