@@ -1,5 +1,6 @@
 ﻿using Api.Contexts;
 using Api.Models;
+using Api.ViewModels;
 using Api.ViewModels.Admin;
 using Api.ViewModels.Employee;
 
