@@ -481,14 +481,14 @@
                 $('#dep').modal('hide');
                 Swal.fire(
                     'Insert!',
-                    'Data Berhasil Disimpan.',
+                    'Data successful created.',
                     'success'
                 )
                 departTable.ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed created.',
                     'error'
                 )
             }) //penutup ERROR
@@ -527,7 +527,7 @@
                 $('#dep').modal('hide');
                 Swal.fire(
                     'Update!',
-                    'Data Berhasil Disimpan.',
+                    'Data has been updated.',
                     'success'
                 );
                 $('#department').modal('hide')
@@ -535,7 +535,7 @@
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed to update.',
                     'error'
                 );
             })
@@ -785,14 +785,14 @@
                 $('#job').modal('hide');
                 Swal.fire(
                     'Insert!',
-                    'Data Berhasil Disimpan.',
+                    'Data successful created.',
                     'success'
                 )
                 jobTables.ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed to create.',
                     'error'
                 )
             }) //penutup ERROR
@@ -832,7 +832,7 @@
                 $('#job').modal('hide');
                 Swal.fire(
                     'Update!',
-                    'Data Berhasil Disimpan.',
+                    'Data successful created.',
                     'success'
                 );
                 $('#jobs').modal('hide')
@@ -840,7 +840,7 @@
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed to created.',
                     'error'
                 );
             })
@@ -948,7 +948,7 @@
                 {
                     "data": "id",
                     render: function (data) {
-                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="Update2('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="Delete2('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
+                        return `<div class="row"><div class="mx-auto"><a type="button" onclick="UpdateJobPlacement('${data}')" class="btn btn-sm text-light bg-success" style="box-shadow:3px 3px #000;" data-toggle="modal" data-target="#jobdep" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a> <a type="button" onclick="DeleteJobPlacement('${data}')" class="ml-2 btn btn-sm text-light bg-danger" style="box-shadow:3px 3px #000;" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa-solid fa-trash"></i></a></div></div>`;
                     }
                 }
             ],
@@ -1142,14 +1142,14 @@
                 $('#jobdep').modal('hide');
                 Swal.fire(
                     'Insert!',
-                    'Data Berhasil Disimpan.',
+                    'Data successful created.',
                     'success'
                 )
                 jobPlacementTable.ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed to create',
                     'error'
                 )
             }) //penutup ERROR
@@ -1193,14 +1193,14 @@
                 $('#jobdep').modal('hide');
                 Swal.fire(
                     'Update!',
-                    'Data Berhasil Disimpan.',
+                    'Data successful created.',
                     'success'
                 );
                 jobPlacementTable.ajax.reload()
             }).fail((error) => {
                 Swal.fire(
                     'Failed!',
-                    'Data Gagal Disimpan.',
+                    'Data failed to create.',
                     'error'
                 );
             })
