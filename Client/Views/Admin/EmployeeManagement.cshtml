@@ -747,9 +747,6 @@
                     selectemployee: {
                         required: true
                     },
-                    selectmanager: {
-                        required: true
-                    },
                     selectjob: {
                         required: true
                     },
@@ -760,9 +757,6 @@
                 messages: {
                     selectemployee: {
                         required: "Employee is Required."
-                    },
-                    selectmanager: {
-                        required: "Manager is Required."
                     },
                     selectjob: {
                         required: "Job is Required."
@@ -816,6 +810,7 @@
                     data: JSON.stringify(result),
                 }).done((result) => {
                     $('#modal-placement').modal('hide');
+                    tableManagement.ajax.reload()
                 }).fail((error) => {
                     console.log("gagal update manager")
                 })

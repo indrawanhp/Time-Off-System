@@ -317,7 +317,7 @@
             }).done((result) => {
                 $('#firstName').val(result.firstName);
                 $('#lastName').val(result.lastName);
-                $('#editbirthDate').val(result.birthDate);
+                $('#editbirthDate').val((result.birthDate).substring(0,10));
                 $('#editaddress').val(result.address);
                 $('#edithireDate').val(result.hireDate);
                 $('#editreleaseDate').val(result.releaseDate);
@@ -423,14 +423,13 @@
             }).done((result) => {
                 $("#modal-edit").modal("hide");
                 Swal.fire({
-                    text: 'Data Successfully edited',
+                    text: 'Data has been updated',
                     icon: 'success',
                     timer: 5000,
                     timerProgressBar: true
                 });
                 $('#cont').html(hasil());
             }).fail((error) => {
-                console.log("failed");
                 $("#modal-form").modal("hide");
                 Swal.fire({
                     text: 'Error !',
@@ -483,10 +482,7 @@
                     job.innerHTML = jobs[0].job;
                 })
 
-
-                console.log(result.firstName);
             }).fail((error) => {
-                console.log(error);
             });
         }
 
