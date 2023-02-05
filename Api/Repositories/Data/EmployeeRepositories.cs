@@ -103,4 +103,16 @@ public class EmployeeRepositories : GeneralRepository<Employee, int>
 					Subordinates = managerGroup.Count()
 				}).ToList();
 	}
+    public IEnumerable<SubordinatesVm> GetSubordinates(int id)
+    {
+        return (from e in _context.Employees
+                join e1 in _context.Employees on e.ManagerId equals e1.Id
+                where e.ManagerId == id
+                select new SubordinatesVm
+                {
+                    ManagerId = e.ManagerId,
+                    Name = e.FirstName + " " + e.LastName,
+                    ManagerName = e1.FirstName + " " + e1.LastName
+                }).ToList();
+    }
 }
